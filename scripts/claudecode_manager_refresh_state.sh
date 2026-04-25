@@ -54,10 +54,43 @@ mkdir -p "$(dirname "$state_file")"
 games_file=$(mktemp "${TMPDIR:-/tmp}/microgame-manager-games.XXXXXX")
 game_file=$(mktemp "${TMPDIR:-/tmp}/microgame-manager-game.XXXXXX")
 sessions_file=$(mktemp "${TMPDIR:-/tmp}/microgame-manager-sessions.XXXXXX")
+manager_issue_file=$(mktemp "${TMPDIR:-/tmp}/microgame-manager-issue.XXXXXX")
+manager_audit_file=$(mktemp "${TMPDIR:-/tmp}/microgame-manager-audit.XXXXXX")
 tmp_state=$(mktemp "${TMPDIR:-/tmp}/microgame-manager-state.XXXXXX")
-trap 'rm -f "$games_file" "$game_file" "$sessions_file" "$tmp_state"' EXIT HUP INT TERM
+trap 'rm -f "$games_file" "$game_file" "$sessions_file" "$manager_issue_file" "$manager_audit_file" "$tmp_state"' EXIT HUP INT TERM
 
 printf '[]\n' > "$games_file"
+
+write_issue_state_summary() {
+  source_file="$1"
+  output_file="$2"
+
+  if [ ! -f "$source_file" ]; then
+    printf '{}\n' > "$output_file"
+    return 0
+  fi
+
+  if jq -c --arg state_file "$source_file" '{
+    state_file: $state_file,
+    repo_full_name: (.repo_full_name // ""),
+    issue_number: (.issue_number // null),
+    issue_url: (.issue_url // ""),
+    issue_title: (.issue_title // ""),
+    handoff_status: (.handoff_status // ""),
+    opened_at_utc: (.opened_at_utc // ""),
+    closed_by_active_terminal_at_utc: (.closed_by_active_terminal_at_utc // ""),
+    watcher_session_name: (.watcher_session_name // ""),
+    workdir: (.workdir // ""),
+    resume_workdir: (.resume_workdir // "")
+  }' "$source_file" > "$output_file"; then
+    return 0
+  fi
+
+  jq -n --arg state_file "$source_file" '{
+    state_file: $state_file,
+    parse_error: true
+  }' > "$output_file"
+}
 
 repo_name_for() {
   git -C "$1" remote get-url origin 2>/dev/null |
@@ -206,6 +239,9 @@ else
   printf '[]\n' > "$sessions_file"
 fi
 
+write_issue_state_summary "$manager_workdir/.codex-runtime/issue_bridge_state.json" "$manager_issue_file"
+write_issue_state_summary "$manager_workdir/.codex-runtime/manager_audit_issue_state.json" "$manager_audit_file"
+
 generated_at_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 
 jq -n \
@@ -215,6 +251,8 @@ jq -n \
   --arg tmux_socket "$tmux_socket" \
   --slurpfile games "$games_file" \
   --slurpfile worker_sessions "$sessions_file" \
+  --slurpfile manager_issue "$manager_issue_file" \
+  --slurpfile manager_audit "$manager_audit_file" \
   '{
     schema_version: 1,
     generated_at_utc: $generated_at_utc,
@@ -238,6 +276,10 @@ jq -n \
     tmux: {
       worker_sessions: $worker_sessions[0]
     },
+    issue_bridge: {
+      manager_stage: ($manager_issue[0] // {}),
+      manager_audit: ($manager_audit[0] // {})
+    },
     games: $games[0]
   }' > "$tmp_state"
 
@@ -247,6 +289,16 @@ if [ "$quiet" != "1" ]; then
   jq -r '
     "manager_state: " + .generated_at_utc,
     "summary: games=\(.summary.games_total) dispatchable=\(.summary.games_dispatchable) review=\(.summary.games_waiting_review) queued=\(.summary.workers_queued) running=\(.summary.workers_running) blocked=\(.summary.workers_blocked) done=\(.summary.workers_done) tmux_workers=\(.summary.tmux_worker_sessions)",
+    (def issue_line($label; $s):
+      if (($s.parse_error // false) == true) then
+        "\($label): parse_error state=\($s.state_file)"
+      elif (($s.issue_number // null) != null) then
+        "\($label): #\($s.issue_number) \($s.handoff_status) \($s.issue_url)"
+      else
+        "\($label): none"
+      end;
+      issue_line("manager_issue"; .issue_bridge.manager_stage),
+      issue_line("manager_audit"; .issue_bridge.manager_audit)),
     (.games[] | "game: \(.slug) repo=\(.repo) git=\(.git.state) stage=\(.current_stage // ""):\(.current_stage_status // "") action=\(.next_recommended_action)")
   ' "$state_file"
 fi
