@@ -90,6 +90,7 @@ func (r *Runner) runOpenStage(args []string) int {
 	threadID := fs.String("thread-id", "", "")
 	repo := fs.String("repo", "", "")
 	workdir := fs.String("workdir", ".", "")
+	resumeWorkdir := fs.String("resume-workdir", "", "")
 	stateFile := fs.String("state-file", DefaultStateFile, "")
 	tokenFile := fs.String("token-file", DefaultTokenFile, "")
 	lockFile := fs.String("lock-file", DefaultLockFile, "")
@@ -120,6 +121,14 @@ func (r *Runner) runOpenStage(args []string) int {
 	if err != nil {
 		fmt.Fprintln(r.Stderr, err)
 		return 1
+	}
+	absoluteResumeWorkdir := absoluteWorkdir
+	if strings.TrimSpace(*resumeWorkdir) != "" {
+		absoluteResumeWorkdir, err = filepath.Abs(*resumeWorkdir)
+		if err != nil {
+			fmt.Fprintln(r.Stderr, err)
+			return 1
+		}
 	}
 	if err := loadTokenFile(resolveInWorkdir(absoluteWorkdir, *tokenFile)); err != nil {
 		fmt.Fprintln(r.Stderr, err)
@@ -198,7 +207,7 @@ func (r *Runner) runOpenStage(args []string) int {
 			DecisionRequest:    decisionRequestText,
 			TerminalHandoff:    renderTerminalHandoff(issue.HTMLURL, decisionRequestText),
 			ThreadID:           resolvedThreadID,
-			Workdir:            absoluteWorkdir,
+			Workdir:            absoluteResumeWorkdir,
 			OpenedAtUTC:        nowUTCISO(),
 			WatcherSessionName: *watcherSessionName,
 		}
@@ -212,6 +221,7 @@ func (r *Runner) runOpenStage(args []string) int {
 			"issue_number":         issue.Number,
 			"issue_url":            issue.HTMLURL,
 			"thread_id":            resolvedThreadID,
+			"resume_workdir":       absoluteResumeWorkdir,
 			"watcher_session_name": *watcherSessionName,
 		})
 		return err

@@ -9,9 +9,9 @@
 
 ## 独立仓库边界
 
-这条 ClaudeCode 做微游戏的流水线必须使用独立 GitHub 仓库：
+ClaudeCode 做微游戏的流水线必须使用一游戏一仓库：
 
-- `dengxiaocheng/BabelMicrogames`
+- `dengxiaocheng/BabelMicrogame-*`
 
 它不能再复用：
 
@@ -26,7 +26,42 @@
 sh scripts/claudecode_manager_repo_guard.sh
 ```
 
-只要 `origin` 不是 `dengxiaocheng/BabelMicrogames`，manager/factory/worker handoff 会直接拒绝运行。
+只要 `origin` 不是 `dengxiaocheng/BabelMicrogame-*` 前缀，manager/worker handoff 会直接拒绝运行。
+
+## Codex manager 独立工作目录
+
+Codex manager 固定只在这个目录恢复和执行：
+
+```bash
+/home/openclaw/claudecode-manager
+```
+
+小游戏源码目录只给 ClaudeCode worker 和测试/提交使用，例如：
+
+```bash
+/home/openclaw/babel-microgames/gongtou-dianming
+```
+
+正确关系是：
+
+- game workdir 保存游戏代码、worker registry、worker packet、worker report
+- manager workdir 保存调度脚本、bridge 二进制、管理规则
+- game issue watcher 可以从 game workdir 读取 `.codex-runtime/issue_bridge_state.json`
+- 但 issue state 里的 `workdir` 必须是 `/home/openclaw/claudecode-manager`
+- 因此 watcher 恢复 Codex 时回到管理目录，而不是游戏源码目录
+
+打开游戏阶段 issue 必须使用：
+
+```bash
+sh scripts/claudecode_manager_open_game_stage.sh \
+  --game-workdir /home/openclaw/babel-microgames/gongtou-dianming \
+  --repo dengxiaocheng/BabelMicrogame-GongtouDianming \
+  --title "工头点名 / 下一阶段" \
+  --report "..." \
+  --decision-request "..."
+```
+
+该脚本会把 issue state 写在游戏 workdir，同时把 Codex resume 目录固定为 manager workdir。
 
 ## 推荐运行形态
 

@@ -1,6 +1,6 @@
 # AGENTS.md
 
-This file defines repository-level working rules for the Babel runtime.
+This file defines repository-level working rules for the ClaudeCode manager.
 
 It exists to reduce drift while the system is growing quickly.
 
@@ -8,11 +8,40 @@ It exists to reduce drift while the system is growing quickly.
 
 This repository is the dedicated Babel microgame factory and ClaudeCode manager lane.
 
+This is the only workdir for the Codex process that manages ClaudeCode workers:
+
+- `/home/openclaw/claudecode-manager`
+
+The Codex manager must not be resumed inside a game source workdir.
+
+Game source workdirs are separate and must stay game-only:
+
+- `/home/openclaw/babel-microgames/peigei-ri`
+- `/home/openclaw/babel-microgames/yejian-qidao`
+- `/home/openclaw/babel-microgames/gongtou-dianming`
+
+Manager responsibilities:
+
+- read worker reports from game `.codex-runtime/claudecode_workers/`
+- review diffs inside the target game workdir
+- run game tests from the target game workdir
+- commit and push only the target game repository
+- mark worker status `done / rework / cancelled`
+- open the next game stage issue with `--resume-workdir /home/openclaw/claudecode-manager`
+- start the next ClaudeCode worker using the target game's fixed Claude session
+
+Manager must not:
+
+- implement game source changes directly unless repairing manager-induced breakage
+- add manager/runtime code to a game repository
+- use `BabelOnline-GoCpp`, `Babel`, or umbrella `BabelMicrogames` for worker queues
+- let issue watcher resume Codex inside a game workdir
+
 Its GitHub issue namespace must be separate from the long-lived `s` / `m` repositories.
 
-The expected remote is:
+Game worker repositories must use this prefix:
 
-- `dengxiaocheng/BabelMicrogames`
+- `dengxiaocheng/BabelMicrogame-*`
 
 ClaudeCode manager scripts must not open worker issues in:
 
