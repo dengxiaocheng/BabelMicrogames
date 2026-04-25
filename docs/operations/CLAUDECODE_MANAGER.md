@@ -13,7 +13,7 @@ manager 智能化路线先读：
 - `ClaudeCode` 负责执行被拆好的 worker 任务
 - `Codex` 负责管理、验收、排队和续跑
 - GitHub issue 继续作为 handoff 边界
-- worker registry 和 queue 由当前仓库自己的 `issue bridge` 维护
+- worker registry 和 queue 存在目标游戏 workdir，但默认由 `s` 的 Go `issue bridge` 维护
 
 ## 独立仓库边界
 
@@ -55,7 +55,8 @@ Codex manager 固定只在这个目录恢复和执行：
 正确关系是：
 
 - game workdir 保存游戏代码、worker registry、worker packet、worker report
-- manager workdir 保存调度脚本、bridge 二进制、管理规则
+- manager workdir 保存调度脚本和管理规则
+- issue bridge 默认通过 `scripts/claudecode_issue_bridge.sh` 复用 `/home/openclaw/babel-runtime` 的 Go bridge
 - game issue watcher 可以从 game workdir 读取 `.codex-runtime/issue_bridge_state.json`
 - 但 issue state 里的 `workdir` 必须是 `/home/openclaw/claudecode-manager`
 - 因此 watcher 恢复 Codex 时回到管理目录，而不是游戏源码目录
@@ -72,6 +73,23 @@ sh scripts/claudecode_manager_open_game_stage.sh \
 ```
 
 该脚本会把 issue state 写在游戏 workdir，同时把 Codex resume 目录固定为 manager workdir。
+
+## Bridge 复用边界
+
+ClaudeCode manager 只保留业务编排脚本。以下操作默认复用 `s` 的 Go bridge：
+
+- `worker-register / worker-packet / worker-next / worker-start / worker-finish / worker-queue / worker-set-status`
+- `open-stage / manager-handoff / watch / start-watcher / stop-watcher`
+- `.codex-runtime/issue_bridge_events.jsonl`
+- `BABEL_ISSUE_BRIDGE_EVENT_HOOK`
+
+默认入口：
+
+```bash
+sh scripts/claudecode_issue_bridge.sh worker-queue
+```
+
+也可以通过 `BRIDGE_CMD` 临时覆盖，但日常不要指向本仓库复制出的 `.codex-runtime/bin/babel-issue-bridge`，否则会再次形成第二套 Go bridge 语义。
 
 ## 推荐运行形态
 
@@ -190,7 +208,7 @@ sh scripts/claudecode_manager_stop_watcher.sh
 由管理线程使用：
 
 ```bash
-go run ./cmd/babel-issue-bridge open-stage ...
+sh scripts/claudecode_issue_bridge.sh open-stage ...
 ```
 
 打开当前 worker 阶段 issue，并让 watcher 进入等待。
@@ -202,11 +220,11 @@ go run ./cmd/babel-issue-bridge open-stage ...
 当前最小版已经提供：
 
 ```bash
-go run ./cmd/babel-issue-bridge worker-register --worker-id <id> --task-title <title>
-go run ./cmd/babel-issue-bridge worker-packet --worker-id <id> --lane <lane> --task-level <S|M|L> --task-title <title> --task-summary <summary>
-go run ./cmd/babel-issue-bridge worker-next
-go run ./cmd/babel-issue-bridge worker-queue
-go run ./cmd/babel-issue-bridge worker-set-status --worker-id <id> --status done
+sh scripts/claudecode_issue_bridge.sh worker-register --worker-id <id> --task-title <title>
+sh scripts/claudecode_issue_bridge.sh worker-packet --worker-id <id> --lane <lane> --task-level <S|M|L> --task-title <title> --task-summary <summary>
+sh scripts/claudecode_issue_bridge.sh worker-next
+sh scripts/claudecode_issue_bridge.sh worker-queue
+sh scripts/claudecode_issue_bridge.sh worker-set-status --worker-id <id> --status done
 ```
 
 worker queue 的目标不是自动调度一切，而是先让 `Codex manager` 能看到：
@@ -273,7 +291,7 @@ sh scripts/claudecode_worker_packet.sh \
 另外现在 manager 不用再自己翻 queue，可以直接取“下一个该派发的 worker”：
 
 ```bash
-go run ./cmd/babel-issue-bridge worker-next
+sh scripts/claudecode_issue_bridge.sh worker-next
 ```
 
 它默认会同时带两层约束：
@@ -292,13 +310,13 @@ go run ./cmd/babel-issue-bridge worker-next
 如果你要放宽它，可以显式：
 
 ```bash
-go run ./cmd/babel-issue-bridge worker-next --max-running 2 --allow-same-lane
+sh scripts/claudecode_issue_bridge.sh worker-next --max-running 2 --allow-same-lane
 ```
 
 如果当前仓库里同时挂着多条项目线，推荐再加：
 
 ```bash
-go run ./cmd/babel-issue-bridge worker-next --worker-prefix peigei-ri-
+sh scripts/claudecode_issue_bridge.sh worker-next --worker-prefix peigei-ri-
 ```
 
 这样 manager 只会在指定项目前缀里挑 worker，不会被别的历史队列干扰。
@@ -411,7 +429,7 @@ sh scripts/claudecode_worker_finish.sh --workdir <repo> --worker-id <id> --comme
 它内部会执行：
 
 ```bash
-go run ./cmd/babel-issue-bridge worker-finish --worker-id <id> --comment-file <path>
+sh scripts/claudecode_issue_bridge.sh worker-finish --worker-id <id> --comment-file <path>
 ```
 
 语义是：
@@ -446,7 +464,7 @@ watcher 检测到：
 普通的：
 
 ```bash
-go run ./cmd/babel-issue-bridge close-active ...
+sh scripts/claudecode_issue_bridge.sh close-active ...
 ```
 
 语义是：
@@ -459,7 +477,7 @@ go run ./cmd/babel-issue-bridge close-active ...
 所以这里必须使用：
 
 ```bash
-go run ./cmd/babel-issue-bridge manager-handoff ...
+sh scripts/claudecode_issue_bridge.sh manager-handoff ...
 ```
 
 它的语义是：
@@ -502,25 +520,25 @@ go run ./cmd/babel-issue-bridge manager-handoff ...
 - `scripts/microgame_factory_start.sh`
   用内置 Babel 创意预设一键开始一条微游戏任务链。它会先生成 plan 和 worker packets，再按当前项目前缀立即派出第一个 worker。
 
-- `go run ./cmd/babel-issue-bridge worker-register`
+- `sh scripts/claudecode_issue_bridge.sh worker-register`
   登记新 worker
 
-- `go run ./cmd/babel-issue-bridge worker-packet`
+- `sh scripts/claudecode_issue_bridge.sh worker-packet`
   生成或刷新 worker 的标准任务包和 report 模板；可顺手写入 `lane / task-level / budget / scope / test-command`
 
-- `go run ./cmd/babel-issue-bridge worker-next`
+- `sh scripts/claudecode_issue_bridge.sh worker-next`
   取当前最该派发的 worker；默认只从 `rework / queued` 中选，并带 `max-running=1 + lane 互斥`。可额外用 `--worker-prefix` 只在某条项目线内选择
 
-- `go run ./cmd/babel-issue-bridge worker-start`
+- `sh scripts/claudecode_issue_bridge.sh worker-start`
   标记 worker 开始执行
 
-- `go run ./cmd/babel-issue-bridge worker-finish`
+- `sh scripts/claudecode_issue_bridge.sh worker-finish`
   标记 worker 回交并执行 `manager-handoff`
 
-- `go run ./cmd/babel-issue-bridge worker-queue`
+- `sh scripts/claudecode_issue_bridge.sh worker-queue`
   查看当前 queue
 
-- `go run ./cmd/babel-issue-bridge worker-set-status`
+- `sh scripts/claudecode_issue_bridge.sh worker-set-status`
   让 manager 在审查后把 worker 标成 `done / rework / cancelled`
 
 ## 下一阶段建议

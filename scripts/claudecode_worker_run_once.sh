@@ -8,7 +8,7 @@ model=""
 allowed_tools=""
 timeout_seconds="1800"
 auto_finish="1"
-bridge_cmd="${BRIDGE_CMD:-/home/openclaw/claudecode-manager/.codex-runtime/bin/babel-issue-bridge}"
+bridge_cmd="${BRIDGE_CMD:-/home/openclaw/claudecode-manager/scripts/claudecode_issue_bridge.sh}"
 session_id=""
 
 while [ $# -gt 0 ]; do

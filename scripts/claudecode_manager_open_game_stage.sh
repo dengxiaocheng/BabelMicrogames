@@ -10,7 +10,7 @@ decision_request=""
 manager_workdir="${CLAUDECODE_MANAGER_WORKDIR:-/home/openclaw/claudecode-manager}"
 manager_thread_id="${CLAUDECODE_MANAGER_THREAD_ID:-019dbdc4-8d17-7600-8de1-cdd9d510fa97}"
 watcher_session_name=""
-bridge_cmd="${BRIDGE_CMD:-/home/openclaw/claudecode-manager/.codex-runtime/bin/babel-issue-bridge}"
+bridge_cmd="${BRIDGE_CMD:-/home/openclaw/claudecode-manager/scripts/claudecode_issue_bridge.sh}"
 
 while [ $# -gt 0 ]; do
   case "$1" in

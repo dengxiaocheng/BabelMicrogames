@@ -18,7 +18,7 @@ worker_prefix=""
 daemon="0"
 auto_seed_microgames="0"
 auto_seed_presets="dianming shuiyuan huijiang yinji bingpeng"
-bridge_cmd="${BRIDGE_CMD:-/home/openclaw/claudecode-manager/.codex-runtime/bin/babel-issue-bridge}"
+bridge_cmd="${BRIDGE_CMD:-/home/openclaw/claudecode-manager/scripts/claudecode_issue_bridge.sh}"
 
 while [ $# -gt 0 ]; do
   case "$1" in

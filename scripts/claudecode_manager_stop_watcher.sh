@@ -5,7 +5,7 @@ set -eu
 workdir=""
 session_name="claudecode_manager_watch"
 tmux_socket="claudecode_manager"
-bridge_cmd="${BRIDGE_CMD:-/home/openclaw/claudecode-manager/.codex-runtime/bin/babel-issue-bridge}"
+bridge_cmd="${BRIDGE_CMD:-/home/openclaw/claudecode-manager/scripts/claudecode_issue_bridge.sh}"
 
 while [ $# -gt 0 ]; do
   case "$1" in

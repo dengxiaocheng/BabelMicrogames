@@ -20,7 +20,7 @@ GitHub 仓库：
 
 不要把 ClaudeCode worker issue 写入 `BabelOnline-GoCpp` 或 `Babel`。那两个仓库继续服务 `s/m` 长期会话和对应 watcher。`BabelMicrogames` 也不应该承载某个具体小游戏的源码；它只承载 manager 资料和必要的 manager 级协调记录。
 
-本仓库从 Babel 新运行时仓库拆出，因此仍保留一部分 runtime / issue-bridge 工具能力；当前重点是让 ClaudeCode 在 5000 行以内的 Babel 微游戏切片上持续工作，并由 Codex manager 做排队、审查和收口。
+本仓库从 Babel 新运行时仓库拆出，因此仍保留一部分 runtime / issue-bridge 工具能力；当前重点是让 ClaudeCode 在 5000 行以内的 Babel 微游戏切片上持续工作，并由 Codex manager 做排队、审查和收口。日常 issue bridge 默认不再执行本仓库复制出的 Go bridge，而是通过 `scripts/claudecode_issue_bridge.sh` 复用 `/home/openclaw/babel-runtime` 的 Go bridge、事件日志和 hook 语义。
 
 它继承已经验证过的产品能力，但不继承旧实现债务。当前方向是：
 
@@ -102,8 +102,11 @@ GitHub 仓库：
 
 ## 实用脚本
 
+- `scripts/claudecode_issue_bridge.sh`
+  ClaudeCode manager 的默认 bridge 薄包装。它把当前工作目录交给 `/home/openclaw/babel-runtime/scripts/stage_issue_bridge.sh`，由 `s` 的 Go bridge 执行 `worker-* / open-stage / manager-handoff / watch`，并继承 `BABEL_ISSUE_BRIDGE_EVENT_HOOK`。
+
 - `go run ./cmd/babel-issue-bridge`
-  创建阶段 issue、默认 assign 并 `@mention` 当前 GitHub 用户、写入本地 watcher 状态和 terminal handoff 文案，并在 issue 关闭且带评论后恢复同一条 Codex 线程；只有在显式 waiting 状态下，当前终端回复才会消费活动 issue。内部会使用 `.codex-runtime/issue_bridge.lock` 串行化 watcher 与当前终端的关键操作，并把关键流程记录到 `.codex-runtime/issue_bridge_events.jsonl`。默认会从 `.codex-runtime/github-token.env` 读取 GitHub token。另一台实时开发节点推送后，也可以通过关闭当前 stage issue 并写入“先 pull 再继续”的 comment，把执行权交回服务器节点。
+  兼容入口。除排障外，ClaudeCode manager 脚本默认应走 `scripts/claudecode_issue_bridge.sh`，避免 manager 仓和 `s` 的 Go bridge 语义漂移。
 
 - `go run ./cmd/babel-issue-bridge start-watcher`
   用 `tmux` 启动本地 issue watcher。前台只保留一行状态提示，详细流程写进 `issue_bridge_events.jsonl`。
@@ -114,7 +117,7 @@ GitHub 仓库：
 - `go run ./cmd/babel-issue-bridge manual-resume --thread-id <thread>`
   供服务器本机或 Termux `s` 手动接管当前线程。进入交互前会先关闭当前等待中的阶段 issue、打断 watcher 拉起的自动客户端，并在退出后释放接管状态。恢复时会显式把当前仓库目录传给 `codex`，避免 thread 早期记录目录与当前目录不一致时弹出工作目录选择提示。
 
-- `go run ./cmd/babel-issue-bridge manager-handoff --comment-file <path>`
+- `scripts/claudecode_issue_bridge.sh manager-handoff --comment-file <path>`
   供非 Codex worker 在完成当前小任务后，把结果回交给 waiting 中的 Codex 管理线程。它会创建新评论并关闭当前 issue，但不会把这条评论标记成“当前终端已消费”，因此 watcher 仍然可以据此恢复管理线程。
 
 - `go run ./cmd/babel-issue-bridge cleanup-manual --thread-id <thread> --entrypoint termux_s|termux_m`
@@ -195,7 +198,7 @@ GitHub 仓库：
 - `scripts/claudecode_worker_finish.sh`
   让 ClaudeCode worker 通过 `manager-handoff` 把结果回交给 waiting 中的 Codex 管理线程。
 
-- `go run ./cmd/babel-issue-bridge worker-register|worker-packet|worker-next|worker-start|worker-finish|worker-queue|worker-set-status`
+- `scripts/claudecode_issue_bridge.sh worker-register|worker-packet|worker-next|worker-start|worker-finish|worker-queue|worker-set-status`
   当前最小版的 Claude worker registry / queue。用来登记 worker、生成固定 task packet、写入 `lane`、按并发和 lane 约束自动挑选下一个可派发 worker、查看当前队列、在 worker 完成后把结果挂回 Codex manager，并在 manager 审查后回写最终状态。
 
 - `go run ./cmd/babel-wechatd`

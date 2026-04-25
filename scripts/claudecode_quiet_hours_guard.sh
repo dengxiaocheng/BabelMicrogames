@@ -8,7 +8,7 @@ watcher_session="claudecode_manager_watch"
 quiet_start="1400"
 quiet_end="1800"
 poll_seconds="30"
-bridge_cmd="${BRIDGE_CMD:-/home/openclaw/claudecode-manager/.codex-runtime/bin/babel-issue-bridge}"
+bridge_cmd="${BRIDGE_CMD:-/home/openclaw/claudecode-manager/scripts/claudecode_issue_bridge.sh}"
 
 while [ $# -gt 0 ]; do
   case "$1" in

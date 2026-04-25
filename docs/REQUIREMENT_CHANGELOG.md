@@ -44,6 +44,18 @@
 - 状态：`implemented`
 - 范围：`control-plane`
 - 变化：
+  ClaudeCode manager 的 issue bridge 默认实现不再指向 `/home/openclaw/claudecode-manager/.codex-runtime/bin/babel-issue-bridge`。新增 `scripts/claudecode_issue_bridge.sh` 作为薄包装，统一转发到 `/home/openclaw/babel-runtime/scripts/stage_issue_bridge.sh`，因此 worker queue、stage issue、manager-handoff、watcher 事件和 `BABEL_ISSUE_BRIDGE_EVENT_HOOK` 都复用 `s` 的 Go bridge。
+- 更新的 canonical docs：
+  - `AGENTS.md`
+  - `README.md`
+  - `docs/operations/CLAUDECODE_MANAGER.md`
+  - `docs/REQUIREMENT_CHANGELOG.md`
+- 实现入口：
+  - `scripts/claudecode_issue_bridge.sh`
+
+- 状态：`implemented`
+- 范围：`control-plane`
+- 变化：
   Codex manager 的调度状态从“占位仓本地 worker registry”收敛为“扫描每个 `BabelMicrogame-*` game workdir 的 manager 总表”。新增 `.codex-runtime/microgame_manager_state.json` 生成入口、状态摘要入口和历史污染状态归档入口；`autorun` 现在可以从 manager workdir 扫描 `/home/openclaw/babel-microgames/*`，但真正派发 ClaudeCode worker 时只进入目标游戏 workdir，避免再次污染 `s / m` 或 manager 占位仓。
   后续补强了两条失败治理规则：worker 队列优先按阶段顺序排序，避免因更新时间跳过 state/content/ui 顺序；ClaudeCode 固定 session 被占用时标 `blocked`，不再误判为代码 rework，也不会继续派发该游戏后续 worker。
 - 更新的 canonical docs：
