@@ -125,7 +125,7 @@ if [ "$run_once" = "1" ]; then
 else
   set -- sh /home/openclaw/claudecode-manager/scripts/claudecode_worker_resume.sh --workdir "$workdir" --worker-id "$WORKER_ID"
 fi
-if [ "$run_once" = "0" ] && [ -n "$session_id" ]; then
+if [ -n "$session_id" ]; then
   set -- "$@" --session-id "$session_id"
 fi
 if [ -n "$model" ]; then

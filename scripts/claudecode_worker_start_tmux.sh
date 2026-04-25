@@ -11,6 +11,7 @@ allow_same_lane="0"
 model=""
 tmux_socket="claudecode_manager"
 bridge_cmd="${BRIDGE_CMD:-/home/openclaw/claudecode-manager/.codex-runtime/bin/babel-issue-bridge}"
+session_id=""
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -40,6 +41,10 @@ while [ $# -gt 0 ]; do
       ;;
     --model)
       model="$2"
+      shift 2
+      ;;
+    --session-id)
+      session_id="$2"
       shift 2
       ;;
     --tmux-socket)
@@ -113,6 +118,9 @@ run_file=$(mktemp ".codex-runtime/tmux/${session_name}.XXXXXX.sh")
   fi
   if [ -n "$model" ]; then
     printf ' --model %s' "$(quote "$model")"
+  fi
+  if [ -n "$session_id" ]; then
+    printf ' --session-id %s' "$(quote "$session_id")"
   fi
   printf '\n'
 } > "$run_file"

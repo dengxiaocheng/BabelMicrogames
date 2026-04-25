@@ -9,6 +9,7 @@ allowed_tools=""
 timeout_seconds="1800"
 auto_finish="1"
 bridge_cmd="${BRIDGE_CMD:-/home/openclaw/claudecode-manager/.codex-runtime/bin/babel-issue-bridge}"
+session_id=""
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -26,6 +27,10 @@ while [ $# -gt 0 ]; do
       ;;
     --allowed-tools)
       allowed_tools="$2"
+      shift 2
+      ;;
+    --session-id)
+      session_id="$2"
       shift 2
       ;;
     --timeout-seconds)
@@ -58,6 +63,10 @@ sh /home/openclaw/claudecode-manager/scripts/claudecode_manager_repo_guard.sh --
   exit 1
 }
 
+if [ -z "$session_id" ]; then
+  session_id=$(sh /home/openclaw/claudecode-manager/scripts/claudecode_game_session.sh --workdir "$workdir")
+fi
+
 packet_file=".codex-runtime/claudecode_workers/${worker_id}/packet.md"
 report_file=".codex-runtime/claudecode_workers/${worker_id}/report.md"
 output_file=".codex-runtime/claudecode_workers/${worker_id}/claude-output.log"
@@ -87,7 +96,7 @@ You are running unattended in ClaudeCode worker mode.
 - When finished, run the finish command listed in the packet.
 EOF
 
-set -- claude --dangerously-skip-permissions -p "$(cat "$prompt")"
+set -- claude --dangerously-skip-permissions --session-id "$session_id" -p "$(cat "$prompt")"
 if [ -n "$model" ]; then
   set -- "$@" --model "$model"
 fi

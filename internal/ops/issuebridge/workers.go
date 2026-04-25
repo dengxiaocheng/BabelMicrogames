@@ -474,7 +474,7 @@ func renderWorkerPacket(worker ClaudeWorker, goal string, acceptance, constraint
 		"",
 		"## Finish Protocol",
 		fmt.Sprintf("1. 把结果写到 `%s`", strings.TrimSpace(worker.ReportFile)),
-		fmt.Sprintf("2. 在仓库根目录执行：`sh scripts/claudecode_worker_finish.sh --worker-id %s`", strings.TrimSpace(worker.WorkerID)),
+		fmt.Sprintf("2. 在仓库根目录执行：`sh /home/openclaw/claudecode-manager/scripts/claudecode_worker_finish.sh --workdir %s --worker-id %s`", strings.TrimSpace(worker.Workdir), strings.TrimSpace(worker.WorkerID)),
 		"3. 不要自己做项目级归档或阶段切换，交给 Codex manager。",
 		"",
 	)
