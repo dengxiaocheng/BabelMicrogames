@@ -39,6 +39,27 @@
 
 ## 模板
 
+## 2026-04-25
+
+- 状态：`implemented`
+- 范围：`control-plane`
+- 变化：
+  `dengxiaocheng/BabelMicrogames` 正式定位为独立 Codex manager 的资料、流程和脚本仓库，不再作为任何具体小游戏源码仓。新增微游戏工厂端到端流程文档和 Codex manager 智能化路线文档，明确当前 manager 只是“能调度”，还没有做到 incoming 自动消化、全局状态集中、结构化验收、失败降级和跨游戏调度。当前树同步移除了历史残留的小游戏源码和 per-game plan，源码真源只保留在各自 `BabelMicrogame-*` 仓库。
+- 更新的 canonical docs：
+  - `README.md`
+  - `AGENTS.md`
+  - `docs/INDEX.md`
+  - `docs/OPERATIONS.md`
+  - `docs/operations/README.md`
+  - `docs/operations/CLAUDECODE_MANAGER.md`
+  - `docs/operations/MICROGAME_FACTORY_FLOW.md`
+  - `docs/operations/CODEX_MANAGER_INTELLIGENCE.md`
+  - `docs/governance/DOC_MANIFEST.json`
+  - `docs/REQUIREMENT_CHANGELOG.md`
+- 实现入口：
+  - `/home/openclaw/claudecode-manager`
+  - `dengxiaocheng/BabelMicrogames`
+
 ## 2026-04-23
 
 - 状态：`implemented`

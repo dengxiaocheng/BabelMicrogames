@@ -8,6 +8,12 @@ It exists to reduce drift while the system is growing quickly.
 
 This repository is the dedicated Babel microgame factory and ClaudeCode manager lane.
 
+Its remote repository is:
+
+- `dengxiaocheng/BabelMicrogames`
+
+That repository is for manager documentation, scripts, rules, and manager-level coordination. It is not a microgame source repository.
+
 This is the only workdir for the Codex process that manages ClaudeCode workers:
 
 - `/home/openclaw/claudecode-manager`
@@ -34,10 +40,12 @@ Manager must not:
 
 - implement game source changes directly unless repairing manager-induced breakage
 - add manager/runtime code to a game repository
-- use `BabelOnline-GoCpp`, `Babel`, or umbrella `BabelMicrogames` for worker queues
+- use `BabelOnline-GoCpp`, `Babel`, or `BabelMicrogames` as a per-game worker queue
 - let issue watcher resume Codex inside a game workdir
 
-Its GitHub issue namespace must be separate from the long-lived `s` / `m` repositories.
+Its GitHub issue namespace and source repositories must be separate from the long-lived `s` / `m` repositories.
+
+Use `BabelMicrogames` for manager-level notes and repository ownership. Use `BabelMicrogame-*` repositories for per-game source, issues, worker queues, and GitHub Pages.
 
 Game worker repositories must use this prefix:
 

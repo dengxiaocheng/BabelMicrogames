@@ -1,12 +1,24 @@
-# Babel Microgames
+# Babel Microgames Manager
 
-这是 Babel 的微游戏工厂与 ClaudeCode manager 专用仓库。
+这是 Babel 微游戏工厂的独立 Codex manager 资料与脚本仓库。
 
-它使用独立 GitHub issue 命名空间：
+GitHub 仓库：
 
 - `dengxiaocheng/BabelMicrogames`
 
-不要把 ClaudeCode worker issue 写入 `BabelOnline-GoCpp` 或 `Babel`。那两个仓库继续服务 `s/m` 长期会话和对应 watcher。
+本仓库用途：
+
+- 保存独立 Codex manager 的规则、流程文档和调度脚本
+- 保存微游戏工厂的计划模板、worker packet 规则和验收策略
+- 作为 `/home/openclaw/claudecode-manager` 的远端归档
+
+本仓库不是小游戏源码仓库。
+
+小游戏源码必须进入独立仓库：
+
+- `dengxiaocheng/BabelMicrogame-*`
+
+不要把 ClaudeCode worker issue 写入 `BabelOnline-GoCpp` 或 `Babel`。那两个仓库继续服务 `s/m` 长期会话和对应 watcher。`BabelMicrogames` 也不应该承载某个具体小游戏的源码；它只承载 manager 资料和必要的 manager 级协调记录。
 
 本仓库从 Babel 新运行时仓库拆出，因此仍保留一部分 runtime / issue-bridge 工具能力；当前重点是让 ClaudeCode 在 5000 行以内的 Babel 微游戏切片上持续工作，并由 Codex manager 做排队、审查和收口。
 
@@ -47,6 +59,9 @@
 建议从这里开始阅读：
 
 - [docs/INDEX.md](docs/INDEX.md)
+- [docs/operations/MICROGAME_FACTORY_FLOW.md](docs/operations/MICROGAME_FACTORY_FLOW.md)
+- [docs/operations/CODEX_MANAGER_INTELLIGENCE.md](docs/operations/CODEX_MANAGER_INTELLIGENCE.md)
+- [docs/operations/CLAUDECODE_MANAGER.md](docs/operations/CLAUDECODE_MANAGER.md)
 - [docs/architecture/README.md](docs/architecture/README.md)
 - [docs/runtime/README.md](docs/runtime/README.md)
 - [docs/governance/README.md](docs/governance/README.md)

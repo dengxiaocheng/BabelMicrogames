@@ -47,6 +47,8 @@
       "readme": "docs/operations/README.md",
       "docs": [
         "docs/OPERATIONS.md",
+        "docs/operations/MICROGAME_FACTORY_FLOW.md",
+        "docs/operations/CODEX_MANAGER_INTELLIGENCE.md",
         "docs/operations/NODE_RUNTIME.md",
         "docs/operations/ISSUE_BRIDGE.md",
         "docs/operations/COLLAB_MCP.md",
@@ -95,6 +97,8 @@
       "docs/operations/NODE_RUNTIME.md"
     ],
     "claudecode_manager": [
+      "docs/operations/MICROGAME_FACTORY_FLOW.md",
+      "docs/operations/CODEX_MANAGER_INTELLIGENCE.md",
       "docs/operations/CLAUDECODE_MANAGER.md",
       "docs/operations/ISSUE_BRIDGE.md",
       "docs/operations/NODE_RUNTIME.md"
@@ -165,6 +169,8 @@
     ],
     "operations_flow_change": [
       "docs/OPERATIONS.md",
+      "docs/operations/MICROGAME_FACTORY_FLOW.md",
+      "docs/operations/CODEX_MANAGER_INTELLIGENCE.md",
       "docs/operations/ISSUE_BRIDGE.md",
       "docs/operations/WINDOWS_LOCAL.md",
       "docs/operations/CLAUDECODE_MANAGER.md",

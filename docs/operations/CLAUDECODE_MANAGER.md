@@ -1,6 +1,14 @@
 # ClaudeCode 管理工作流
 
-本文描述一个最小可用的管理流：
+本文描述一个最小可用的管理流。
+
+端到端流程先读：
+
+- [MICROGAME_FACTORY_FLOW.md](./MICROGAME_FACTORY_FLOW.md)
+
+manager 智能化路线先读：
+
+- [CODEX_MANAGER_INTELLIGENCE.md](./CODEX_MANAGER_INTELLIGENCE.md)
 
 - `ClaudeCode` 负责执行被拆好的 worker 任务
 - `Codex` 负责管理、验收、排队和续跑
@@ -8,6 +16,8 @@
 - worker registry 和 queue 由当前仓库自己的 `issue bridge` 维护
 
 ## 独立仓库边界
+
+`dengxiaocheng/BabelMicrogames` 是 manager 资料仓，不是具体小游戏源码仓。
 
 ClaudeCode 做微游戏的流水线必须使用一游戏一仓库：
 

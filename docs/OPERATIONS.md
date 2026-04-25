@@ -9,6 +9,12 @@
 
 ## 读取路由
 
+- 如果要处理 `s`、Codex manager、ClaudeCode worker、小游戏仓库之间的完整闭环：
+  读 [operations/MICROGAME_FACTORY_FLOW.md](./operations/MICROGAME_FACTORY_FLOW.md)
+
+- 如果要处理独立 Codex manager 不够智能、如何升级调度脑：
+  读 [operations/CODEX_MANAGER_INTELLIGENCE.md](./operations/CODEX_MANAGER_INTELLIGENCE.md)
+
 - 如果要处理 Termux、节点、代理、启动器和服务器等待语义：
   读 [operations/NODE_RUNTIME.md](./operations/NODE_RUNTIME.md)
 

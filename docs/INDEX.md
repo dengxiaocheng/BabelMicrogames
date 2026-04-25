@@ -49,11 +49,13 @@
 ## 运维模块
 
 - [operations/README.md](./operations/README.md)
-  节点入口、watcher、manual takeover、hook
+  微游戏工厂流程、manager 智能化路线、节点入口、watcher、manual takeover、hook
 
 入口文档：
 
 - [OPERATIONS.md](./OPERATIONS.md)
+- [operations/MICROGAME_FACTORY_FLOW.md](./operations/MICROGAME_FACTORY_FLOW.md)
+- [operations/CODEX_MANAGER_INTELLIGENCE.md](./operations/CODEX_MANAGER_INTELLIGENCE.md)
 - [operations/NODE_RUNTIME.md](./operations/NODE_RUNTIME.md)
 - [operations/ISSUE_BRIDGE.md](./operations/ISSUE_BRIDGE.md)
 - [operations/COLLAB_MCP.md](./operations/COLLAB_MCP.md)
