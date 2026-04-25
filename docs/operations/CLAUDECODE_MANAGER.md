@@ -103,6 +103,7 @@ sh scripts/claudecode_manager_autorun.sh \
 - 当前不在 14:00-18:00 quiet hours
 - `claudecode_manager` tmux socket 下没有 `claudecode_worker_*` 会话
 - 任一游戏 workdir 的 worker queue 中存在 `queued` 或 `rework` 任务
+- 目标游戏没有 `blocked` worker
 
 它不会从 `/home/openclaw/claudecode-manager/.codex-runtime/claudecode_workers.json` 派发任务。manager 占位仓只保存调度脚本、文档和总表；真正启动 worker 时，autorun 会进入 `/home/openclaw/babel-microgames/<game>`。
 
@@ -133,6 +134,8 @@ sh scripts/claudecode_manager_autorun.sh \
 - 没有 backlog 时才保持空转等待
 
 当前一游戏一仓库规则优先级更高；如果自动种子脚本还没有明确创建独立 repo/workdir，就会拒绝执行，而不是把新游戏塞回 manager 仓库。
+
+如果 `ClaudeCode` 返回固定 session 被占用，worker 会被标为 `blocked`。这表示会话锁冲突，不表示代码任务失败。manager 需要先释放或更换该游戏的固定 Claude session，再把对应 worker 改回 `queued` 或 `rework`。
 
 查看 manager 总表：
 

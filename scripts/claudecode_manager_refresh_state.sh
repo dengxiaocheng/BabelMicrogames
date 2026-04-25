@@ -118,21 +118,23 @@ if [ -d "$game_root" ]; then
         def rank:
           if .status == "handoff_queued" then 0
           elif .status == "rework" then 1
-          elif .status == "running" then 2
-          elif .status == "queued" then 3
+          elif .status == "blocked" then 2
+          elif .status == "running" then 3
+          elif .status == "queued" then 4
           else 9
           end;
-        [.workers[]? | select(.status == "handoff_queued" or .status == "rework" or .status == "running" or .status == "queued")]
+        [.workers[]? | select(.status == "handoff_queued" or .status == "rework" or .status == "blocked" or .status == "running" or .status == "queued")]
         | sort_by(rank)
         | .[0].worker_id // ""
       ' "$registry")
       current_stage_status=$(jq -r --arg id "$current_stage" '.workers[]? | select(.worker_id == $id) | .status // ""' "$registry")
       blocked_reason=$(jq -r '
-        [.workers[]? | select(.status == "rework" or .status == "blocked" or .status == "failed") | .last_note // empty]
+        [.workers[]? | select(.status == "blocked" or .status == "rework" or .status == "failed") | .last_note // empty]
         | .[0] // ""
       ' "$registry")
 
       handoff_count=$(jq -r '[.workers[]? | select(.status == "handoff_queued")] | length' "$registry")
+      blocked_count=$(jq -r '[.workers[]? | select(.status == "blocked")] | length' "$registry")
       rework_count=$(jq -r '[.workers[]? | select(.status == "rework")] | length' "$registry")
       running_count=$(jq -r '[.workers[]? | select(.status == "running")] | length' "$registry")
       queued_count=$(jq -r '[.workers[]? | select(.status == "queued")] | length' "$registry")
@@ -140,6 +142,8 @@ if [ -d "$game_root" ]; then
         next_action="clean_worktree_before_dispatch"
       elif [ "$handoff_count" != "0" ]; then
         next_action="review_worker_handoff"
+      elif [ "$blocked_count" != "0" ]; then
+        next_action="resolve_blocked_worker"
       elif [ "$rework_count" != "0" ]; then
         next_action="dispatch_rework_worker"
       elif [ "$running_count" != "0" ]; then
@@ -226,6 +230,7 @@ jq -n \
       workers_queued: ($games[0] | map(.worker_counts.queued // 0) | add // 0),
       workers_running: ($games[0] | map(.worker_counts.running // 0) | add // 0),
       workers_rework: ($games[0] | map(.worker_counts.rework // 0) | add // 0),
+      workers_blocked: ($games[0] | map(.worker_counts.blocked // 0) | add // 0),
       workers_handoff_queued: ($games[0] | map(.worker_counts.handoff_queued // 0) | add // 0),
       workers_done: ($games[0] | map(.worker_counts.done // 0) | add // 0),
       tmux_worker_sessions: ($worker_sessions[0] | length)
@@ -241,7 +246,7 @@ mv "$tmp_state" "$state_file"
 if [ "$quiet" != "1" ]; then
   jq -r '
     "manager_state: " + .generated_at_utc,
-    "summary: games=\(.summary.games_total) dispatchable=\(.summary.games_dispatchable) review=\(.summary.games_waiting_review) queued=\(.summary.workers_queued) running=\(.summary.workers_running) done=\(.summary.workers_done) tmux_workers=\(.summary.tmux_worker_sessions)",
+    "summary: games=\(.summary.games_total) dispatchable=\(.summary.games_dispatchable) review=\(.summary.games_waiting_review) queued=\(.summary.workers_queued) running=\(.summary.workers_running) blocked=\(.summary.workers_blocked) done=\(.summary.workers_done) tmux_workers=\(.summary.tmux_worker_sessions)",
     (.games[] | "game: \(.slug) repo=\(.repo) git=\(.git.state) stage=\(.current_stage // ""):\(.current_stage_status // "") action=\(.next_recommended_action)")
   ' "$state_file"
 fi

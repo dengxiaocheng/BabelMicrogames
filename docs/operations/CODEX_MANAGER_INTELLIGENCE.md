@@ -209,7 +209,14 @@ manager 应把每个 worker 的验收变成固定评分。
 - 第二次失败：拆成更小 worker
 - 第三次失败：暂停该游戏，写 blocked reason
 - 网络失败：不算代码失败，但记录 session/network risk
+- Claude session 被占用：标 `blocked`，暂停该游戏，不能算 worker 代码失败
 - scope 越界：必须 rework，不进入下一阶段
+
+当前已经落地的最小保护：
+
+- `claudecode_worker_run_once.sh` 检测到 `Session ID ... is already in use` 时写回 `blocked`
+- `claudecode_manager_autorun.sh` 发现某个游戏存在 `blocked` worker 时，不再继续派发该游戏的后续 worker
+- `microgame_manager_state.json` 会把 blocked worker 计入总表，并把下一步标为 `resolve_blocked_worker`
 
 ## 第五阶段：跨游戏调度
 

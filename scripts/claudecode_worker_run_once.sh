@@ -116,6 +116,10 @@ fi
 cat "$output_file"
 
 if [ "$claude_status" -ne 0 ]; then
+  if grep -qi 'Session ID .*already in use' "$output_file"; then
+    "$bridge_cmd" worker-set-status --worker-id "$worker_id" --status blocked --note "claudecode session busy: $session_id" >/dev/null
+    exit 75
+  fi
   "$bridge_cmd" worker-set-status --worker-id "$worker_id" --status rework --note "claudecode run-once failed: $claude_status" >/dev/null
   exit "$claude_status"
 fi

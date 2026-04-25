@@ -171,6 +171,12 @@ has_worker_session() {
 has_actionable_worker_in() {
   candidate_workdir="$1"
   sh /home/openclaw/claudecode-manager/scripts/claudecode_manager_repo_guard.sh --workdir "$candidate_workdir" >/dev/null
+  if [ -f "$candidate_workdir/.codex-runtime/claudecode_workers.json" ]; then
+    blocked_count=$(jq -r '[.workers[]? | select(.status == "blocked")] | length' "$candidate_workdir/.codex-runtime/claudecode_workers.json" 2>/dev/null || echo 0)
+    if [ "$blocked_count" != "0" ]; then
+      return 1
+    fi
+  fi
   set -- "$bridge_cmd" worker-next --shell --max-running "$max_running"
   if [ -n "$worker_prefix" ]; then
     set -- "$@" --worker-prefix "$worker_prefix"

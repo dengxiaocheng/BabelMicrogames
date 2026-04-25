@@ -231,6 +231,28 @@ func TestDispatchableWorkersIgnoresRunningAndHandoff(t *testing.T) {
 	}
 }
 
+func TestDispatchableWorkersSortsQueuedByLaneBeforeUpdateTime(t *testing.T) {
+	registry := newWorkerRegistry()
+	registry.Workers = []ClaudeWorker{
+		{WorkerID: "content-1", Status: WorkerStatusQueued, Lane: "content", LastUpdatedAtUTC: "2026-04-24T00:00:01Z"},
+		{WorkerID: "logic-1", Status: WorkerStatusQueued, Lane: "logic", LastUpdatedAtUTC: "2026-04-24T00:00:03Z"},
+		{WorkerID: "ui-1", Status: WorkerStatusQueued, Lane: "ui", LastUpdatedAtUTC: "2026-04-24T00:00:02Z"},
+	}
+	workers := dispatchableWorkers(registry)
+	if len(workers) != 3 {
+		t.Fatalf("expected 3 dispatchable workers, got %d", len(workers))
+	}
+	if workers[0].WorkerID != "logic-1" {
+		t.Fatalf("expected logic worker first, got %q", workers[0].WorkerID)
+	}
+	if workers[1].WorkerID != "content-1" {
+		t.Fatalf("expected content worker second, got %q", workers[1].WorkerID)
+	}
+	if workers[2].WorkerID != "ui-1" {
+		t.Fatalf("expected ui worker third, got %q", workers[2].WorkerID)
+	}
+}
+
 func TestApplyTaskLevelDefaults(t *testing.T) {
 	level, maxFiles, maxDeltaLines := applyTaskLevelDefaults("m", 0, 0)
 	if level != TaskLevelM {
@@ -273,8 +295,8 @@ func TestNextDispatchableWorkerRespectsLaneLock(t *testing.T) {
 		t.Fatalf("expected lane-safe worker, got %+v ok=%v", worker, ok)
 	}
 	worker, ok = nextDispatchableWorker(registry, false, 2, true)
-	if !ok || worker.WorkerID != "queued-ui" {
-		t.Fatalf("expected same-lane worker when lane lock disabled, got %+v ok=%v", worker, ok)
+	if !ok || worker.WorkerID != "queued-logic" {
+		t.Fatalf("expected lane-priority worker when lane lock disabled, got %+v ok=%v", worker, ok)
 	}
 }
 

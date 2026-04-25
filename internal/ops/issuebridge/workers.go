@@ -13,6 +13,7 @@ const (
 	WorkerStatusHandoffQueued = "handoff_queued"
 	WorkerStatusDone          = "done"
 	WorkerStatusRework        = "rework"
+	WorkerStatusBlocked       = "blocked"
 	WorkerStatusCancelled     = "cancelled"
 	TaskLevelS                = "S"
 	TaskLevelM                = "M"
@@ -34,8 +35,10 @@ func workerStatusPriority(status string) int {
 		return 1
 	case WorkerStatusRunning:
 		return 2
-	case WorkerStatusQueued:
+	case WorkerStatusBlocked:
 		return 3
+	case WorkerStatusQueued:
+		return 4
 	default:
 		return 9
 	}
@@ -87,13 +90,13 @@ func sortWorkersForQueue(workers []ClaudeWorker) {
 		if lp != rp {
 			return lp < rp
 		}
-		if strings.TrimSpace(left.LastUpdatedAtUTC) != strings.TrimSpace(right.LastUpdatedAtUTC) {
-			return strings.TrimSpace(left.LastUpdatedAtUTC) < strings.TrimSpace(right.LastUpdatedAtUTC)
-		}
 		llp := workerLanePriority(left.Lane)
 		rlp := workerLanePriority(right.Lane)
 		if llp != rlp {
 			return llp < rlp
+		}
+		if strings.TrimSpace(left.LastUpdatedAtUTC) != strings.TrimSpace(right.LastUpdatedAtUTC) {
+			return strings.TrimSpace(left.LastUpdatedAtUTC) < strings.TrimSpace(right.LastUpdatedAtUTC)
 		}
 		return strings.TrimSpace(left.WorkerID) < strings.TrimSpace(right.WorkerID)
 	})

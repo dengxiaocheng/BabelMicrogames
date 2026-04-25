@@ -37,7 +37,7 @@ sh "$manager_workdir/scripts/claudecode_manager_refresh_state.sh" \
 
 jq -r '
   "generated: \(.generated_at_utc)",
-  "summary: games=\(.summary.games_total) dirty=\(.summary.games_dirty) dispatchable=\(.summary.games_dispatchable) review=\(.summary.games_waiting_review) queued=\(.summary.workers_queued) running=\(.summary.workers_running) rework=\(.summary.workers_rework) done=\(.summary.workers_done) tmux_workers=\(.summary.tmux_worker_sessions)",
+  "summary: games=\(.summary.games_total) dirty=\(.summary.games_dirty) dispatchable=\(.summary.games_dispatchable) review=\(.summary.games_waiting_review) queued=\(.summary.workers_queued) running=\(.summary.workers_running) blocked=\(.summary.workers_blocked) rework=\(.summary.workers_rework) done=\(.summary.workers_done) tmux_workers=\(.summary.tmux_worker_sessions)",
   "tmux_workers: " + ((.tmux.worker_sessions // []) | join(", ")),
   (.games[] | "\(.slug): \(.git.state) \(.repo) stage=\(.current_stage // "")/\(.current_stage_status // "") action=\(.next_recommended_action) session=\(.claude_session_id)")
 ' "$state_file"
