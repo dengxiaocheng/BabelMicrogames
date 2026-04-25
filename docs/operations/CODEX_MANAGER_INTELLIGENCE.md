@@ -148,8 +148,8 @@ manager 应该变成一个“生产调度脑”，但仍然不常驻大模型。
 当前已经落地的入口：
 
 ```bash
-sh scripts/claudecode_manager_refresh_state.sh
-sh scripts/claudecode_manager_status.sh
+sh /home/openclaw/babel-runtime/scripts/claudecode_manager_refresh_state.sh
+sh /home/openclaw/babel-runtime/scripts/claudecode_manager_status.sh
 ```
 
 约束：
@@ -157,16 +157,16 @@ sh scripts/claudecode_manager_status.sh
 - 总表只扫描 `/home/openclaw/babel-microgames/*`
 - 每个小游戏自己的 `.codex-runtime/claudecode_workers.json` 仍是 worker 真源
 - manager 占位仓自己的 `.codex-runtime/claudecode_workers.json` 不再允许作为调度真源
-- 如果发现历史遗留状态，先执行 `sh scripts/claudecode_manager_clean_legacy_state.sh`
+- 如果发现历史遗留状态，先执行 `sh /home/openclaw/babel-runtime/scripts/claudecode_manager_clean_legacy_state.sh`
 
 这样 Codex manager 可以从一个总表回答“哪个游戏可派发、哪个需要验收、哪个 workdir 脏、哪个 Claude session 绑定到哪个游戏”，但不会把所有 worker 状态集中写回 manager 仓库。
 
 ## 第二阶段：incoming 扫描器
 
-manager 应提供脚本：
+incoming 扫描器还未落地。落地时也必须由 `s` 提供入口，例如：
 
 ```bash
-sh scripts/claudecode_manager_ingest_incoming.sh
+sh /home/openclaw/babel-runtime/scripts/claudecode_manager_ingest_incoming.sh
 ```
 
 它读取：
@@ -252,7 +252,7 @@ manager 必须请求用户或 `s` 介入：
 
 优先做这几个，不要一次性做复杂系统：
 
-1. `microgame_manager_state.json`：已由 `scripts/claudecode_manager_refresh_state.sh` 生成
+1. `microgame_manager_state.json`：已由 `/home/openclaw/babel-runtime/scripts/claudecode_manager_refresh_state.sh` 生成
 2. incoming 扫描报告脚本
 3. worker 结构化验收脚本
 4. blocked/rework 统一规则

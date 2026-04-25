@@ -13,7 +13,7 @@
 manager 仓不实现 Go bridge。所有 bridge 调用默认走：
 
 ```bash
-sh scripts/claudecode_issue_bridge.sh ...
+sh /home/openclaw/babel-runtime/scripts/claudecode_issue_bridge.sh ...
 ```
 
 该脚本转发到 `s`：
@@ -41,7 +41,7 @@ sh scripts/claudecode_issue_bridge.sh ...
 打开游戏阶段 issue：
 
 ```bash
-sh scripts/claudecode_manager_open_game_stage.sh \
+sh /home/openclaw/babel-runtime/scripts/claudecode_manager_open_game_stage.sh \
   --game-workdir /home/openclaw/babel-microgames/gongtou-dianming \
   --repo dengxiaocheng/BabelMicrogame-GongtouDianming \
   --title "工头点名 / 下一阶段" \
@@ -66,7 +66,7 @@ manager 总表只是索引：
 查看状态：
 
 ```bash
-sh scripts/claudecode_manager_status.sh
+sh /home/openclaw/babel-runtime/scripts/claudecode_manager_status.sh
 ```
 
 ## Worker 启动
@@ -74,7 +74,7 @@ sh scripts/claudecode_manager_status.sh
 无人值守启动一个 worker：
 
 ```bash
-sh scripts/claudecode_worker_start_tmux.sh \
+sh /home/openclaw/babel-runtime/scripts/claudecode_worker_start_tmux.sh \
   --workdir /home/openclaw/babel-microgames/<game> \
   --worker-prefix <game>-
 ```
@@ -82,7 +82,7 @@ sh scripts/claudecode_worker_start_tmux.sh \
 自动调度器：
 
 ```bash
-sh scripts/claudecode_manager_autorun.sh \
+sh /home/openclaw/babel-runtime/scripts/claudecode_manager_autorun.sh \
   --workdir /home/openclaw/claudecode-manager \
   --manager-workdir /home/openclaw/claudecode-manager \
   --game-root /home/openclaw/babel-microgames \
@@ -102,7 +102,7 @@ sh scripts/claudecode_manager_autorun.sh \
 worker 完成后通过：
 
 ```bash
-sh scripts/claudecode_worker_finish.sh \
+sh /home/openclaw/babel-runtime/scripts/claudecode_worker_finish.sh \
   --workdir /home/openclaw/babel-microgames/<game> \
   --worker-id <worker-id>
 ```
@@ -111,7 +111,7 @@ sh scripts/claudecode_worker_finish.sh \
 
 - 用 `manager-handoff` 把 report 评论到当前游戏 issue
 - 关闭游戏 issue
-- 调用 `scripts/claudecode_manager_audit_issue.sh`
+- 调用 `/home/openclaw/babel-runtime/scripts/claudecode_manager_audit_issue.sh`
 - 在 `BabelMicrogames` 打开并关闭一条 manager audit issue
 
 audit state 单独写入：

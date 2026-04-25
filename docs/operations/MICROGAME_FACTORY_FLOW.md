@@ -63,14 +63,14 @@ dengxiaocheng/BabelMicrogame-*
 推荐入口：
 
 ```bash
-sh /home/openclaw/claudecode-manager/scripts/claudecode_manager_start_watcher.sh
-sh /home/openclaw/claudecode-manager/scripts/claudecode_quiet_hours_guard.sh
+sh /home/openclaw/babel-runtime/scripts/claudecode_manager_start_watcher.sh
+sh /home/openclaw/babel-runtime/scripts/claudecode_quiet_hours_guard.sh
 ```
 
 如果要打开新阶段 issue，使用：
 
 ```bash
-sh /home/openclaw/claudecode-manager/scripts/claudecode_manager_open_game_stage.sh
+sh /home/openclaw/babel-runtime/scripts/claudecode_manager_open_game_stage.sh
 ```
 
 ### 3. manager 建立或继续小游戏
@@ -130,7 +130,7 @@ manager 判断 incoming 计划后，选择：
 无人值守 worker 用独立 tmux 会话运行：
 
 ```bash
-sh /home/openclaw/claudecode-manager/scripts/claudecode_worker_start_tmux.sh \
+sh /home/openclaw/babel-runtime/scripts/claudecode_worker_start_tmux.sh \
   --workdir /home/openclaw/babel-microgames/<game> \
   --worker-prefix <game-slug>-
 ```
@@ -185,7 +185,7 @@ manager 验收后要确认：
 执行入口：
 
 ```bash
-sh /home/openclaw/claudecode-manager/scripts/claudecode_quiet_hours_guard.sh
+sh /home/openclaw/babel-runtime/scripts/claudecode_quiet_hours_guard.sh
 ```
 
 quiet hours 中可以保留文档整理和状态查看，但不应继续启动 ClaudeCode 生产任务。

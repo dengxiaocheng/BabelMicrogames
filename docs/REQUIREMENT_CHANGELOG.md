@@ -7,7 +7,16 @@
 - 状态：`implemented`
 - 范围：`control-plane`
 - 变化：
-  manager 仓完成瘦身：删除复制自 runtime 的 `cmd/`、`internal/`、`go.mod`、`requirements/`、`.github/`、`.githooks/`、Termux/Windows 节点脚本和旧 runtime 文档。本仓只保留 ClaudeCode manager 业务脚本、微游戏工厂文档、计划文件和 manager 级状态说明。
+  AI 会话管理脚本真源迁出 manager 仓，统一归属 `/home/openclaw/babel-runtime/scripts` 与 `babel-ops`。本仓删除 `scripts/`，只保留 Codex manager 的文档、规则、计划和状态说明；其它会话只被 `s` 的脚本管理，不需要维护脚本实现。
+- 入口：
+  - `/home/openclaw/babel-runtime/scripts`
+  - `AGENTS.md`
+  - `README.md`
+
+- 状态：`implemented`
+- 范围：`control-plane`
+- 变化：
+  manager 仓完成瘦身：删除复制自 runtime 的 `cmd/`、`internal/`、`go.mod`、`requirements/`、`.github/`、`.githooks/`、Termux/Windows 节点脚本和旧 runtime 文档。本仓只保留 ClaudeCode manager 文档、规则、计划文件和 manager 级状态说明。
 - 入口：
   - `AGENTS.md`
   - `README.md`
@@ -20,22 +29,22 @@
 - 变化：
   `claudecode_manager_refresh_state.sh` 和 `claudecode_manager_status.sh` 现在把 manager 主 stage issue 与 manager audit issue 一起写入 `.codex-runtime/microgame_manager_state.json`，便于 `s` 只读一个总表。
 - 入口：
-  - `scripts/claudecode_manager_refresh_state.sh`
-  - `scripts/claudecode_manager_status.sh`
+  - `/home/openclaw/babel-runtime/scripts/claudecode_manager_refresh_state.sh`
+  - `/home/openclaw/babel-runtime/scripts/claudecode_manager_status.sh`
 
 - 状态：`implemented`
 - 范围：`control-plane`
 - 变化：
   manager audit issue 使用独立 `.codex-runtime/manager_audit_issue_state.json` 和 `.codex-runtime/manager_audit_issue.lock`，不再覆盖 manager 主 `.codex-runtime/issue_bridge_state.json`。
 - 入口：
-  - `scripts/claudecode_manager_audit_issue.sh`
+  - `/home/openclaw/babel-runtime/scripts/claudecode_manager_audit_issue.sh`
 
 - 状态：`implemented`
 - 范围：`control-plane`
 - 变化：
-  ClaudeCode manager 的 issue bridge 默认复用 `s` 的 Go bridge。`scripts/claudecode_issue_bridge.sh` 是薄包装，转发到 `/home/openclaw/babel-runtime/scripts/stage_issue_bridge.sh`。
+  ClaudeCode manager 的 issue bridge 默认复用 `s` 的 Go bridge。`/home/openclaw/babel-runtime/scripts/claudecode_issue_bridge.sh` 是薄包装，转发到 `/home/openclaw/babel-runtime/scripts/stage_issue_bridge.sh`。
 - 入口：
-  - `scripts/claudecode_issue_bridge.sh`
+  - `/home/openclaw/babel-runtime/scripts/claudecode_issue_bridge.sh`
 
 - 状态：`implemented`
 - 范围：`control-plane`

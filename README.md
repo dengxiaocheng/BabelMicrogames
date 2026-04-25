@@ -7,7 +7,7 @@
 - 控制面真源：`/home/openclaw/babel-runtime`
 - 小游戏源码根目录：`/home/openclaw/babel-microgames`
 
-本仓库只保存 manager 规则、脚本、流程文档和 manager 级协调记录；具体小游戏源码必须进入独立的 `dengxiaocheng/BabelMicrogame-*` 仓库。
+本仓库只保存 manager 规则、流程文档和 manager 级协调记录；具体小游戏源码必须进入独立的 `dengxiaocheng/BabelMicrogame-*` 仓库，AI 会话管理脚本必须留在 `s`。
 
 ## 边界
 
@@ -19,10 +19,10 @@
 - 某个小游戏源码仓
 - 第二套 issue bridge 实现
 
-`s` 统一拥有 Go issue bridge、watcher/hook、Termux、节点进程和 GitHub handoff。manager 只通过薄包装调用 `s`：
+`s` 统一拥有 Go issue bridge、watcher/hook、Termux、节点进程和 GitHub handoff。manager 不保留脚本实现；需要操作时由 `s` 调用：
 
 ```bash
-scripts/claudecode_issue_bridge.sh
+/home/openclaw/babel-runtime/scripts/claudecode_issue_bridge.sh
 ```
 
 ## 主要文档
@@ -40,13 +40,13 @@ scripts/claudecode_issue_bridge.sh
 查看 manager 总表：
 
 ```bash
-sh scripts/claudecode_manager_status.sh
+sh /home/openclaw/babel-runtime/scripts/claudecode_manager_status.sh
 ```
 
 启动自动调度：
 
 ```bash
-sh scripts/claudecode_manager_autorun.sh \
+sh /home/openclaw/babel-runtime/scripts/claudecode_manager_autorun.sh \
   --workdir /home/openclaw/claudecode-manager \
   --manager-workdir /home/openclaw/claudecode-manager \
   --game-root /home/openclaw/babel-microgames \
@@ -62,7 +62,7 @@ sh scripts/claudecode_manager_autorun.sh \
 启动某个游戏 watcher：
 
 ```bash
-sh scripts/claudecode_manager_start_watcher.sh \
+sh /home/openclaw/babel-runtime/scripts/claudecode_manager_start_watcher.sh \
   --workdir /home/openclaw/babel-microgames/gongtou-dianming \
   --session-name claudecode_manager_watch_gongtou_dianming \
   --resume-prefix claudecode_manager_resume_gongtou_dianming \
@@ -73,7 +73,7 @@ sh scripts/claudecode_manager_start_watcher.sh \
 打开游戏阶段 issue：
 
 ```bash
-sh scripts/claudecode_manager_open_game_stage.sh \
+sh /home/openclaw/babel-runtime/scripts/claudecode_manager_open_game_stage.sh \
   --game-workdir /home/openclaw/babel-microgames/<game> \
   --repo dengxiaocheng/BabelMicrogame-<Name> \
   --title "<stage>" \
@@ -84,7 +84,7 @@ sh scripts/claudecode_manager_open_game_stage.sh \
 worker 完成回交：
 
 ```bash
-sh scripts/claudecode_worker_finish.sh --workdir /home/openclaw/babel-microgames/<game> --worker-id <worker-id>
+sh /home/openclaw/babel-runtime/scripts/claudecode_worker_finish.sh --workdir /home/openclaw/babel-microgames/<game> --worker-id <worker-id>
 ```
 
 该入口默认会创建并关闭一条 manager audit issue，状态写入：
@@ -111,7 +111,6 @@ sh scripts/claudecode_worker_finish.sh --workdir /home/openclaw/babel-microgames
 ## 验证
 
 ```bash
-find scripts -maxdepth 1 -type f -name '*.sh' -print0 | xargs -0 -n1 sh -n
-sh scripts/claudecode_manager_status.sh
+sh /home/openclaw/babel-runtime/scripts/claudecode_manager_status.sh
 git diff --check
 ```

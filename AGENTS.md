@@ -17,13 +17,13 @@
 - 仓库：`dengxiaocheng/BabelOnline-GoCpp`
 - 真源：Go issue bridge、watcher/hook、Termux、节点进程、GitHub handoff、总控状态入口
 
-本仓库不得复制或扩张第二套 Go bridge。所有 `worker-*`、`open-stage`、`manager-handoff`、`watch`、事件日志和 hook 默认必须通过：
+本仓库不得复制或扩张第二套 Go bridge，也不得保存 AI 会话管理脚本。所有 `worker-*`、`open-stage`、`manager-handoff`、`watch`、事件日志和 hook 默认必须通过 `s`：
 
 ```bash
-scripts/claudecode_issue_bridge.sh
+/home/openclaw/babel-runtime/scripts/claudecode_issue_bridge.sh
 ```
 
-该脚本只是薄包装，最终调用：
+该入口只是薄包装，最终调用：
 
 ```bash
 /home/openclaw/babel-runtime/scripts/stage_issue_bridge.sh
@@ -33,8 +33,6 @@ scripts/claudecode_issue_bridge.sh
 
 本仓库只保留：
 
-- `scripts/claudecode_*.sh`
-- `scripts/microgame_factory_*.sh`
 - `docs/operations/*.md`
 - `docs/REQUIREMENT_CHANGELOG.md`
 - `plan/*.md`
@@ -47,9 +45,10 @@ scripts/claudecode_issue_bridge.sh
 - `requirements/`
 - `.github/workflows/`
 - `.githooks/`
+- `scripts/`
 - Termux / Windows 节点脚本
 
-这些属于 `s` 或具体游戏仓库，不属于 manager 仓。
+这些属于 `s` 或具体游戏仓库，不属于 manager 仓。AI 会话管理脚本统一放在 `/home/openclaw/babel-runtime/scripts` 或 `babel-ops`。
 
 ## 小游戏边界
 
@@ -86,24 +85,24 @@ scripts/claudecode_issue_bridge.sh
 
 ## 状态和进程
 
-常驻进程只允许轻量脚本和 watcher：
+常驻进程只允许由 `s` 启动和管理的轻量 watcher / worker：
 
 - `claudecode_manager_autorun`
 - 每个活动游戏一个 `claudecode_manager_watch_<game>`
 
-不保留无脚本来源的临时 web server、旧 `go run ./cmd/babel-issue-bridge` watcher、旧本地 bridge binary。
+不保留无 `s` 脚本来源的临时 web server、旧 `go run ./cmd/babel-issue-bridge` watcher、旧本地 bridge binary。
 
 查看状态：
 
 ```bash
-sh scripts/claudecode_manager_status.sh
+sh /home/openclaw/babel-runtime/scripts/claudecode_manager_status.sh
 ```
 
 从 `s` 查看全局状态：
 
 ```bash
 cd /home/openclaw/babel-runtime
-sh scripts/s_control_status.sh
+sh /home/openclaw/babel-runtime/scripts/s_control_status.sh
 ```
 
 ## 验证
@@ -111,7 +110,6 @@ sh scripts/s_control_status.sh
 提交前至少运行：
 
 ```bash
-find scripts -maxdepth 1 -type f -name '*.sh' -print0 | xargs -0 -n1 sh -n
-sh scripts/claudecode_manager_status.sh
+sh /home/openclaw/babel-runtime/scripts/claudecode_manager_status.sh
 git diff --check
 ```
