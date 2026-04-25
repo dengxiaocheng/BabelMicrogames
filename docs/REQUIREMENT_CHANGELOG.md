@@ -44,6 +44,22 @@
 - 状态：`implemented`
 - 范围：`control-plane`
 - 变化：
+  Codex manager 的调度状态从“占位仓本地 worker registry”收敛为“扫描每个 `BabelMicrogame-*` game workdir 的 manager 总表”。新增 `.codex-runtime/microgame_manager_state.json` 生成入口、状态摘要入口和历史污染状态归档入口；`autorun` 现在可以从 manager workdir 扫描 `/home/openclaw/babel-microgames/*`，但真正派发 ClaudeCode worker 时只进入目标游戏 workdir，避免再次污染 `s / m` 或 manager 占位仓。
+- 更新的 canonical docs：
+  - `README.md`
+  - `AGENTS.md`
+  - `docs/operations/CLAUDECODE_MANAGER.md`
+  - `docs/operations/CODEX_MANAGER_INTELLIGENCE.md`
+  - `docs/REQUIREMENT_CHANGELOG.md`
+- 实现入口：
+  - `scripts/claudecode_manager_refresh_state.sh`
+  - `scripts/claudecode_manager_status.sh`
+  - `scripts/claudecode_manager_clean_legacy_state.sh`
+  - `scripts/claudecode_manager_autorun.sh`
+
+- 状态：`implemented`
+- 范围：`control-plane`
+- 变化：
   `dengxiaocheng/BabelMicrogames` 正式定位为独立 Codex manager 的资料、流程和脚本仓库，不再作为任何具体小游戏源码仓。新增微游戏工厂端到端流程文档和 Codex manager 智能化路线文档，明确当前 manager 只是“能调度”，还没有做到 incoming 自动消化、全局状态集中、结构化验收、失败降级和跨游戏调度。当前树同步移除了历史残留的小游戏源码和 per-game plan，源码真源只保留在各自 `BabelMicrogame-*` 仓库。
 - 更新的 canonical docs：
   - `README.md`

@@ -92,19 +92,37 @@ sh scripts/claudecode_manager_start_watcher.sh
 启动持续调度器：
 
 ```bash
-sh scripts/claudecode_manager_autorun.sh --daemon
+sh scripts/claudecode_manager_autorun.sh \
+  --workdir /home/openclaw/claudecode-manager \
+  --game-root /home/openclaw/babel-microgames \
+  --daemon
 ```
 
 它只在以下条件同时满足时拉起下一个 ClaudeCode worker：
 
 - 当前不在 14:00-18:00 quiet hours
 - `claudecode_manager` tmux socket 下没有 `claudecode_worker_*` 会话
-- worker queue 中存在 `queued` 或 `rework` 任务
+- 任一游戏 workdir 的 worker queue 中存在 `queued` 或 `rework` 任务
+
+它不会从 `/home/openclaw/claudecode-manager/.codex-runtime/claudecode_workers.json` 派发任务。manager 占位仓只保存调度脚本、文档和总表；真正启动 worker 时，autorun 会进入 `/home/openclaw/babel-microgames/<game>`。
+
+如果只允许它调度某一个小游戏：
+
+```bash
+sh scripts/claudecode_manager_autorun.sh \
+  --workdir /home/openclaw/claudecode-manager \
+  --game-workdir /home/openclaw/babel-microgames/gongtou-dianming \
+  --daemon
+```
 
 如果希望队列清空后不再进入人工决策点，而是按固定 Codex 策略继续做下一条微游戏线，使用：
 
 ```bash
-sh scripts/claudecode_manager_autorun.sh --daemon --auto-seed-microgames
+sh scripts/claudecode_manager_autorun.sh \
+  --workdir /home/openclaw/claudecode-manager \
+  --game-root /home/openclaw/babel-microgames \
+  --daemon \
+  --auto-seed-microgames
 ```
 
 固定策略：
@@ -113,6 +131,21 @@ sh scripts/claudecode_manager_autorun.sh --daemon --auto-seed-microgames
 - 队列为空：从内置 backlog 自动种下一条微游戏线
 - 当前默认 backlog：`dianming`、`shuiyuan`、`huijiang`、`yinji`、`bingpeng`
 - 没有 backlog 时才保持空转等待
+
+当前一游戏一仓库规则优先级更高；如果自动种子脚本还没有明确创建独立 repo/workdir，就会拒绝执行，而不是把新游戏塞回 manager 仓库。
+
+查看 manager 总表：
+
+```bash
+sh scripts/claudecode_manager_status.sh
+```
+
+清理历史污染状态：
+
+```bash
+sh scripts/claudecode_manager_clean_legacy_state.sh --dry-run
+sh scripts/claudecode_manager_clean_legacy_state.sh
+```
 
 停止专用 watcher：
 

@@ -80,7 +80,12 @@ quote() {
 }
 
 if [ -z "$session_name" ]; then
-  session_suffix=$(printf "%s" "${worker_prefix:-next}" | tr -c '[:alnum:]_-' '_' | sed 's/_*$//')
+  if [ -n "$worker_prefix" ]; then
+    session_seed="$worker_prefix"
+  else
+    session_seed=$(basename "$workdir")
+  fi
+  session_suffix=$(printf "%s" "$session_seed" | tr -c '[:alnum:]_-' '_' | sed 's/_*$//')
   if [ -z "$session_suffix" ]; then
     session_suffix="next"
   fi

@@ -168,6 +168,15 @@ GitHub 仓库：
 - `scripts/claudecode_manager_next.sh`
   让 Codex manager 直接挑出当前最该派发的 worker，并可一键进入对应的 ClaudeCode worker 会话。默认带 `max-running=1` 和同 `lane` 互斥；如果没有现成 session id，但 worker packet 已经存在，也可以直接拉起新的 Claude 会话。
 
+- `scripts/claudecode_manager_refresh_state.sh`
+  扫描 `/home/openclaw/babel-microgames/*`，生成 manager 总表 `.codex-runtime/microgame_manager_state.json`。这个总表只做索引和调度视图，不替代每个游戏自己的 worker registry。
+
+- `scripts/claudecode_manager_status.sh`
+  刷新并打印 manager 总表摘要，快速查看每个小游戏 workdir、Claude session、当前 stage、队列数量和下一步建议。
+
+- `scripts/claudecode_manager_clean_legacy_state.sh`
+  归档 manager 占位仓里历史遗留的 `.codex-runtime/claudecode_workers.json`、worker packet 和旧 tmux runfile，防止 autorun 误把 manager 仓库当成具体小游戏队列。
+
 - `scripts/claudecode_manager_start_watcher.sh`
   启动 ClaudeCode 专用 manager watcher。它只常驻轻量 Go watcher；当 worker 关闭 issue 并留下 report 评论后，才用 `codex exec resume` 唤醒一次 Codex manager，处理完成后退出。
 

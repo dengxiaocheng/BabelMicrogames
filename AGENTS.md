@@ -28,6 +28,7 @@ Game source workdirs are separate and must stay game-only:
 
 Manager responsibilities:
 
+- keep `/home/openclaw/claudecode-manager/.codex-runtime/microgame_manager_state.json` refreshed as the manager-level index
 - read worker reports from game `.codex-runtime/claudecode_workers/`
 - review diffs inside the target game workdir
 - run game tests from the target game workdir
@@ -41,7 +42,14 @@ Manager must not:
 - implement game source changes directly unless repairing manager-induced breakage
 - add manager/runtime code to a game repository
 - use `BabelOnline-GoCpp`, `Babel`, or `BabelMicrogames` as a per-game worker queue
+- use `/home/openclaw/claudecode-manager/.codex-runtime/claudecode_workers.json` as dispatch truth
 - let issue watcher resume Codex inside a game workdir
+
+Dispatch truth is always the target game workdir:
+
+- `/home/openclaw/babel-microgames/<game>/.codex-runtime/claudecode_workers.json`
+
+The manager repository may keep an aggregate state file, but it must not own per-game worker packets or worker status.
 
 Its GitHub issue namespace and source repositories must be separate from the long-lived `s` / `m` repositories.
 

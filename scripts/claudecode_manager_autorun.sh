@@ -3,6 +3,10 @@
 set -eu
 
 workdir=""
+manager_workdir="/home/openclaw/claudecode-manager"
+manager_repo="${CLAUDECODE_MANAGER_REPO:-dengxiaocheng/BabelMicrogames}"
+game_root="/home/openclaw/babel-microgames"
+game_workdir=""
 tmux_socket="claudecode_manager"
 session_name="claudecode_manager_autorun"
 poll_seconds="60"
@@ -20,6 +24,18 @@ while [ $# -gt 0 ]; do
   case "$1" in
     --workdir)
       workdir="$2"
+      shift 2
+      ;;
+    --manager-workdir)
+      manager_workdir="$2"
+      shift 2
+      ;;
+    --game-root)
+      game_root="$2"
+      shift 2
+      ;;
+    --game-workdir)
+      game_workdir="$2"
       shift 2
       ;;
     --tmux-socket)
@@ -77,8 +93,35 @@ if [ -z "$workdir" ]; then
   workdir=$(pwd)
 fi
 
+abs_dir() {
+  (cd "$1" && pwd -P)
+}
+
+repo_name_for() {
+  git -C "$1" remote get-url origin 2>/dev/null |
+    sed -e 's#^git@github.com:##' \
+        -e 's#^https://github.com/##' \
+        -e 's#^http://github.com/##' \
+        -e 's#\.git$##'
+}
+
+guard_control_workdir() {
+  repo=$(repo_name_for "$1" || true)
+  if [ "$repo" = "$manager_repo" ]; then
+    sh /home/openclaw/claudecode-manager/scripts/claudecode_manager_repo_guard.sh --workdir "$1" --expected-repo "$manager_repo"
+  else
+    sh /home/openclaw/claudecode-manager/scripts/claudecode_manager_repo_guard.sh --workdir "$1"
+  fi
+}
+
+workdir=$(abs_dir "$workdir")
+manager_workdir=$(abs_dir "$manager_workdir")
+if [ -n "$game_workdir" ]; then
+  game_workdir=$(abs_dir "$game_workdir")
+fi
+
 cd "$workdir"
-sh /home/openclaw/claudecode-manager/scripts/claudecode_manager_repo_guard.sh --workdir "$workdir"
+guard_control_workdir "$workdir"
 [ -x "$bridge_cmd" ] || {
   echo "missing bridge command: $bridge_cmd" >&2
   exit 1
@@ -96,7 +139,10 @@ if [ "$daemon" = "1" ]; then
     exit 0
   fi
 
-  command="cd $(quote "$workdir") && BRIDGE_CMD=$(quote "$bridge_cmd") exec sh /home/openclaw/claudecode-manager/scripts/claudecode_manager_autorun.sh --workdir $(quote "$workdir") --tmux-socket $(quote "$tmux_socket") --session-name $(quote "$session_name") --poll-seconds $(quote "$poll_seconds") --quiet-start $(quote "$quiet_start") --quiet-end $(quote "$quiet_end") --max-running $(quote "$max_running") --timeout-seconds $(quote "$timeout_seconds")"
+  command="cd $(quote "$workdir") && BRIDGE_CMD=$(quote "$bridge_cmd") exec sh /home/openclaw/claudecode-manager/scripts/claudecode_manager_autorun.sh --workdir $(quote "$workdir") --manager-workdir $(quote "$manager_workdir") --game-root $(quote "$game_root") --tmux-socket $(quote "$tmux_socket") --session-name $(quote "$session_name") --poll-seconds $(quote "$poll_seconds") --quiet-start $(quote "$quiet_start") --quiet-end $(quote "$quiet_end") --max-running $(quote "$max_running") --timeout-seconds $(quote "$timeout_seconds")"
+  if [ -n "$game_workdir" ]; then
+    command="$command --game-workdir $(quote "$game_workdir")"
+  fi
   if [ -n "$worker_prefix" ]; then
     command="$command --worker-prefix $(quote "$worker_prefix")"
   fi
@@ -122,17 +168,53 @@ has_worker_session() {
   tmux -L "$tmux_socket" list-sessions -F '#S' 2>/dev/null | grep -q '^claudecode_worker_'
 }
 
-has_actionable_worker() {
+has_actionable_worker_in() {
+  candidate_workdir="$1"
+  sh /home/openclaw/claudecode-manager/scripts/claudecode_manager_repo_guard.sh --workdir "$candidate_workdir" >/dev/null
   set -- "$bridge_cmd" worker-next --shell --max-running "$max_running"
   if [ -n "$worker_prefix" ]; then
     set -- "$@" --worker-prefix "$worker_prefix"
   fi
-  "$@" 2>/dev/null | grep -q "^WORKER_ID='"
+  (cd "$candidate_workdir" && "$@") 2>/dev/null | grep -q "^WORKER_ID='"
+}
+
+select_dispatch_workdir() {
+  if [ -n "$game_workdir" ]; then
+    if has_actionable_worker_in "$game_workdir"; then
+      printf '%s\n' "$game_workdir"
+      return 0
+    fi
+    return 1
+  fi
+
+  repo=$(repo_name_for "$workdir" || true)
+  case "$repo" in
+    dengxiaocheng/BabelMicrogame-*)
+      if has_actionable_worker_in "$workdir"; then
+        printf '%s\n' "$workdir"
+        return 0
+      fi
+      ;;
+  esac
+
+  if [ -d "$game_root" ]; then
+    for candidate in "$game_root"/*; do
+      [ -d "$candidate/.git" ] || continue
+      sh /home/openclaw/claudecode-manager/scripts/claudecode_manager_repo_guard.sh --workdir "$candidate" >/dev/null 2>&1 || continue
+      if has_actionable_worker_in "$candidate"; then
+        printf '%s\n' "$candidate"
+        return 0
+      fi
+    done
+  fi
+
+  return 1
 }
 
 start_next_worker() {
+  dispatch_workdir="$1"
   set -- sh /home/openclaw/claudecode-manager/scripts/claudecode_worker_start_tmux.sh \
-    --workdir "$workdir" \
+    --workdir "$dispatch_workdir" \
     --tmux-socket "$tmux_socket" \
     --max-running "$max_running" \
     --timeout-seconds "$timeout_seconds"
@@ -145,13 +227,25 @@ start_next_worker() {
 seed_microgame_if_possible() {
   [ "$auto_seed_microgames" = "1" ] || return 1
   sh /home/openclaw/claudecode-manager/scripts/claudecode_microgame_autoseed.sh \
-    --workdir "$workdir" \
+    --workdir "$manager_workdir" \
     --presets "$auto_seed_presets"
 }
 
-echo "claudecode autorun loop started: workdir=$workdir poll=${poll_seconds}s quiet=${quiet_start}-${quiet_end} auto_seed_microgames=$auto_seed_microgames"
+refresh_state() {
+  if [ -x "$manager_workdir/scripts/claudecode_manager_refresh_state.sh" ]; then
+    sh "$manager_workdir/scripts/claudecode_manager_refresh_state.sh" \
+      --manager-workdir "$manager_workdir" \
+      --game-root "$game_root" \
+      --tmux-socket "$tmux_socket" \
+      --quiet || true
+  fi
+}
+
+echo "claudecode autorun loop started: manager_workdir=$manager_workdir workdir=$workdir game_root=$game_root poll=${poll_seconds}s quiet=${quiet_start}-${quiet_end} auto_seed_microgames=$auto_seed_microgames"
 
 while :; do
+  refresh_state
+
   if in_quiet_hours; then
     sleep "$poll_seconds"
     continue
@@ -162,10 +256,13 @@ while :; do
     continue
   fi
 
-  if has_actionable_worker; then
-    start_next_worker || true
+  dispatch_workdir=""
+  if dispatch_workdir=$(select_dispatch_workdir); then
+    start_next_worker "$dispatch_workdir" || true
   elif seed_microgame_if_possible; then
-    start_next_worker || true
+    if dispatch_workdir=$(select_dispatch_workdir); then
+      start_next_worker "$dispatch_workdir" || true
+    fi
   fi
 
   sleep "$poll_seconds"
