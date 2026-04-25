@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "families": [
+    {
+      "family_id": "rulesets",
+      "kind": "ruleset",
+      "directory": "requirements/rulesets",
+      "schema": "requirements/schemas/ruleset.schema.json"
+    },
+    {
+      "family_id": "prompt_packs",
+      "kind": "prompt_pack",
+      "directory": "requirements/prompt-packs",
+      "schema": "requirements/schemas/prompt-pack.schema.json"
+    },
+    {
+      "family_id": "content_constraints",
+      "kind": "content_constraint",
+      "directory": "requirements/content-constraints",
+      "schema": "requirements/schemas/content-constraint.schema.json"
+    },
+    {
+      "family_id": "gameplay_assets",
+      "kind": "gameplay_asset",
+      "directory": "requirements/gameplay-assets",
+      "schema": "requirements/schemas/gameplay-asset.schema.json"
+    },
+    {
+      "family_id": "experiment_traces",
+      "kind": "experiment_trace",
+      "directory": "requirements/experiments",
+      "schema": "requirements/schemas/experiment-trace.schema.json"
+    }
+  ],
+  "assets": [
+    {
+      "asset_id": "bootstrap.ruleset",
+      "family_id": "rulesets",
+      "kind": "ruleset",
+      "revision": "0.1.0",
+      "path": "requirements/rulesets/bootstrap.ruleset.json"
+    },
+    {
+      "asset_id": "bootstrap.prompt_pack",
+      "family_id": "prompt_packs",
+      "kind": "prompt_pack",
+      "revision": "0.1.0",
+      "path": "requirements/prompt-packs/bootstrap.prompt-pack.json"
+    },
+    {
+      "asset_id": "bootstrap.content_constraint",
+      "family_id": "content_constraints",
+      "kind": "content_constraint",
+      "revision": "0.1.0",
+      "path": "requirements/content-constraints/bootstrap.constraint.json"
+    },
+    {
+      "asset_id": "bootstrap.gameplay_asset",
+      "family_id": "gameplay_assets",
+      "kind": "gameplay_asset",
+      "revision": "0.1.0",
+      "path": "requirements/gameplay-assets/bootstrap.asset.json"
+    },
+    {
+      "asset_id": "bootstrap.experiment_trace",
+      "family_id": "experiment_traces",
+      "kind": "experiment_trace",
+      "revision": "0.1.0",
+      "path": "requirements/experiments/bootstrap.trace.json"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "asset_id": "bootstrap.content_constraint",
+  "family_id": "content_constraints",
+  "kind": "content_constraint",
+  "revision": "0.1.0",
+  "status": "bootstrap",
+  "summary": "Requirement registry foundation 的基础 content constraint 占位资产。",
+  "runtime_modes": [],
+  "test_refs": [],
+  "source_trace": []
+}

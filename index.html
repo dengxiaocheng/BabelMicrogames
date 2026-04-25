@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>巴别在线 · 微游戏</title>
+  <style>
+    :root {
+      --bg: #1a1a2e; --fg: #e0e0e0; --accent: #e2b714;
+      --card: #16213e; --border: #0f3460; --danger: #c0392b;
+      --success: #27ae60;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      background: var(--bg); color: var(--fg);
+      min-height: 100vh; display: flex; justify-content: center; align-items: center;
+    }
+    #app {
+      max-width: 640px; width: 100%; padding: 2rem;
+    }
+    #status-bar {
+      display: flex; gap: 1.2rem; font-size: 0.9rem; color: var(--accent);
+      border-bottom: 1px solid var(--border); padding-bottom: 0.8rem; margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    #status-bar span { white-space: nowrap; }
+    #phase-transition {
+      text-align: center; padding: 0.8rem; margin-bottom: 1rem;
+      color: var(--accent); font-size: 1rem; border-bottom: 1px solid var(--border);
+      display: none;
+    }
+    #phase-transition.visible { display: block; animation: fadeIn 0.4s ease-out; }
+    #event-title {
+      color: var(--accent); font-size: 1.15rem; font-weight: bold;
+      margin-bottom: 0.8rem;
+    }
+    #narrative {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 6px; padding: 1.5rem; line-height: 1.8;
+      min-height: 120px; margin-bottom: 1.5rem; white-space: pre-wrap;
+    }
+    #choices { display: flex; flex-direction: column; gap: 0.6rem; }
+    .choice-btn {
+      background: var(--card); border: 1px solid var(--border);
+      color: var(--fg); padding: 0.8rem 1rem; border-radius: 4px;
+      cursor: pointer; text-align: left; font-size: 1rem;
+      font-family: inherit;
+      transition: border-color 0.2s, opacity 0.25s, background 0.25s;
+    }
+    .choice-btn:hover:not(:disabled) { border-color: var(--accent); }
+    .choice-btn:disabled {
+      opacity: 0.35; cursor: default;
+    }
+    .choice-btn.selected {
+      opacity: 1 !important;
+      border-color: var(--accent);
+      background: rgba(226, 183, 20, 0.12);
+    }
+    .continue-prompt {
+      text-align: center; color: var(--accent); cursor: pointer;
+      padding: 0.8rem; margin-top: 0.4rem; opacity: 0.65;
+      font-size: 0.9rem; border: 1px dashed var(--border); border-radius: 4px;
+      transition: opacity 0.2s;
+    }
+    .continue-prompt:hover { opacity: 1; }
+    #feedback {
+      margin-top: 1.2rem; padding: 1rem; border-radius: 4px;
+      background: rgba(226, 183, 20, 0.08); border-left: 3px solid var(--accent);
+      line-height: 1.7; display: none;
+    }
+    #feedback.visible { display: block; animation: fadeIn 0.4s ease-out; }
+    #ending {
+      text-align: center; padding: 2rem; display: none;
+    }
+    #ending h2 { margin-bottom: 1rem; }
+    #ending p { line-height: 1.8; }
+    #ending.success h2 { color: var(--success); }
+    #ending.failure h2 { color: var(--danger); }
+    #ending.visible { display: block; animation: fadeIn 0.6s ease-out; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    #game-select {
+      text-align: center; padding-top: 3rem;
+    }
+    #game-select button {
+      display: inline-block; margin: 0 0.8rem; padding: 1rem 2.5rem;
+      background: var(--card); border: 1px solid var(--border);
+      color: var(--fg); font-size: 1.1rem; font-family: inherit;
+      border-radius: 6px; cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    #game-select button:hover { border-color: var(--accent); }
+  </style>
+</head>
+<body>
+  <div id="game-select">
+    <button id="btn-ration-day">配给日</button>
+    <button id="btn-yejian-qidao">夜间祈祷</button>
+  </div>
+
+  <div id="app">
+    <div id="status-bar">
+      <span id="s-round">轮次 1</span>
+      <span id="s-phase">第一轮：秩序</span>
+      <span id="s-hunger">饥饿 0</span>
+      <span id="s-rations">配给 8</span>
+      <span id="s-guilt">负罪 0</span>
+      <span id="s-night" style="display:none">夜 1</span>
+      <span id="s-spirit" style="display:none">精神 7</span>
+      <span id="s-suspicion" style="display:none">怀疑 0</span>
+      <span id="s-faith" style="display:none">信仰 5</span>
+    </div>
+    <div id="phase-transition"></div>
+    <div id="event-title"></div>
+    <div id="narrative">加载中...</div>
+    <div id="choices"></div>
+    <div id="feedback"></div>
+    <div id="ending">
+      <h2 id="ending-title"></h2>
+      <p id="ending-text"></p>
+    </div>
+  </div>
+
+  <script type="module">
+    import { UIRenderer } from "./src/ui/renderer.js";
+    import { createInitialState as createRationInitialState, runCycle as runRationCycle } from "./src/state/engine.js";
+    import { NightPrayerController } from "./src/ui/yejian_qidao_controller.js";
+    import { NightPrayerRenderer } from "./src/ui/yejian_qidao_renderer.js";
+
+    // ── Game selector ──────────────────────────────────────
+    const app = document.getElementById("app");
+    const sel = document.getElementById("game-select");
+    app.style.display = "none";
+
+    document.getElementById("btn-ration-day").addEventListener("click", () => startRationDay());
+    document.getElementById("btn-yejian-qidao").addEventListener("click", () => startYejianQidao());
+
+    // ── 配给日 (Ration Day) ────────────────────────────────
+    async function startRationDay() {
+      sel.style.display = "none";
+      app.style.display = "";
+      showRationDayStats();
+
+      const [config, charactersDoc, eventsDoc] = await Promise.all([
+        fetch("src/content/game_config.json").then((r) => r.json()),
+        fetch("src/content/characters.json").then((r) => r.json()),
+        fetch("src/content/events.json").then((r) => r.json()),
+      ]);
+      const charList = charactersDoc.characters;
+      const eventPool = eventsDoc.events;
+
+      let state = createRationInitialState(config, charList);
+
+      const ui = new UIRenderer({
+        round:    document.getElementById("s-round"),
+        phase:    document.getElementById("s-phase"),
+        hunger:   document.getElementById("s-hunger"),
+        rations:  document.getElementById("s-rations"),
+        guilt:    document.getElementById("s-guilt"),
+        eventTitle:      document.getElementById("event-title"),
+        narrative:       document.getElementById("narrative"),
+        choices:         document.getElementById("choices"),
+        feedback:        document.getElementById("feedback"),
+        ending:          document.getElementById("ending"),
+        endingTitle:     document.getElementById("ending-title"),
+        endingText:      document.getElementById("ending-text"),
+        phaseTransition: document.getElementById("phase-transition"),
+      });
+
+      function phaseName() {
+        const ph = config.rounds.phases.find((p) => p.id === state.currentPhaseId);
+        return ph?.name ?? "结算";
+      }
+
+      function pickEvent() {
+        const pool = eventPool.filter((e) => e.phase.includes(state.currentPhaseId));
+        if (pool.length === 0 || state.gameOver) return null;
+        return pool[state.eventIndex % pool.length];
+      }
+
+      function presentEvent() {
+        const ev = pickEvent();
+        if (ev) {
+          ui.renderEvent(ev, (choice) => onChoose(ev, choice));
+        } else {
+          document.getElementById("narrative").textContent = "没有可用事件。";
+        }
+        ui.renderStatus(state, phaseName());
+      }
+
+      function onChoose(event, choice) {
+        const prevPhaseId = state.currentPhaseId;
+        const result = runRationCycle(state, choice.effects, config);
+        state = result.state;
+        if (!state.gameOver && state.currentPhaseId === prevPhaseId) {
+          state = { ...state, eventIndex: state.eventIndex + 1 };
+        }
+
+        ui.renderFeedback(choice.feedback);
+        ui.renderStatus(state, phaseName());
+
+        if (result.ending) {
+          ui.renderEnding(result.ending);
+          return;
+        }
+
+        if (state.currentPhaseId !== prevPhaseId) {
+          ui.renderPhaseTransition(phaseName());
+        }
+
+        ui.showContinue(() => presentEvent());
+      }
+
+      ui.renderStatus(state, phaseName());
+      presentEvent();
+    }
+
+    function showRationDayStats() {
+      show("s-round"); show("s-hunger"); show("s-rations"); show("s-guilt");
+      hide("s-night"); hide("s-spirit"); hide("s-suspicion"); hide("s-faith");
+    }
+
+    // ── 夜间祈祷 (Night Prayer) ───────────────────────────
+    async function startYejianQidao() {
+      sel.style.display = "none";
+      app.style.display = "";
+      showYejianQidaoStats();
+
+      const [config, charactersDoc, eventsDoc] = await Promise.all([
+        fetch("src/content/yejian_qidao_config.json").then((r) => r.json()),
+        fetch("src/content/yejian_qidao_characters.json").then((r) => r.json()),
+        fetch("src/content/yejian_qidao_events.json").then((r) => r.json()),
+      ]);
+      const renderer = new NightPrayerRenderer({
+        night: document.getElementById("s-night"),
+        phase: document.getElementById("s-phase"),
+        spirit: document.getElementById("s-spirit"),
+        suspicion: document.getElementById("s-suspicion"),
+        faith: document.getElementById("s-faith"),
+        eventTitle: document.getElementById("event-title"),
+        narrative: document.getElementById("narrative"),
+        choices: document.getElementById("choices"),
+        feedback: document.getElementById("feedback"),
+        ending: document.getElementById("ending"),
+        endingTitle: document.getElementById("ending-title"),
+        endingText: document.getElementById("ending-text"),
+        phaseTransition: document.getElementById("phase-transition"),
+      });
+      new NightPrayerController(renderer, {
+        config,
+        characters: charactersDoc,
+        events: eventsDoc,
+      }).start();
+    }
+
+    function showYejianQidaoStats() {
+      hide("s-round"); hide("s-hunger"); hide("s-rations"); hide("s-guilt");
+      show("s-night"); show("s-spirit"); show("s-suspicion"); show("s-faith");
+    }
+
+    function show(id) { document.getElementById(id).style.display = ""; }
+    function hide(id) { document.getElementById(id).style.display = "none"; }
+  </script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "asset_id": "bootstrap.experiment_trace",
+  "family_id": "experiment_traces",
+  "kind": "experiment_trace",
+  "revision": "0.1.0",
+  "status": "bootstrap",
+  "summary": "Requirement registry foundation 的基础 experiment trace，占位用于后续验证链路。",
+  "runtime_modes": [],
+  "test_refs": [],
+  "source_trace": [],
+  "derived_assets": [
+    "bootstrap.gameplay_asset"
+  ]
+}

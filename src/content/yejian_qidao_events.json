@@ -1,0 +1,403 @@
+{
+  "version": 1,
+  "game": "yejian-qidao",
+  "description": "夜间祈祷事件池：每个夜晚祈祷中的抉择与危机",
+  "events": [
+    {
+      "id": "evt_first_call",
+      "phase": [1],
+      "trigger": "always",
+      "title": "第一次叩拜",
+      "narrative": "钟声响起。所有人跪下，双手交叠，额头触地。以诺站在前方，火炬照亮他铁一样的侧脸。「开始。」他说。你张开口——祈祷词从你嘴里流出来，像一条被训好的河。但你不知道自己说的是什么。",
+      "choices": [
+        {
+          "id": "pray_earnestly",
+          "text": "全心祈祷",
+          "effects": { "player": { "faith": 2, "spirit": -1, "suspicion": 0 } },
+          "feedback": "你把一切杂念放下，让声音接管身体。祈祷结束时，你觉得自己变轻了一点——或者变空了一点。"
+        },
+        {
+          "id": "mouth_only",
+          "text": "嘴唇在动，心在别处",
+          "effects": { "player": { "faith": -1, "spirit": 0, "suspicion": 1 } },
+          "feedback": "你的嘴唇精准地执行着动作，但思绪已经飘到了很远的地方。以诺扫了你一眼——也许只是习惯。"
+        },
+        {
+          "id": "hesitate",
+          "text": "迟疑了一瞬",
+          "effects": { "player": { "faith": 0, "spirit": 0, "suspicion": 2 } },
+          "feedback": "你停了不到一秒。但以诺的目光像针一样扎了过来。祈祷继续，但那根针还插在你背上。"
+        }
+      ]
+    },
+    {
+      "id": "evt_sarah_whisper",
+      "phase": [1],
+      "trigger": "always",
+      "title": "身旁的低语",
+      "narrative": "祈祷间隙，撒拉的声音从你左边飘来，轻得像呼吸。「你有没有觉得……这些词不是我们的？」她的眼睛直视前方，嘴唇还在机械地动着。以诺正在另一排巡视。",
+      "choices": [
+        {
+          "id": "respond_softly",
+          "text": "小声回应她",
+          "effects": {
+            "player": { "spirit": 1, "suspicion": 1, "faith": -1 },
+            "sarah": { "trust": 2 }
+          },
+          "feedback": "「我觉得也是。」你几乎没发出声音。撒拉的手指微微动了一下——那是她松了口气的样子。"
+        },
+        {
+          "id": "ignore_her",
+          "text": "当作没听见",
+          "effects": {
+            "player": { "spirit": -1, "suspicion": 0, "faith": 1 },
+            "sarah": { "trust": -1 }
+          },
+          "feedback": "你专注于祈祷词，一个字也不落。撒拉没有再说话。但你感觉到她的目光在你身上停留了一瞬。"
+        },
+        {
+          "id": "signal_caution",
+          "text": "用眼神示意她小心",
+          "effects": {
+            "player": { "spirit": 0, "suspicion": 0, "faith": 0 },
+            "sarah": { "trust": 1 }
+          },
+          "feedback": "你微微偏头看了她一眼，又迅速转回去。她懂了——至少知道了你不是聋的。"
+        }
+      ]
+    },
+    {
+      "id": "evt_enoch_inspection",
+      "phase": [1, 2],
+      "trigger": "player.suspicion >= 3 OR random.chance >= 0.5",
+      "title": "以诺的巡视",
+      "narrative": "以诺沿着跪拜的人群缓步走来。火把在他身后拉出长长的影子。他在你面前停下了。你闻到松脂和铁锈的味道。「你今晚的声音不太稳定。」他说，语气像在陈述天气。",
+      "choices": [
+        {
+          "id": "reaffirm_faith",
+          "text": "大声重复祈祷词以示虔诚",
+          "effects": { "player": { "faith": 2, "spirit": -1, "suspicion": -2 } },
+          "feedback": "你的声音在空旷的大厅里回荡。以诺看了你几秒，点了点头，继续走。你的膝盖在发抖。"
+        },
+        {
+          "id": "stay_silent",
+          "text": "低头不语",
+          "effects": { "player": { "faith": -1, "spirit": -1, "suspicion": 1 } },
+          "feedback": "沉默比任何回答都可疑。以诺没有走。他站了很久，久到你听到身后有人开始不安地挪动。最后他走了。但你知道他记住了。"
+        },
+        {
+          "id": "explain_humbly",
+          "text": "低声解释自己需要多练习",
+          "effects": { "player": { "faith": 0, "spirit": 0, "suspicion": -1 } },
+          "feedback": "「我还需要学习，监督。」以诺的嘴角动了一下。「那就学。」他走了。你不确定这是宽恕还是缓刑。"
+        }
+      ]
+    },
+    {
+      "id": "evt_forbidden_words",
+      "phase": [2],
+      "trigger": "always",
+      "title": "禁语的回响",
+      "narrative": "你在祈祷时走神了。脑子里突然冒出一段旋律——不是统一之语，是一种更古老的调子。你从没学过这种语言，但它像是从骨头里长出来的。你的嘴唇差点就跟着动了。",
+      "choices": [
+        {
+          "id": "suppress_old_words",
+          "text": "用力压下去，回到祈祷词",
+          "effects": { "player": { "faith": 1, "spirit": -2, "suspicion": 0 } },
+          "feedback": "你咬紧牙关，把那段旋律塞回记忆深处。祈祷词重新占据了你的嘴。但精神被撕开的那道口子还在隐隐作痛。"
+        },
+        {
+          "id": "let_it_surface",
+          "text": "任由它在脑中流淌",
+          "effects": { "player": { "faith": -2, "spirit": 2, "suspicion": 1 } },
+          "feedback": "你闭上眼，让那段旋律在脑子里走完。奇怪——它结束时，你觉得清醒了很多。但以诺似乎注意到你的嘴唇形状和声音不匹配。"
+        }
+      ]
+    },
+    {
+      "id": "evt_nahor_memory",
+      "phase": [2, 3],
+      "trigger": "nahor.trust >= 1 OR random.chance >= 0.4",
+      "title": "拿鹤的回忆",
+      "narrative": "祈祷结束后，拿鹤坐在角落里。你走过去时，他抬了抬眼皮。「变乱之前，」他忽然开口，「祈祷是不用教的。每个人用自己的话，自己的调子。没有统一的词。」「那为什么现在要统一？」「因为有人害怕。」他看着你，眼睛清亮得不像七十二岁。「害怕不同的声音。」",
+      "choices": [
+        {
+          "id": "ask_more",
+          "text": "追问变乱之前的事",
+          "effects": {
+            "player": { "faith": -1, "spirit": 1, "suspicion": 1 },
+            "nahor": { "trust": 2 }
+          },
+          "feedback": "拿鹤又说了很多。关于塔、关于声音、关于为什么人们曾经能听懂彼此。你听得入迷，直到远处传来脚步声。"
+        },
+        {
+          "id": "accept_silently",
+          "text": "默默听完，不做回应",
+          "effects": {
+            "player": { "faith": 0, "spirit": 0, "suspicion": 0 },
+            "nahor": { "trust": 1 }
+          },
+          "feedback": "你点了点头，没有说话。拿鹤也没再开口。但他的眼睛里有了一种你之前没见过的光——希望，也许。"
+        },
+        {
+          "id": "warn_him",
+          "text": "提醒他小心被人听到",
+          "effects": {
+            "player": { "faith": 0, "spirit": 0, "suspicion": 0 },
+            "nahor": { "trust": 3 }
+          },
+          "feedback": "「小心。」你说。拿鹤看了你一眼，微微笑了。「你还年轻。你能走到最后。」"
+        }
+      ]
+    },
+    {
+      "id": "evt_caleb_fervor",
+      "phase": [2, 3],
+      "trigger": "random.chance >= 0.4",
+      "title": "迦勒的热忱",
+      "narrative": "迦勒跪在你前面两排，声音大得整栋建筑都在共振。「统一之语！纯净之音！赞美变乱后的秩序！」他忽然转过头，直直看着你。眼睛里有火。「你也感受到了，对吗？祈祷的力量？」",
+      "choices": [
+        {
+          "id": "agree_with_caleb",
+          "text": "附和迦勒的热情",
+          "effects": { "player": { "faith": 2, "spirit": -1, "suspicion": -1 } },
+          "feedback": "「是的。」你说。迦勒笑了，笑容真诚得让你心里发虚。也许他是对的。也许是你错了。"
+        },
+        {
+          "id": "nod_vaguely",
+          "text": "含糊地点头",
+          "effects": { "player": { "faith": 0, "spirit": 0, "suspicion": 0 } },
+          "feedback": "你点了一下头，幅度小到几乎看不出来。迦勒似乎满意了，转回去继续祈祷。你不确定他真的看见了你的回应，还是只看到了他想看的。"
+        },
+        {
+          "id": "question_privately",
+          "text": "反问他是否真的心安",
+          "effects": { "player": { "faith": -1, "spirit": 1, "suspicion": 2 } },
+          "feedback": "迦勒的笑容僵了一瞬。然后他恢复了。「当然。」他说。但他转回去的动作比你预想的快。你意识到——他不允许自己不信。"
+        }
+      ]
+    },
+    {
+      "id": "evt_old_tongue_dream",
+      "phase": [3],
+      "trigger": "player.faith <= 6",
+      "title": "旧语的梦",
+      "narrative": "白天你做了个梦。梦里有人说着一句话，反复说，像在教你。那不是统一之语——是更古老的东西。醒来时你发现自己记住了那句话的发音。你不确定这是恩赐还是诅咒。",
+      "choices": [
+        {
+          "id": "practice_secretly",
+          "text": "在无人的地方低声练习",
+          "effects": { "player": { "faith": -1, "spirit": 2, "suspicion": 1 } },
+          "feedback": "那句话从你嘴里滑出来的瞬间，空气似乎震了一下。你的精神前所未有地清明。但如果有人听到了……"
+        },
+        {
+          "id": "bury_it",
+          "text": "把它深埋在记忆里",
+          "effects": { "player": { "faith": 1, "spirit": -1, "suspicion": 0 } },
+          "feedback": "你把那句话锁起来。但它还在那里，在你思维的角落里低低回响，像一口不会干涸的井。"
+        },
+        {
+          "id": "share_with_sarah",
+          "text": "告诉撒拉",
+          "effects": {
+            "player": { "faith": -1, "spirit": 1, "suspicion": 1 },
+            "sarah": { "trust": 3 }
+          },
+          "feedback": "撒拉的眼睛亮了。「我也梦到了。」她低声说。你们对视了一秒，然后各自别开目光。这个秘密太重了。"
+        }
+      ]
+    },
+    {
+      "id": "evt_sarah_secret",
+      "phase": [3],
+      "trigger": "sarah.trust >= 3",
+      "title": "撒拉的坦白",
+      "narrative": "祈祷散场后，撒拉拉住你的袖子，把你拽到阴影里。「我不能再装了，」她的声音在发抖，「每晚我的嘴唇都在动，但我说的不是祈祷词。我用自己的语言——我小时候的语言。我不知道还能撑多久。」",
+      "choices": [
+        {
+          "id": "comfort_her",
+          "text": "安慰她，说你能理解",
+          "effects": {
+            "player": { "faith": -1, "spirit": 1, "suspicion": 0 },
+            "sarah": { "trust": 2 }
+          },
+          "feedback": "你握住她的手。「我理解。」你说。她没哭，但你的手心被她攥得生疼。"
+        },
+        {
+          "id": "urge_caution",
+          "text": "劝她继续伪装",
+          "effects": {
+            "player": { "faith": 0, "spirit": -1, "suspicion": 0 },
+            "sarah": { "trust": -1 }
+          },
+          "feedback": "「别冒险。」你说。撒拉松开你的袖子，退了一步。「你和以诺教的一样。」她说完就走了。你不确定她是对你失望，还是在保护你。"
+        }
+      ]
+    },
+    {
+      "id": "evt_midnight_visitor",
+      "phase": [3, 4],
+      "trigger": "player.spirit >= 4",
+      "title": "午夜的访客",
+      "narrative": "半夜，有人轻轻敲你的门。你打开一条缝——是拿鹤。他手里攥着一块磨得光滑的木牌，上面刻着你看不懂的符号。「拿着，」他说，「这不是符咒，是提醒。提醒你语言曾经是自由的。」",
+      "choices": [
+        {
+          "id": "accept_gift",
+          "text": "接过木牌",
+          "effects": {
+            "player": { "faith": -1, "spirit": 2, "suspicion": 1 },
+            "nahor": { "trust": 2 }
+          },
+          "feedback": "木牌温热，像被人攥了很久。你把它藏在枕头底下。那晚你睡得比前几天都安稳。"
+        },
+        {
+          "id": "decline_for_safety",
+          "text": "婉拒，太危险了",
+          "effects": {
+            "player": { "faith": 0, "spirit": -1, "suspicion": 0 },
+            "nahor": { "trust": -1 }
+          },
+          "feedback": "拿鹤没有坚持。他把木牌收回去，转身走了。走廊里他的影子很矮，但很长。"
+        }
+      ]
+    },
+    {
+      "id": "evt_betrayal_risk",
+      "phase": [4],
+      "trigger": "player.suspicion >= 5",
+      "title": "背叛的可能",
+      "narrative": "迦勒私下找到你。他的表情不像平时那样炽热。「以诺让我盯着你，」他直接说，「但我还没告诉他什么。」他停顿了一下。「你帮帮我也行。我……有时候我也不确定自己信不信。但我不能让他们发现。帮我保守这个秘密，我也保守你的。」",
+      "choices": [
+        {
+          "id": "form_pact",
+          "text": "和他达成默契",
+          "effects": { "player": { "spirit": 1, "suspicion": -2, "faith": -1 } },
+          "feedback": "「成交。」你们没有握手——太像交易了。只是彼此点了一下头。恐惧换恐惧，秘密换秘密。"
+        },
+        {
+          "id": "refuse_coldly",
+          "text": "冷冷拒绝",
+          "effects": { "player": { "spirit": -1, "suspicion": 2, "faith": 0 } },
+          "feedback": "迦勒的脸变了。「你也会被发现的。」他低声说完就走了。你不知道他会在以诺面前说什么。"
+        }
+      ]
+    },
+    {
+      "id": "evt_nahor_gift",
+      "phase": [4],
+      "trigger": "nahor.trust >= 3",
+      "title": "拿鹤的托付",
+      "narrative": "拿鹤把你叫到一边。他的脸色不太好。「我不一定还能撑过下一夜，」他说，从怀里掏出一卷薄薄的羊皮，「这是我记住的所有旧语言。能记住多少就记多少——不是让你说，是让你知道，还有别的可能。」",
+      "choices": [
+        {
+          "id": "memorize",
+          "text": "当场默记",
+          "effects": {
+            "player": { "faith": -2, "spirit": 2, "suspicion": 1 },
+            "nahor": { "trust": 3 }
+          },
+          "feedback": "你看了两遍。有些词你认得——它们和你梦中的一样。拿鹤把羊皮收回，塞进衣襟。「记住了就忘不了了。」他说。"
+        },
+        {
+          "id": "ask_to_keep",
+          "text": "请求保留羊皮",
+          "effects": {
+            "player": { "faith": -1, "spirit": 1, "suspicion": 2 },
+            "nahor": { "trust": 1 }
+          },
+          "feedback": "拿鹤犹豫了。「带着它比带着命还危险。」但他还是递了过来。你把羊皮贴身藏好。它在胸口微微发烫。"
+        }
+      ]
+    },
+    {
+      "id": "evt_group_pressure",
+      "phase": [4],
+      "trigger": "player.suspicion >= 3",
+      "title": "集体的凝视",
+      "narrative": "今晚的祈祷格外长。以诺要求每个人单独念一段。轮到你时，所有人的目光都投了过来——不是善意的。他们看你，像看一个可能拖累所有人的异类。祈祷词在你舌尖打转。",
+      "choices": [
+        {
+          "id": "recite_flawlessly",
+          "text": "一字不差地背出来",
+          "effects": { "player": { "faith": 1, "spirit": -2, "suspicion": -3 } },
+          "feedback": "你的声音在颤抖，但每一个字都对。以诺挑不出毛病。你坐回去时，后背的汗把衣裳浸透了。"
+        },
+        {
+          "id": "stumble_recover",
+          "text": "磕磕绊绊但勉强完成",
+          "effects": { "player": { "faith": -1, "spirit": -1, "suspicion": 1 } },
+          "feedback": "你在第三句卡了一下。有人发出了一声叹息——不是同情，是厌烦。以诺没有说话，但他记住了。"
+        }
+      ]
+    },
+    {
+      "id": "evt_final_prayer",
+      "phase": [5],
+      "trigger": "always",
+      "title": "最后一次祈祷",
+      "narrative": "最后一夜。大厅里烛火通明。以诺站在最高处，俯视着所有人。「今夜是终祷。」他的声音在穹顶回荡。「所有不纯的，都将被净化。」他看向你的方向。也许只是你的错觉。也许不是。祈祷开始了。",
+      "choices": [
+        {
+          "id": "pray_with_all",
+          "text": "投入全部精神祈祷",
+          "effects": { "player": { "faith": 3, "spirit": -2, "suspicion": -2 } },
+          "feedback": "你把自己揉碎了塞进祈祷词里。每个音节都是真实的——至少在那几分钟里是。祈祷结束，你感觉身体空了一半，但另一半异常坚定。"
+        },
+        {
+          "id": "whisper_old_words",
+          "text": "在祈祷词中夹入旧语",
+          "effects": { "player": { "faith": -2, "spirit": 3, "suspicion": 2 } },
+          "feedback": "你用统一之语的音量掩护着，嘴唇间溜出了一句旧语。没有人听到。或者有人听到了但选择了沉默。你感觉自己的骨头在共振——像和某个古老的频率对上了。"
+        },
+        {
+          "id": "silence_inside",
+          "text": "外表虔诚，内心沉默",
+          "effects": { "player": { "faith": 0, "spirit": 0, "suspicion": -1 } },
+          "feedback": "你的嘴唇完美地执行着每一个动作。但里面什么都没有——像一口倒空的井。以诺从你面前走过，什么也没说。也许他看穿了但不在乎。也许你的空洞刚好吻合了祈祷的要求。"
+        }
+      ]
+    },
+    {
+      "id": "evt_enoch_judgment",
+      "phase": [5],
+      "trigger": "player.suspicion >= 5",
+      "title": "以诺的审判",
+      "narrative": "终祷结束后，以诺没有让人散去。他走到你面前，火把的光在他脸上切割出明暗分明的线条。「五夜了，」他说，「每一夜我都在听你。」他从你身边走过，停了三步远。「你心里藏着别的东西。我闻得到。」他转过身。所有人都在看。",
+      "choices": [
+        {
+          "id": "confess_partial",
+          "text": "承认动摇，但声称仍在寻找信仰",
+          "effects": { "player": { "faith": 0, "spirit": -1, "suspicion": -2 } },
+          "feedback": "以诺沉默了很久。「动摇不可怕，」他终于说，「可怕的是不再寻找。你可以继续祈祷。」他的声音里有一种你从未听到过的东西——也许是慈悲，也许是诡计。"
+        },
+        {
+          "id": "deny_all",
+          "text": "断然否认",
+          "effects": { "player": { "faith": 1, "spirit": -2, "suspicion": 1 } },
+          "feedback": "「我是虔诚的。」你的声音比预想的稳定。以诺看了你很久，最后移开了目光。你不知道他信了还是决定再观察。但你的精神被这次对峙消耗了大半。"
+        }
+      ]
+    },
+    {
+      "id": "evt_nahor_final",
+      "phase": [5],
+      "trigger": "nahor.trust >= 2",
+      "title": "拿鹤的最后一课",
+      "narrative": "终祷散场。大厅快空了。拿鹤坐在角落，比任何时候都矮。你走过去时，他抬起头。「我撑过了所有夜晚，」他说，「不是因为信——是因为我记得。记得语言是自由的，记得人不需要被教怎么和天说话。」他握住你的手，力气大得不像老人。「现在轮到你了。记住就好。不需要反抗，不需要证明。记住就好。」",
+      "choices": [
+        {
+          "id": "promise_to_remember",
+          "text": "答应他会记住",
+          "effects": { "player": { "faith": -1, "spirit": 3, "suspicion": 0 } },
+          "feedback": "「我会记住。」你说。拿鹤松开了手。他的眼睛里有水光，但那是笑。「那就够了。」他说。你站起来的时候，觉得膝盖以下是树根，上半身是天空。"
+        },
+        {
+          "id": "sit_in_silence",
+          "text": "坐在他身边不说话",
+          "effects": { "player": { "faith": 0, "spirit": 2, "suspicion": 0 } },
+          "feedback": "你没有回答。你坐在他旁边，像两棵老树。大厅里只剩下烛火的声音。不需要语言的时候，安静就是最好的祈祷。"
+        }
+      ]
+    }
+  ]
+}

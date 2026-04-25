@@ -1,0 +1,124 @@
+{
+  "version": 1,
+  "game": "yejian-qidao",
+  "description": "夜间祈祷游戏配置：连续夜晚祈祷、精神与怀疑度管理",
+
+  "nights": {
+    "total": 5,
+    "phases": [
+      {
+        "id": 1,
+        "name": "第一夜：服从",
+        "description": "第一次夜间祈祷。你还不熟悉规矩，但所有人都盯着你看。",
+        "events_per_night": 2,
+        "available_events": ["evt_first_call", "evt_sarah_whisper", "evt_enoch_inspection"]
+      },
+      {
+        "id": 2,
+        "name": "第二夜：裂隙",
+        "description": "你开始察觉祈祷词中的异样。有人和你一样不安。",
+        "events_per_night": 2,
+        "available_events": ["evt_forbidden_words", "evt_nahor_memory", "evt_caleb_fervor", "evt_enoch_inspection"]
+      },
+      {
+        "id": 3,
+        "name": "第三夜：抉择",
+        "description": "旧语言的碎片在你脑中回响。祈祷还是沉默，已不只是习惯。",
+        "events_per_night": 2,
+        "available_events": ["evt_old_tongue_dream", "evt_sarah_secret", "evt_caleb_fervor", "evt_midnight_visitor"]
+      },
+      {
+        "id": 4,
+        "name": "第四夜：试炼",
+        "description": "以诺的目光更加锐利。一条错误的祈祷可能让你万劫不复。",
+        "events_per_night": 2,
+        "available_events": ["evt_betrayal_risk", "evt_nahor_gift", "evt_group_pressure", "evt_midnight_visitor"]
+      },
+      {
+        "id": 5,
+        "name": "第五夜：终祷",
+        "description": "最后一次祈祷。所有的选择汇聚在这一夜。",
+        "events_per_night": 2,
+        "available_events": ["evt_final_prayer", "evt_enoch_judgment", "evt_nahor_final"]
+      }
+    ]
+  },
+
+  "initial_state": {
+    "player": {
+      "spirit": 7,
+      "suspicion": 0,
+      "faith": 5
+    },
+    "spirit_drain_per_night": 1,
+    "description": "每夜结束后 spirit 自动 -1（精神自然消耗）"
+  },
+
+  "thresholds": {
+    "spirit": {
+      "strong": 7,
+      "stable": 4,
+      "fragile": 2,
+      "broken": 0
+    },
+    "suspicion": {
+      "none": 0,
+      "noted": 3,
+      "watched": 5,
+      "condemned": 8
+    },
+    "faith": {
+      "doubt": 2,
+      "wavering": 4,
+      "steady": 6,
+      "devout": 8
+    }
+  },
+
+  "endings": {
+    "survivals": [
+      {
+        "id": "faithful_survivor",
+        "name": "虔诚者",
+        "condition": "player.spirit > fragile AND player.suspicion < watched AND player.faith >= devout",
+        "text": "五夜过去了。你跪在原地，嘴唇还在微微翕动。以诺从你身旁走过，没有停留。你活了下来——但活着的人，未必还是自己。"
+      },
+      {
+        "id": "silent_survivor",
+        "name": "沉默者",
+        "condition": "player.spirit > fragile AND player.suspicion < watched AND player.faith <= wavering",
+        "text": "五夜过去了。你的嘴唇动了五夜，但从未发出过一个真心的音节。以诺扫过你的脸，什么也没读出来。你活了下来——以沉默为代价。"
+      },
+      {
+        "id": "compromised",
+        "name": "附和者",
+        "condition": "player.spirit <= fragile AND player.suspicion < condemned",
+        "text": "你撑过了五夜，但精神已经支离破碎。你不再分不清祈祷词是出自内心还是出于恐惧。以诺说：「你的声音越来越虔诚了。」你不知道该不该害怕这句话。"
+      }
+    ],
+    "failures": [
+      {
+        "id": "broken_spirit",
+        "name": "精神崩溃",
+        "condition": "player.spirit <= broken",
+        "text": "这一夜，你在祈祷中途停了下来。不是因为叛逆——是因为再也念不出一个字。你的嘴唇在动，但喉咙里什么都没有。以诺把你架了出去。外面很冷。你再也听不到祈祷声了——但你第一次觉得安静是好的。"
+      },
+      {
+        "id": "condemned",
+        "name": "被审判",
+        "condition": "player.suspicion >= condemned",
+        "text": "以诺终于站定了。他看着你，像看一只不慎暴露在月光下的飞蛾。「你从第一夜就不信。」他说。不是疑问句。你被带走了。身后的祈祷声没有停——甚至没有乱一拍。"
+      }
+    ]
+  },
+
+  "state_rules": {
+    "spirit_cap": 10,
+    "spirit_floor": 0,
+    "suspicion_cap": 10,
+    "suspicion_floor": 0,
+    "faith_cap": 10,
+    "faith_floor": 0,
+    "clamping": "所有状态值在 floor 和 cap 之间钳制"
+  }
+}

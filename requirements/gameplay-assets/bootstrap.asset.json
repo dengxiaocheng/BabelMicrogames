@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "asset_id": "bootstrap.gameplay_asset",
+  "family_id": "gameplay_assets",
+  "kind": "gameplay_asset",
+  "revision": "0.1.0",
+  "status": "bootstrap",
+  "summary": "Requirement registry foundation 的基础 gameplay asset，占位用于后续 experiment-to-asset 转换。",
+  "runtime_modes": [],
+  "test_refs": [],
+  "source_trace": [
+    "bootstrap.experiment_trace"
+  ],
+  "linked_assets": [
+    "bootstrap.ruleset",
+    "bootstrap.prompt_pack",
+    "bootstrap.content_constraint"
+  ]
+}
