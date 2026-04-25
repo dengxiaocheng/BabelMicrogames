@@ -105,6 +105,9 @@ GitHub 仓库：
 - `scripts/claudecode_issue_bridge.sh`
   ClaudeCode manager 的默认 bridge 薄包装。它把当前工作目录交给 `/home/openclaw/babel-runtime/scripts/stage_issue_bridge.sh`，由 `s` 的 Go bridge 执行 `worker-* / open-stage / manager-handoff / watch`，并继承 `BABEL_ISSUE_BRIDGE_EVENT_HOOK`。
 
+- `scripts/claudecode_manager_audit_issue.sh`
+  Codex manager 的透明阶段记录入口。每次 ClaudeCode worker 通过 `worker-finish` 关闭游戏 issue 并回交 manager 时，会在 `BabelMicrogames` 打开一条 manager 级 audit issue，再自动关闭，方便之后接管时查看 manager 自己的阶段汇报。
+
 - `go run ./cmd/babel-issue-bridge`
   兼容入口。除排障外，ClaudeCode manager 脚本默认应走 `scripts/claudecode_issue_bridge.sh`，避免 manager 仓和 `s` 的 Go bridge 语义漂移。
 
@@ -196,7 +199,7 @@ GitHub 仓库：
   用预制 Babel 创意线一键开始微游戏任务链。它会先生成对应的工厂产物和 worker packets，再以无人值守 `run-once` 方式立即派出当前第一个 Claude worker，并只从当前项目自己的 worker 前缀里挑任务。当前内置预设有：`peigei`、`qidao`、`dianming`。
 
 - `scripts/claudecode_worker_finish.sh`
-  让 ClaudeCode worker 通过 `manager-handoff` 把结果回交给 waiting 中的 Codex 管理线程。
+  让 ClaudeCode worker 通过 `manager-handoff` 把结果回交给 waiting 中的 Codex 管理线程；默认还会调用 `scripts/claudecode_manager_audit_issue.sh`，为 manager 自己生成一条打开后关闭的透明审计 issue。
 
 - `scripts/claudecode_issue_bridge.sh worker-register|worker-packet|worker-next|worker-start|worker-finish|worker-queue|worker-set-status`
   当前最小版的 Claude worker registry / queue。用来登记 worker、生成固定 task packet、写入 `lane`、按并发和 lane 约束自动挑选下一个可派发 worker、查看当前队列、在 worker 完成后把结果挂回 Codex manager，并在 manager 审查后回写最终状态。

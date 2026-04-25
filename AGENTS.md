@@ -37,6 +37,7 @@ Manager responsibilities:
 - open the next game stage issue with `--resume-workdir /home/openclaw/claudecode-manager`
 - start the next ClaudeCode worker using the target game's fixed Claude session
 - use `/home/openclaw/babel-runtime` as the default Go issue bridge implementation through `scripts/claudecode_issue_bridge.sh`
+- create and close a manager-level audit issue when a ClaudeCode worker handoff issue is closed, so later takeover can inspect manager-side stage history
 
 Manager must not:
 
@@ -53,6 +54,8 @@ Dispatch truth is always the target game workdir:
 The manager repository may keep an aggregate state file, but it must not own per-game worker packets or worker status.
 
 Manager scripts may keep ClaudeCode-specific orchestration in this repository, but `worker-*`, `open-stage`, `manager-handoff`, watcher events, and `BABEL_ISSUE_BRIDGE_EVENT_HOOK` must flow through the `s` Go bridge by default. Do not re-expand the local copied `cmd/babel-issue-bridge` into an active second implementation.
+
+When worker finish closes a game issue, `scripts/claudecode_worker_finish.sh` should also call `scripts/claudecode_manager_audit_issue.sh` unless `CLAUDECODE_MANAGER_AUDIT_ISSUE=0` is explicitly set for emergency debugging.
 
 Its GitHub issue namespace and source repositories must be separate from the long-lived `s` / `m` repositories.
 

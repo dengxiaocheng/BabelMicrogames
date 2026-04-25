@@ -74,6 +74,8 @@ sh scripts/claudecode_manager_open_game_stage.sh \
 
 该脚本会把 issue state 写在游戏 workdir，同时把 Codex resume 目录固定为 manager workdir。
 
+`s` 的 Go bridge 支持 `--resume-workdir`。因此游戏 workdir 仍保存该游戏的 `.codex-runtime/issue_bridge_state.json`，但 watcher 真正恢复 Codex 时会进入 `/home/openclaw/claudecode-manager`。
+
 ## Bridge 复用边界
 
 ClaudeCode manager 只保留业务编排脚本。以下操作默认复用 `s` 的 Go bridge：
@@ -90,6 +92,30 @@ sh scripts/claudecode_issue_bridge.sh worker-queue
 ```
 
 也可以通过 `BRIDGE_CMD` 临时覆盖，但日常不要指向本仓库复制出的 `.codex-runtime/bin/babel-issue-bridge`，否则会再次形成第二套 Go bridge 语义。
+
+## Manager Audit Issue
+
+ClaudeCode worker 关闭游戏 issue 只是“执行者完成并回交”。为了让 Codex manager 自己的管理动作也可追踪，worker finish 后还要写一条 manager 级 audit issue：
+
+```bash
+sh scripts/claudecode_manager_audit_issue.sh \
+  --title "Codex manager audit: <worker-id>" \
+  --report-file /path/to/report.md
+```
+
+默认行为：
+
+- 在 `dengxiaocheng/BabelMicrogames` 打开一条 issue
+- issue body 写入 manager 侧阶段报告
+- 立即用 comment 关闭该 issue
+- 事件仍写入 manager workdir 的 `.codex-runtime/issue_bridge_events.jsonl`
+- `BABEL_ISSUE_BRIDGE_EVENT_HOOK` 仍由 `s` 的 Go bridge 触发
+
+`scripts/claudecode_worker_finish.sh` 默认会自动执行这个 audit 步骤。只有排障时才允许设置：
+
+```bash
+CLAUDECODE_MANAGER_AUDIT_ISSUE=0
+```
 
 ## 推荐运行形态
 
@@ -510,6 +536,9 @@ sh scripts/claudecode_issue_bridge.sh manager-handoff ...
 
 - `scripts/claudecode_worker_finish.sh`
   把 worker 结果通过 `manager-handoff` 交回 Codex manager
+
+- `scripts/claudecode_manager_audit_issue.sh`
+  为 Codex manager 自己生成打开后关闭的 manager 级 audit issue，记录它处理 ClaudeCode worker handoff 的阶段汇报
 
 - `scripts/claudecode_manager_next.sh`
   让 manager 直接挑出当前最该派发的 worker，并可立即启动 Claude worker

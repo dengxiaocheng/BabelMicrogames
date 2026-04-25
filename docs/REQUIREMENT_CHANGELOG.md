@@ -44,6 +44,19 @@
 - 状态：`implemented`
 - 范围：`control-plane`
 - 变化：
+  Codex manager 每次处理 ClaudeCode worker handoff 时，也要有自己的 issue 记录。新增 `scripts/claudecode_manager_audit_issue.sh`，通过 `s` Go bridge 在 `BabelMicrogames` 打开 manager 级 audit issue 并立即关闭；`scripts/claudecode_worker_finish.sh` 默认在 worker handoff 成功后调用该审计入口，除非显式设置 `CLAUDECODE_MANAGER_AUDIT_ISSUE=0`。
+- 更新的 canonical docs：
+  - `AGENTS.md`
+  - `README.md`
+  - `docs/operations/CLAUDECODE_MANAGER.md`
+  - `docs/REQUIREMENT_CHANGELOG.md`
+- 实现入口：
+  - `scripts/claudecode_manager_audit_issue.sh`
+  - `scripts/claudecode_worker_finish.sh`
+
+- 状态：`implemented`
+- 范围：`control-plane`
+- 变化：
   ClaudeCode manager 的 issue bridge 默认实现不再指向 `/home/openclaw/claudecode-manager/.codex-runtime/bin/babel-issue-bridge`。新增 `scripts/claudecode_issue_bridge.sh` 作为薄包装，统一转发到 `/home/openclaw/babel-runtime/scripts/stage_issue_bridge.sh`，因此 worker queue、stage issue、manager-handoff、watcher 事件和 `BABEL_ISSUE_BRIDGE_EVENT_HOOK` 都复用 `s` 的 Go bridge。
 - 更新的 canonical docs：
   - `AGENTS.md`

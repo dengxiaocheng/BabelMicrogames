@@ -11,6 +11,7 @@ manager_workdir="${CLAUDECODE_MANAGER_WORKDIR:-/home/openclaw/claudecode-manager
 manager_thread_id="${CLAUDECODE_MANAGER_THREAD_ID:-019dbdc4-8d17-7600-8de1-cdd9d510fa97}"
 watcher_session_name=""
 bridge_cmd="${BRIDGE_CMD:-/home/openclaw/claudecode-manager/scripts/claudecode_issue_bridge.sh}"
+dry_run="0"
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -46,6 +47,10 @@ while [ $# -gt 0 ]; do
       watcher_session_name="$2"
       shift 2
       ;;
+    --dry-run)
+      dry_run="1"
+      shift
+      ;;
     *)
       echo "unknown arg: $1" >&2
       exit 2
@@ -73,4 +78,5 @@ exec "$bridge_cmd" open-stage \
   --watcher-session-name "$watcher_session_name" \
   --title "$title" \
   --report "$report" \
-  --decision-request "$decision_request"
+  --decision-request "$decision_request" \
+  $(if [ "$dry_run" = "1" ]; then printf '%s\n' --dry-run; fi)

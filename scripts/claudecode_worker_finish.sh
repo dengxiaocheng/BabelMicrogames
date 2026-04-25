@@ -76,4 +76,37 @@ if [ "$annotate_comment" = "1" ]; then
   set -- "$@" --annotate-comment
 fi
 
-exec "$@"
+if "$@"; then
+  finish_status=0
+else
+  finish_status=$?
+fi
+
+abs_path() {
+  case "$1" in
+    /*) printf "%s\n" "$1" ;;
+    *) printf "%s/%s\n" "$workdir" "$1" ;;
+  esac
+}
+
+if [ "$finish_status" -eq 0 ] && [ -n "$worker_id" ] && [ "${CLAUDECODE_MANAGER_AUDIT_ISSUE:-1}" = "1" ]; then
+  audit_report_file=""
+  if [ -n "$comment_file" ]; then
+    audit_report_file=$(abs_path "$comment_file")
+  elif [ -n "$report_file" ]; then
+    audit_report_file=$(abs_path "$report_file")
+  fi
+  if [ -n "$audit_report_file" ] && [ -f "$audit_report_file" ]; then
+    BRIDGE_CMD="$bridge_cmd" sh /home/openclaw/claudecode-manager/scripts/claudecode_manager_audit_issue.sh \
+      --title "Codex manager audit: $worker_id" \
+      --report-file "$audit_report_file" \
+      --comment "Codex manager audit recorded worker handoff: $worker_id" || true
+  else
+    BRIDGE_CMD="$bridge_cmd" sh /home/openclaw/claudecode-manager/scripts/claudecode_manager_audit_issue.sh \
+      --title "Codex manager audit: $worker_id" \
+      --report "Worker handoff recorded: $worker_id" \
+      --comment "Codex manager audit recorded worker handoff: $worker_id" || true
+  fi
+fi
+
+exit "$finish_status"
