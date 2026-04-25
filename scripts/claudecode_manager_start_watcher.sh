@@ -7,6 +7,7 @@ session_name="claudecode_manager_watch"
 resume_prefix="claudecode_manager_resume"
 poll_seconds="10"
 tmux_socket="claudecode_manager"
+bridge_cmd="${BRIDGE_CMD:-/home/openclaw/claudecode-manager/.codex-runtime/bin/babel-issue-bridge}"
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -42,7 +43,11 @@ if [ -z "$workdir" ]; then
 fi
 
 cd "$workdir"
-sh scripts/claudecode_manager_repo_guard.sh --workdir "$workdir"
+sh /home/openclaw/claudecode-manager/scripts/claudecode_manager_repo_guard.sh --workdir "$workdir"
+[ -x "$bridge_cmd" ] || {
+  echo "missing bridge command: $bridge_cmd" >&2
+  exit 1
+}
 
 if [ -n "$tmux_socket" ]; then
   quote() {
@@ -54,13 +59,13 @@ if [ -n "$tmux_socket" ]; then
     echo "watcher 已在运行: $session_name"
     exit 0
   fi
-  command="cd $(quote "$workdir") && exec go run ./cmd/babel-issue-bridge watch --poll-seconds $(quote "$poll_seconds") --watcher-session-name $(quote "$session_name") --resume-session-prefix $(quote "$resume_prefix") --resume-mode exec"
+  command="cd $(quote "$workdir") && exec $(quote "$bridge_cmd") watch --poll-seconds $(quote "$poll_seconds") --watcher-session-name $(quote "$session_name") --resume-session-prefix $(quote "$resume_prefix") --resume-mode exec"
   tmux -L "$tmux_socket" new-session -d -s "$session_name" "$command"
   echo "watcher 已启动: $session_name"
   exit 0
 fi
 
-go run ./cmd/babel-issue-bridge start-watcher \
+"$bridge_cmd" start-watcher \
   --session-name "$session_name" \
   -- \
   --poll-seconds "$poll_seconds" \

@@ -12,6 +12,7 @@ task_title=""
 task_summary=""
 packet_file=""
 send_packet="0"
+bridge_cmd="${BRIDGE_CMD:-/home/openclaw/claudecode-manager/.codex-runtime/bin/babel-issue-bridge}"
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -67,14 +68,18 @@ if [ -z "$workdir" ]; then
 fi
 
 cd "$workdir"
-sh scripts/claudecode_manager_repo_guard.sh --workdir "$workdir"
+sh /home/openclaw/claudecode-manager/scripts/claudecode_manager_repo_guard.sh --workdir "$workdir"
+[ -x "$bridge_cmd" ] || {
+  echo "missing bridge command: $bridge_cmd" >&2
+  exit 1
+}
 
 if [ -n "$worker_id" ] && [ -z "$packet_file" ]; then
   packet_file=".codex-runtime/claudecode_workers/${worker_id}/packet.md"
 fi
 
 if [ -n "$worker_id" ]; then
-  set -- go run ./cmd/babel-issue-bridge worker-start --worker-id "$worker_id"
+  set -- "$bridge_cmd" worker-start --worker-id "$worker_id"
   if [ -n "$session_id" ]; then
     set -- "$@" --session-id "$session_id"
   fi

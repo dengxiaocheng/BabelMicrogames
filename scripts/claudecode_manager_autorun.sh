@@ -14,6 +14,7 @@ worker_prefix=""
 daemon="0"
 auto_seed_microgames="0"
 auto_seed_presets="dianming shuiyuan huijiang yinji bingpeng"
+bridge_cmd="${BRIDGE_CMD:-/home/openclaw/claudecode-manager/.codex-runtime/bin/babel-issue-bridge}"
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -77,7 +78,11 @@ if [ -z "$workdir" ]; then
 fi
 
 cd "$workdir"
-sh scripts/claudecode_manager_repo_guard.sh --workdir "$workdir"
+sh /home/openclaw/claudecode-manager/scripts/claudecode_manager_repo_guard.sh --workdir "$workdir"
+[ -x "$bridge_cmd" ] || {
+  echo "missing bridge command: $bridge_cmd" >&2
+  exit 1
+}
 
 quote() {
   printf "'"
@@ -91,7 +96,7 @@ if [ "$daemon" = "1" ]; then
     exit 0
   fi
 
-  command="cd $(quote "$workdir") && exec sh scripts/claudecode_manager_autorun.sh --workdir $(quote "$workdir") --tmux-socket $(quote "$tmux_socket") --session-name $(quote "$session_name") --poll-seconds $(quote "$poll_seconds") --quiet-start $(quote "$quiet_start") --quiet-end $(quote "$quiet_end") --max-running $(quote "$max_running") --timeout-seconds $(quote "$timeout_seconds")"
+  command="cd $(quote "$workdir") && BRIDGE_CMD=$(quote "$bridge_cmd") exec sh /home/openclaw/claudecode-manager/scripts/claudecode_manager_autorun.sh --workdir $(quote "$workdir") --tmux-socket $(quote "$tmux_socket") --session-name $(quote "$session_name") --poll-seconds $(quote "$poll_seconds") --quiet-start $(quote "$quiet_start") --quiet-end $(quote "$quiet_end") --max-running $(quote "$max_running") --timeout-seconds $(quote "$timeout_seconds")"
   if [ -n "$worker_prefix" ]; then
     command="$command --worker-prefix $(quote "$worker_prefix")"
   fi
@@ -118,7 +123,7 @@ has_worker_session() {
 }
 
 has_actionable_worker() {
-  set -- go run ./cmd/babel-issue-bridge worker-next --shell --max-running "$max_running"
+  set -- "$bridge_cmd" worker-next --shell --max-running "$max_running"
   if [ -n "$worker_prefix" ]; then
     set -- "$@" --worker-prefix "$worker_prefix"
   fi
@@ -126,7 +131,7 @@ has_actionable_worker() {
 }
 
 start_next_worker() {
-  set -- sh scripts/claudecode_worker_start_tmux.sh \
+  set -- sh /home/openclaw/claudecode-manager/scripts/claudecode_worker_start_tmux.sh \
     --workdir "$workdir" \
     --tmux-socket "$tmux_socket" \
     --max-running "$max_running" \
@@ -139,7 +144,7 @@ start_next_worker() {
 
 seed_microgame_if_possible() {
   [ "$auto_seed_microgames" = "1" ] || return 1
-  sh scripts/claudecode_microgame_autoseed.sh \
+  sh /home/openclaw/claudecode-manager/scripts/claudecode_microgame_autoseed.sh \
     --workdir "$workdir" \
     --presets "$auto_seed_presets"
 }

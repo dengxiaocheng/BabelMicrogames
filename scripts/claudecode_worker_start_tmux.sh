@@ -10,6 +10,7 @@ max_running="1"
 allow_same_lane="0"
 model=""
 tmux_socket="claudecode_manager"
+bridge_cmd="${BRIDGE_CMD:-/home/openclaw/claudecode-manager/.codex-runtime/bin/babel-issue-bridge}"
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -57,6 +58,11 @@ if [ -z "$workdir" ]; then
 fi
 
 cd "$workdir"
+sh /home/openclaw/claudecode-manager/scripts/claudecode_manager_repo_guard.sh --workdir "$workdir"
+[ -x "$bridge_cmd" ] || {
+  echo "missing bridge command: $bridge_cmd" >&2
+  exit 1
+}
 command -v tmux >/dev/null 2>&1 || {
   echo "missing tmux" >&2
   exit 1
@@ -96,7 +102,8 @@ run_file=$(mktemp ".codex-runtime/tmux/${session_name}.XXXXXX.sh")
   echo '#!/usr/bin/env sh'
   echo 'set -eu'
   printf 'cd %s\n' "$(quote "$workdir")"
-  printf 'exec sh scripts/claudecode_manager_next.sh --workdir %s --run-once --timeout-seconds %s --max-running %s' \
+  printf 'BRIDGE_CMD=%s exec sh /home/openclaw/claudecode-manager/scripts/claudecode_manager_next.sh --workdir %s --run-once --timeout-seconds %s --max-running %s' \
+    "$(quote "$bridge_cmd")" \
     "$(quote "$workdir")" "$(quote "$timeout_seconds")" "$(quote "$max_running")"
   if [ -n "$worker_prefix" ]; then
     printf ' --worker-prefix %s' "$(quote "$worker_prefix")"

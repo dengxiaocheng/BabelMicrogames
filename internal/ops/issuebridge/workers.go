@@ -41,6 +41,25 @@ func workerStatusPriority(status string) int {
 	}
 }
 
+func workerLanePriority(lane string) int {
+	switch strings.TrimSpace(lane) {
+	case "foundation":
+		return 0
+	case "logic", "state":
+		return 1
+	case "content":
+		return 2
+	case "ui":
+		return 3
+	case "integration":
+		return 4
+	case "qa":
+		return 5
+	default:
+		return 9
+	}
+}
+
 func actionableWorkerStatus(status string) bool {
 	switch strings.TrimSpace(status) {
 	case WorkerStatusQueued, WorkerStatusRunning, WorkerStatusHandoffQueued, WorkerStatusRework:
@@ -70,6 +89,11 @@ func sortWorkersForQueue(workers []ClaudeWorker) {
 		}
 		if strings.TrimSpace(left.LastUpdatedAtUTC) != strings.TrimSpace(right.LastUpdatedAtUTC) {
 			return strings.TrimSpace(left.LastUpdatedAtUTC) < strings.TrimSpace(right.LastUpdatedAtUTC)
+		}
+		llp := workerLanePriority(left.Lane)
+		rlp := workerLanePriority(right.Lane)
+		if llp != rlp {
+			return llp < rlp
 		}
 		return strings.TrimSpace(left.WorkerID) < strings.TrimSpace(right.WorkerID)
 	})

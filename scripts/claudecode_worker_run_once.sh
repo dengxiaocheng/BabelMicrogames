@@ -8,6 +8,7 @@ model=""
 allowed_tools=""
 timeout_seconds="1800"
 auto_finish="1"
+bridge_cmd="${BRIDGE_CMD:-/home/openclaw/claudecode-manager/.codex-runtime/bin/babel-issue-bridge}"
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -51,7 +52,11 @@ if [ -z "$worker_id" ]; then
 fi
 
 cd "$workdir"
-sh scripts/claudecode_manager_repo_guard.sh --workdir "$workdir"
+sh /home/openclaw/claudecode-manager/scripts/claudecode_manager_repo_guard.sh --workdir "$workdir"
+[ -x "$bridge_cmd" ] || {
+  echo "missing bridge command: $bridge_cmd" >&2
+  exit 1
+}
 
 packet_file=".codex-runtime/claudecode_workers/${worker_id}/packet.md"
 report_file=".codex-runtime/claudecode_workers/${worker_id}/report.md"
@@ -62,7 +67,7 @@ if [ ! -f "$packet_file" ]; then
   exit 1
 fi
 
-go run ./cmd/babel-issue-bridge worker-start --worker-id "$worker_id" >/dev/null
+"$bridge_cmd" worker-start --worker-id "$worker_id" >/dev/null
 
 prompt=$(mktemp "${TMPDIR:-/tmp}/claudecode-worker.XXXXXX")
 trap 'rm -f "$prompt"' EXIT HUP INT TERM
@@ -102,7 +107,7 @@ fi
 cat "$output_file"
 
 if [ "$claude_status" -ne 0 ]; then
-  go run ./cmd/babel-issue-bridge worker-set-status --worker-id "$worker_id" --status rework --note "claudecode run-once failed: $claude_status" >/dev/null
+  "$bridge_cmd" worker-set-status --worker-id "$worker_id" --status rework --note "claudecode run-once failed: $claude_status" >/dev/null
   exit "$claude_status"
 fi
 
@@ -132,5 +137,5 @@ if [ "$auto_finish" = "1" ] && [ "$worker_status" != "handoff_queued" ] && [ "$w
       echo "- 待 manager 审查"
     } > "$report_file"
   fi
-  sh scripts/claudecode_worker_finish.sh --worker-id "$worker_id"
+  BRIDGE_CMD="$bridge_cmd" sh /home/openclaw/claudecode-manager/scripts/claudecode_worker_finish.sh --workdir "$workdir" --worker-id "$worker_id"
 fi

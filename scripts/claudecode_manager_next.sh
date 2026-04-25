@@ -13,6 +13,7 @@ allow_same_lane="0"
 worker_prefix=""
 run_once="0"
 timeout_seconds="1800"
+bridge_cmd="${BRIDGE_CMD:-/home/openclaw/claudecode-manager/.codex-runtime/bin/babel-issue-bridge}"
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -72,9 +73,13 @@ if [ -z "$workdir" ]; then
 fi
 
 cd "$workdir"
-sh scripts/claudecode_manager_repo_guard.sh --workdir "$workdir"
+sh /home/openclaw/claudecode-manager/scripts/claudecode_manager_repo_guard.sh --workdir "$workdir"
+[ -x "$bridge_cmd" ] || {
+  echo "missing bridge command: $bridge_cmd" >&2
+  exit 1
+}
 
-set -- go run ./cmd/babel-issue-bridge worker-next --shell
+set -- "$bridge_cmd" worker-next --shell
 if [ "$all_actionable" = "1" ]; then
   set -- "$@" --all-actionable
 fi
@@ -116,9 +121,9 @@ if [ "$send_packet" = "0" ] && [ -z "$session_id" ] && [ -n "${PACKET_FILE:-}" ]
 fi
 
 if [ "$run_once" = "1" ]; then
-  set -- sh scripts/claudecode_worker_run_once.sh --workdir "$workdir" --worker-id "$WORKER_ID" --timeout-seconds "$timeout_seconds"
+  set -- sh /home/openclaw/claudecode-manager/scripts/claudecode_worker_run_once.sh --workdir "$workdir" --worker-id "$WORKER_ID" --timeout-seconds "$timeout_seconds"
 else
-  set -- sh scripts/claudecode_worker_resume.sh --workdir "$workdir" --worker-id "$WORKER_ID"
+  set -- sh /home/openclaw/claudecode-manager/scripts/claudecode_worker_resume.sh --workdir "$workdir" --worker-id "$WORKER_ID"
 fi
 if [ "$run_once" = "0" ] && [ -n "$session_id" ]; then
   set -- "$@" --session-id "$session_id"

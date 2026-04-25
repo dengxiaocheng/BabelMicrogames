@@ -3,7 +3,8 @@
 set -eu
 
 workdir=""
-expected_repo="${CLAUDECODE_MANAGER_REPO:-dengxiaocheng/BabelMicrogames}"
+expected_repo="${CLAUDECODE_MANAGER_REPO:-}"
+expected_prefix="${CLAUDECODE_MANAGER_REPO_PREFIX:-dengxiaocheng/BabelMicrogame-}"
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -13,6 +14,10 @@ while [ $# -gt 0 ]; do
       ;;
     --expected-repo)
       expected_repo="$2"
+      shift 2
+      ;;
+    --expected-prefix)
+      expected_prefix="$2"
       shift 2
       ;;
     *)
@@ -35,8 +40,19 @@ repo=$(printf "%s" "$remote_url" |
       -e 's#^http://github.com/##' \
       -e 's#\.git$##')
 
-if [ "$repo" != "$expected_repo" ]; then
-  echo "wrong ClaudeCode manager repo: origin=$remote_url expected=$expected_repo" >&2
-  echo "refusing to use shared s/m issue namespace" >&2
-  exit 1
+if [ -n "$expected_repo" ]; then
+  if [ "$repo" != "$expected_repo" ]; then
+    echo "wrong ClaudeCode manager repo: origin=$remote_url expected=$expected_repo" >&2
+    echo "refusing to use shared s/m issue namespace" >&2
+    exit 1
+  fi
+else
+  case "$repo" in
+    "$expected_prefix"*) ;;
+    *)
+      echo "wrong ClaudeCode game repo: origin=$remote_url expected-prefix=$expected_prefix" >&2
+      echo "refusing to use shared s/m issue namespace" >&2
+      exit 1
+      ;;
+  esac
 fi

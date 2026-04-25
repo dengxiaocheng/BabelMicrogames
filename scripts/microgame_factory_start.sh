@@ -189,7 +189,7 @@ sh scripts/microgame_factory_create.sh \
 
 echo "factory ready: plan/microgames/$slug" >&2
 
-set -- sh scripts/claudecode_manager_next.sh --workdir "$workdir" --max-running "$max_running"
+set -- sh /home/openclaw/claudecode-manager/scripts/claudecode_manager_next.sh --workdir "$workdir" --max-running "$max_running"
 set -- "$@" --worker-prefix "${task_prefix}-"
 if [ "$interactive" = "0" ]; then
   set -- "$@" --run-once --timeout-seconds "$timeout_seconds"

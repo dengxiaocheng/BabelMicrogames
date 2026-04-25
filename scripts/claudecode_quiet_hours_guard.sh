@@ -8,6 +8,7 @@ watcher_session="claudecode_manager_watch"
 quiet_start="1400"
 quiet_end="1800"
 poll_seconds="30"
+bridge_cmd="${BRIDGE_CMD:-/home/openclaw/claudecode-manager/.codex-runtime/bin/babel-issue-bridge}"
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -47,7 +48,11 @@ if [ -z "$workdir" ]; then
 fi
 
 cd "$workdir"
-sh scripts/claudecode_manager_repo_guard.sh --workdir "$workdir"
+sh /home/openclaw/claudecode-manager/scripts/claudecode_manager_repo_guard.sh --workdir "$workdir"
+[ -x "$bridge_cmd" ] || {
+  echo "missing bridge command: $bridge_cmd" >&2
+  exit 1
+}
 
 now=$(date +%H%M)
 in_quiet="0"
@@ -74,7 +79,7 @@ mark_running_rework() {
   jq -r '.workers[] | select(.status=="running") | .worker_id' .codex-runtime/claudecode_workers.json 2>/dev/null |
     while IFS= read -r worker_id; do
       [ -n "$worker_id" ] || continue
-      go run ./cmd/babel-issue-bridge worker-set-status \
+      "$bridge_cmd" worker-set-status \
         --worker-id "$worker_id" \
         --status rework \
         --note "paused by daily ClaudeCode quiet hours ${quiet_start}-${quiet_end}" >/dev/null || true
@@ -94,7 +99,7 @@ if [ "$in_quiet" = "1" ]; then
   exit 0
 fi
 
-sh scripts/claudecode_manager_start_watcher.sh \
+BRIDGE_CMD="$bridge_cmd" sh /home/openclaw/claudecode-manager/scripts/claudecode_manager_start_watcher.sh \
   --workdir "$workdir" \
   --session-name "$watcher_session" \
   --tmux-socket "$tmux_socket" \

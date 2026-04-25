@@ -28,6 +28,9 @@ fi
 
 cd "$workdir"
 
+echo "auto-seed disabled: microgames now require one repo and one workdir per game" >&2
+exit 3
+
 slug_for_preset() {
   case "$1" in
     peigei|ration)

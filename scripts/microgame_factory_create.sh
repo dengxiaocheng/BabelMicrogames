@@ -17,6 +17,7 @@ ui_root="src/ui/"
 code_root="src/"
 content_root="src/content/"
 test_root="tests/"
+bridge_cmd="${BRIDGE_CMD:-/home/openclaw/claudecode-manager/.codex-runtime/bin/babel-issue-bridge}"
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -110,7 +111,11 @@ if [ -z "$success_condition" ]; then
 fi
 
 cd "$workdir"
-sh scripts/claudecode_manager_repo_guard.sh --workdir "$workdir"
+sh /home/openclaw/claudecode-manager/scripts/claudecode_manager_repo_guard.sh --workdir "$workdir"
+[ -x "$bridge_cmd" ] || {
+  echo "missing bridge command: $bridge_cmd" >&2
+  exit 1
+}
 
 plan_dir="plan/microgames/$slug"
 mkdir -p "$plan_dir"
@@ -214,7 +219,7 @@ cat > "$tasks_md" <<EOF
    - goal: 跑测试、补缺口、确认结算与边界
 EOF
 
-go run ./cmd/babel-issue-bridge worker-packet \
+"$bridge_cmd" worker-packet \
   --worker-id "${task_prefix}-foundation" \
   --lane foundation \
   --task-level M \
@@ -229,7 +234,7 @@ go run ./cmd/babel-issue-bridge worker-packet \
   --acceptance "主循环入口存在" \
   --deliverable "基础代码骨架和 report"
 
-go run ./cmd/babel-issue-bridge worker-packet \
+"$bridge_cmd" worker-packet \
   --worker-id "${task_prefix}-state" \
   --lane logic \
   --task-level M \
@@ -243,7 +248,7 @@ go run ./cmd/babel-issue-bridge worker-packet \
   --acceptance "一次循环可结算" \
   --deliverable "状态更新逻辑和 report"
 
-go run ./cmd/babel-issue-bridge worker-packet \
+"$bridge_cmd" worker-packet \
   --worker-id "${task_prefix}-content" \
   --lane content \
   --task-level M \
@@ -257,7 +262,7 @@ go run ./cmd/babel-issue-bridge worker-packet \
   --acceptance "内容与 Babel 创意线一致" \
   --deliverable "内容资产和 report"
 
-go run ./cmd/babel-issue-bridge worker-packet \
+"$bridge_cmd" worker-packet \
   --worker-id "${task_prefix}-ui" \
   --lane ui \
   --task-level M \
@@ -271,7 +276,7 @@ go run ./cmd/babel-issue-bridge worker-packet \
   --acceptance "反馈可见" \
   --deliverable "UI 代码和 report"
 
-go run ./cmd/babel-issue-bridge worker-packet \
+"$bridge_cmd" worker-packet \
   --worker-id "${task_prefix}-integration" \
   --lane integration \
   --task-level M \
@@ -287,7 +292,7 @@ go run ./cmd/babel-issue-bridge worker-packet \
   --acceptance "结算入口可达" \
   --deliverable "集成代码和 report"
 
-go run ./cmd/babel-issue-bridge worker-packet \
+"$bridge_cmd" worker-packet \
   --worker-id "${task_prefix}-qa" \
   --lane qa \
   --task-level S \

@@ -8,6 +8,7 @@ comment_file=""
 annotate_comment="0"
 worker_id=""
 report_file=""
+bridge_cmd="${BRIDGE_CMD:-/home/openclaw/claudecode-manager/.codex-runtime/bin/babel-issue-bridge}"
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -47,7 +48,11 @@ if [ -z "$workdir" ]; then
 fi
 
 cd "$workdir"
-sh scripts/claudecode_manager_repo_guard.sh --workdir "$workdir"
+sh /home/openclaw/claudecode-manager/scripts/claudecode_manager_repo_guard.sh --workdir "$workdir"
+[ -x "$bridge_cmd" ] || {
+  echo "missing bridge command: $bridge_cmd" >&2
+  exit 1
+}
 
 if [ -n "$worker_id" ] && [ -z "$comment_file" ] && [ -z "$report_file" ]; then
   report_file=".codex-runtime/claudecode_workers/${worker_id}/report.md"
@@ -57,9 +62,9 @@ if [ -z "$comment_file" ] && [ -n "$report_file" ]; then
 fi
 
 if [ -n "$worker_id" ]; then
-  set -- go run ./cmd/babel-issue-bridge worker-finish --worker-id "$worker_id"
+  set -- "$bridge_cmd" worker-finish --worker-id "$worker_id"
 else
-  set -- go run ./cmd/babel-issue-bridge manager-handoff
+  set -- "$bridge_cmd" manager-handoff
 fi
 if [ -n "$comment" ]; then
   set -- "$@" --comment "$comment"
