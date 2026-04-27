@@ -694,6 +694,14 @@ Source queue:
 - Used the direct worker start wrapper from `/home/openclaw/babel-microgames/peigei-ri` as fallback after the batch command failed. It started `claudecode_worker_peigei_ri`, which immediately exited; probe shows `peigei-ri-state` is `blocked` with busy Claude session `b1ab9434-b5c3-40af-80d3-c9db28a6dd82`.
 - Refreshed manager status: `running=0`, `review=0`, `dispatchable=1`, `blocked=5`, `rework=4`, `done=6`. The only dispatchable item is outside First 12 (`gongtou-dianming`), and tmux lists no `claudecode_worker_*` session.
 
+## 2026-04-27 10:03 Manager Pass
+
+- Re-read the compact queue `/home/openclaw/babel-runtime/plan/MICROGAME_PRODUCTION_BATCH_2026-04-27.json` and refreshed manager status. Initial status was `running=0`, `review=0`, `handoff_queued=0`, `dispatchable=1`, `blocked=2`, and `rework=7`.
+- Ran the preferred high-level command `microgame_batch_prepare_next.sh --start-worker`. It selected `peigei-ri` and stopped before contract sync or worker start because `/home/openclaw/babel-microgames/peigei-ri` is dirty with `M index.html` and `M src/ui/renderer.js`.
+- Recorded the `peigei-ri` blocker as `clean_worktree_before_dispatch` for `peigei-ri-ui/rework`; manager state reports the rework reason as `changed files outside write scope: index.html`.
+- Checked the current First 12 status without opening or editing game source files. `huijiang-peibi`, `duanti-yunliao`, `dengyou-fenpei`, `tiban-mingdan`, `bingpeng-yezhen`, `gongpai-jiaohuan`, `zhuiwu-yujing`, `heizhang-xiaoce`, `shuiyuan-lunzhi`, and `tianti-zuihou-yiji` are dirty and require `clean_worktree_before_dispatch`; `jiaoshoujia-qiangxiu` is clean but already `blocked` with `worker stalled: no stdout, no source changes, and placeholder report after repeated probes`.
+- Stop point: no First 12 worker is running or `handoff_queued`, and no First 12 item is both clean and dispatchable. Tmux lists no `claudecode_worker_*` session, so stale finished-worker cleanup was not applicable. The only dispatchable manager-status item is outside First 12 (`gongtou-dianming`) and was left untouched.
+
 ## Notes
 
 - All missing first-12 repos were bootstrapped through `microgame_batch_prepare_next.sh --slug <slug>` without `--start-worker`.
