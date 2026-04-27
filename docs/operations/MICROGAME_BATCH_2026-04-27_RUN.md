@@ -1,6 +1,6 @@
 # Microgame Batch 2026-04-27 Run
 
-Last updated: 2026-04-27 09:02:37 +0800
+Last updated: 2026-04-27 09:13:43 +0800
 
 Source queue:
 
@@ -11,7 +11,7 @@ Source queue:
 
 - `peigei-ri`: clean worktree. Started through `microgame_batch_prepare_next.sh --start-worker`; `peigei-ri-foundation` immediately moved to `blocked` because Claude session `b1ab9434-b5c3-40af-80d3-c9db28a6dd82` is already in use.
 - `huijiang-peibi`: unsafe to dispatch; game worktree is dirty with `M src/content/eventPool.ts`. `microgame_worker_probe.sh --workdir /home/openclaw/babel-microgames/huijiang-peibi --worker-id huijiang-peibi-foundation` shows status `queued`, no tmux worker session/process, a placeholder report with 12 TODO markers, and no reviewable handoff.
-- `duanti-yunliao`: clean worktree. Retried through `microgame_batch_prepare_next.sh --slug duanti-yunliao --start-worker`; `duanti-yunliao-foundation` immediately returned to `blocked` because Claude session `2d3ef2ea-17a9-4bb7-b374-16e0fb0a510e` is already in use.
+- `duanti-yunliao`: `duanti-yunliao-foundation` ran through `microgame_batch_prepare_next.sh --slug duanti-yunliao --start-worker` with fresh Claude session `abddc4eb-9d46-4d36-b6ba-c299b4fe9e71` and reached `handoff_queued`. Mechanical review failed because the declared `npm test` command cannot run without `/home/openclaw/babel-microgames/duanti-yunliao/package.json`; worker is now `rework`, and the worktree remains dirty with worker-scoped `index.html`, `src/game.ts`, and `src/main.ts`.
 - `dengyou-fenpei`: clean worktree. Started through `microgame_batch_prepare_next.sh --slug dengyou-fenpei --start-worker`; `dengyou-fenpei-foundation` immediately moved to `blocked` because Claude session `4ea89b36-142c-4f5d-984a-0450699a6b41` is already in use.
 - `tiban-mingdan`: dirty worktree with untracked `index.html` and `src/`; `tiban-mingdan-foundation` is already `blocked`.
 - `bingpeng-yezhen`: dirty worktree with untracked `index.html` and `src/`; `bingpeng-yezhen-foundation` is `rework`.
@@ -26,11 +26,11 @@ Source queue:
 
 - Read compact queue `/home/openclaw/babel-runtime/plan/MICROGAME_PRODUCTION_BATCH_2026-04-27.json`.
 - Ran the preferred unslugged batch command with `--start-worker`; it selected `huijiang-peibi` and stopped before worker start because `/home/openclaw/babel-microgames/huijiang-peibi` is dirty with `M src/content/eventPool.ts`.
-- Probed clean blocked First 12 workers with `microgame_worker_probe.sh --workdir ... --worker-id ...`. `peigei-ri-state`, `dengyou-fenpei-foundation`, and `duanti-yunliao-foundation` have no active worker session/process and busy Claude session outputs. `jiaoshoujia-qiangxiu-foundation` had no active worker and an empty older output log.
-- Continued to the next clean First 12 candidate, `duanti-yunliao`, through `microgame_batch_prepare_next.sh --queue-file /home/openclaw/babel-runtime/plan/MICROGAME_PRODUCTION_BATCH_2026-04-27.json --slug duanti-yunliao --start-worker`. It started `claudecode_worker_duanti_yunliao`, then immediately returned to `blocked` because Claude session `2d3ef2ea-17a9-4bb7-b374-16e0fb0a510e` is already in use.
-- Continued to the next clean First 12 candidate, `jiaoshoujia-qiangxiu`, through the same batch command with `--slug jiaoshoujia-qiangxiu --start-worker`. It started `claudecode_worker_jiaoshoujia_qiangxiu`, then immediately returned to blocked state; the latest worker output says Claude session `ffab96cd-1c45-4917-acc8-6045433922a3` is already in use.
-- Checked the review and cleanup paths. `claudecode_manager_status.sh` reports `review=0`, `microgame_worker_review_handoff.sh` has no target without a specific ready handoff, and tmux lists only `claudecode_manager_autorun` plus `microgame_batch_manager`.
-- Stop point: `claudecode_manager_status.sh` reports `running=0`, `review=0`, `dispatchable=1`, `blocked=6`, and `rework=4`. The only dispatchable item is outside First 12 (`gongtou-dianming`) and was left untouched.
+- Refreshed manager status and found `peigei-ri`, `duanti-yunliao`, and `dengyou-fenpei` clean/dispatchable. A `peigei-ri` start attempt refused because `claudecode_worker_duanti_yunliao` was already running, so no second worker was launched.
+- Probed `duanti-yunliao-foundation` with `microgame_worker_probe.sh`; it ran under fresh session `abddc4eb-9d46-4d36-b6ba-c299b4fe9e71`, wrote only the declared `index.html`, `src/game.ts`, and `src/main.ts` files, then reached `handoff_queued`.
+- Ran `microgame_worker_review_handoff.sh --workdir /home/openclaw/babel-microgames/duanti-yunliao --worker-id duanti-yunliao-foundation`. Review failed on the worker test command because `/home/openclaw/babel-microgames/duanti-yunliao/package.json` does not exist, so `npm test` exits `ENOENT`.
+- The review helper opened and closed manager audit issue #4 and pushed manager commit `527bc0a` (`Record Codex manager audit`). Because the helper left the registry in `handoff_queued` after the failed test, the same `s` control-plane `babel-ops worker set-status` path was used to mark `duanti-yunliao-foundation` as `rework` with note `mechanical review failed: npm test cannot run because package.json is missing`.
+- The stale-looking Claude process from the finished worker was allowed to exit naturally; no `claudecode_worker_*` tmux session remains, so `microgame_worker_cleanup_finished.sh` was not applicable.
 
 ## 2026-04-27 09:02 Manager Pass
 
