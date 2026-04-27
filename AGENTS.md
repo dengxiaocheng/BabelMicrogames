@@ -74,6 +74,7 @@
 - 提交并推送目标游戏仓库
 - 打开下一阶段 issue，且 `--resume-workdir` 固定为 `/home/openclaw/claudecode-manager`
 - worker finish 后创建并关闭 manager audit issue
+- 所有 stage/audit issue 必须通过 `s` 的统一 Go bridge 自动带 commit trace：issue 正文和关闭评论都应指向当前 HEAD 的 GitHub commit 链接
 
 禁止：
 
