@@ -1,6 +1,6 @@
 # Microgame Batch 2026-04-27 Run
 
-Last updated: 2026-04-27 11:58:29 +0800
+Last updated: 2026-04-27 12:21:41 +0800
 
 Source queue:
 
@@ -23,6 +23,13 @@ Source queue:
 - `tianti-zuihou-yiji`: dirty; `tianti-zuihou-yiji-foundation` is `rework`, and dispatch is blocked on `clean_worktree_before_dispatch`.
 
 ## This Turn
+
+- 2026-04-27 12:01-12:21 +0800: Re-read compact queue `/home/openclaw/babel-runtime/plan/MICROGAME_PRODUCTION_BATCH_2026-04-27.json` and refreshed manager status. Initial status for this pass was `running=0`, `review=0`, `dirty=11`; only non-First-12 `gongtou-dianming` was dispatchable.
+- Ran the preferred `microgame_batch_prepare_next.sh --start-worker`; it selected `peigei-ri` and stopped before contract sync because `/home/openclaw/babel-microgames/peigei-ri` is dirty with `M index.html` and `M src/ui/renderer.js`.
+- Continued down First 12 through the batch entrypoint with explicit `--slug` calls. Dirty blockers before worker start: `huijiang-peibi` (`M src/content/eventPool.ts`), `duanti-yunliao` (`?? index.html`, `?? src/game.ts`, `?? src/main.ts`), `dengyou-fenpei` (`?? index.html`, `?? src/main.ts`), `tiban-mingdan` (`?? index.html`, `?? src/`), `bingpeng-yezhen` (`?? index.html`, `?? src/`), `gongpai-jiaohuan` (`?? index.html`, `?? src/`), `zhuiwu-yujing` (`?? index.html`, `?? src/`), `heizhang-xiaoce` (`?? index.html`, `?? src/`), `shuiyuan-lunzhi` (`?? index.html`, `?? src/`), and `tianti-zuihou-yiji` (`?? index.html`, `?? package.json`, `?? src/`).
+- `jiaoshoujia-qiangxiu` was accepted by the batch entrypoint and started `jiaoshoujia-qiangxiu-state` in `claudecode_worker_jiaoshoujia_qiangxiu` on session `c248ea6f-e4e5-4ec4-932d-c615f52c7426`. Probes showed worker-created `src/state.js`, `src/engine.js`, `src/state.test.js`, and `package.json`; the report later reached 0 TODO markers and the worker entered `handoff_queued`.
+- Ran `microgame_worker_review_handoff.sh` for `jiaoshoujia-qiangxiu-state`. The mechanical review opened and closed manager audit issue #8 and recorded manager audit commit `ce35f79`, but rejected the game handoff with `changed files outside write scope: package.json`. While the orphan Claude process was still alive, it re-marked the worker handoff; after the process exited naturally, the registry showed the worker as `done`, so a second review call refused with `worker is not ready for review: status=done`. No game commit or push was made by the review script.
+- Stop point for this pass: `running=0`, `review=0`, no `claudecode_worker_*` tmux session remains, and `jiaoshoujia-qiangxiu` is dirty with uncommitted worker artifacts (`?? package.json`, `?? src/`). No First 12 item is both clean and dispatchable. `gongtou-dianming` remains outside First 12 and was left untouched.
 
 - 2026-04-27 11:52-11:58 +0800: Re-read compact queue `/home/openclaw/babel-runtime/plan/MICROGAME_PRODUCTION_BATCH_2026-04-27.json` and refreshed manager status. Initial status for this pass was `running=0`, `review=0`, `dirty=11`; only non-First-12 `gongtou-dianming` was dispatchable.
 - Ran the preferred `microgame_batch_prepare_next.sh --start-worker`; it selected `peigei-ri` and stopped before contract sync because `/home/openclaw/babel-microgames/peigei-ri` is dirty with `M index.html` and `M src/ui/renderer.js`.
