@@ -1,6 +1,6 @@
 # Microgame Batch 2026-04-27 Run
 
-Last updated: 2026-04-27 09:44:17 +0800
+Last updated: 2026-04-27 10:00:30 +0800
 
 Source queue:
 
@@ -28,6 +28,8 @@ Source queue:
 - Started the next worker through `microgame_batch_prepare_next.sh --start-worker`; it selected `peigei-ri-ui`, ran in tmux, and reached `handoff_queued`.
 - Mechanical review of `peigei-ri-ui` rejected the handoff to `rework` because the worker changed `index.html` outside write scope (`src/ui/`, `src/`). Manager audit issue #6 was opened/closed, and the game worktree remains dirty with `M index.html` and `M src/ui/renderer.js`.
 - Re-ran the preferred unslugged batch command; it still selected `peigei-ri` and stopped on the dirty rework tree, so `peigei-ri` is currently blocked on `clean_worktree_before_dispatch` before another worker can be safely dispatched.
+- Continued through the same batch entrypoint with explicit safe slug `dengyou-fenpei`; `dengyou-fenpei-foundation` ran in tmux and reached `handoff_queued` with scoped files `index.html` and `src/main.ts`.
+- Mechanical review of `dengyou-fenpei-foundation` rejected the handoff to `rework` because the configured `npm test` command fails without `/home/openclaw/babel-microgames/dengyou-fenpei/package.json`. Manager audit issue #7 was opened/closed, and the game worktree remains dirty with the worker files.
 
 ## Prior Turn
 
