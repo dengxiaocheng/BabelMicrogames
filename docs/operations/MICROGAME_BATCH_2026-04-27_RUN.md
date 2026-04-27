@@ -1,6 +1,6 @@
 # Microgame Batch 2026-04-27 Run
 
-Last updated: 2026-04-27 19:48:46 +0800
+Last updated: 2026-04-27 20:15:20 +0800
 
 Source queue:
 
@@ -9,20 +9,26 @@ Source queue:
 
 ## First 12 Queue State
 
-- `peigei-ri`: dirty; `peigei-ri-ui` is `rework` and dispatch is blocked on `clean_worktree_before_dispatch` with `M index.html` and `M src/ui/renderer.js`.
-- `huijiang-peibi`: dirty; `huijiang-peibi-state` remains `queued`, but dispatch is blocked on `clean_worktree_before_dispatch` with `M src/content/eventPool.ts`.
-- `duanti-yunliao`: clean; `duanti-yunliao-foundation` was mechanically reviewed, tested, committed, pushed, and accepted. Current stage is `duanti-yunliao-ui/blocked`.
-- `dengyou-fenpei`: dirty; `dengyou-fenpei-foundation` is the single active running worker, so further dispatch is blocked on `wait_running_worker`.
-- `tiban-mingdan`: dirty; `tiban-mingdan-foundation` is `blocked`, and dispatch is blocked on `clean_worktree_before_dispatch`.
-- `bingpeng-yezhen`: dirty; `bingpeng-yezhen-foundation` is `rework`, and dispatch is blocked on `clean_worktree_before_dispatch`.
-- `gongpai-jiaohuan`: dirty; `gongpai-jiaohuan-state` remains `queued`, but dispatch is blocked on `clean_worktree_before_dispatch`.
-- `zhuiwu-yujing`: dirty; `zhuiwu-yujing-state` remains `queued`, but dispatch is blocked on `clean_worktree_before_dispatch`.
-- `heizhang-xiaoce`: dirty; `heizhang-xiaoce-foundation` is `rework`, and dispatch is blocked on `clean_worktree_before_dispatch`.
-- `shuiyuan-lunzhi`: dirty; `shuiyuan-lunzhi-foundation` is `rework`, and dispatch is blocked on `clean_worktree_before_dispatch`.
-- `jiaoshoujia-qiangxiu`: dirty; `jiaoshoujia-qiangxiu-foundation` is `blocked`, and dispatch is blocked on `clean_worktree_before_dispatch` with uncommitted `package.json` and `src/` artifacts.
-- `tianti-zuihou-yiji`: dirty; `tianti-zuihou-yiji-foundation` is `rework`, and dispatch is blocked on `clean_worktree_before_dispatch`.
+- `peigei-ri`: dirty; current stage is `peigei-ri-integration/blocked`, and dispatch is blocked on `clean_worktree_before_dispatch`.
+- `huijiang-peibi`: dirty; current stage is `huijiang-peibi-foundation/blocked`, and dispatch is blocked on `clean_worktree_before_dispatch`.
+- `duanti-yunliao`: clean; current stage is `duanti-yunliao-ui/blocked`, and action is `resolve_blocked_worker`.
+- `dengyou-fenpei`: clean; current stage is `dengyou-fenpei-state/blocked`, and action is `resolve_blocked_worker`.
+- `tiban-mingdan`: clean; current stage is `tiban-mingdan-state/blocked`, and action is `resolve_blocked_worker`.
+- `bingpeng-yezhen`: clean; `bingpeng-yezhen-foundation` was mechanically reviewed and accepted. Current stage is `bingpeng-yezhen-state/blocked`, and action is `resolve_blocked_worker`.
+- `gongpai-jiaohuan`: dirty; current stage is `gongpai-jiaohuan-content/blocked`, and dispatch is blocked on `clean_worktree_before_dispatch`.
+- `zhuiwu-yujing`: dirty; current stage is `zhuiwu-yujing-content/blocked`, and dispatch is blocked on `clean_worktree_before_dispatch`.
+- `heizhang-xiaoce`: dirty because `heizhang-xiaoce-foundation` is the active running worker; current summary stage is `heizhang-xiaoce-state/blocked`, and action is `wait_running_worker`.
+- `shuiyuan-lunzhi`: clean; current stage is `shuiyuan-lunzhi-state/blocked`, and action is `resolve_blocked_worker`.
+- `jiaoshoujia-qiangxiu`: dirty; current stage is `jiaoshoujia-qiangxiu-content/blocked`, and dispatch is blocked on `clean_worktree_before_dispatch`.
+- `tianti-zuihou-yiji`: dirty; current stage is `tianti-zuihou-yiji-state/blocked`, and dispatch is blocked on `clean_worktree_before_dispatch`.
 
 ## This Turn
+
+- 2026-04-27 20:11-20:15 +0800: Re-read compact queue `/home/openclaw/babel-runtime/plan/MICROGAME_PRODUCTION_BATCH_2026-04-27.json` and refreshed manager status. Initial status was `running=0`, `review=1`, `dirty=8`, `dispatchable=1`; the reviewable First 12 handoff was `bingpeng-yezhen-foundation`.
+- Ran `microgame_worker_review_handoff.sh --workdir /home/openclaw/babel-microgames/bingpeng-yezhen --worker-id bingpeng-yezhen-foundation`. The mechanical review ran `npm test` with 17 passing tests, found no staged game commit to create, pushed an up-to-date branch, opened and closed manager audit issue #137, and accepted the handoff.
+- Refreshed status after review: `running=1`, `review=0`, `dirty=7`, `done=14`. The batch manager had started `heizhang-xiaoce-foundation` in `claudecode_worker_heizhang_xiaoce_foundation`.
+- Probed `heizhang-xiaoce-foundation` with `microgame_worker_probe.sh`: status is `running`, started at `2026-04-27T12:11:48Z`, `claude_output_bytes=0`, report has 0 TODO markers, and git status currently shows worker-owned untracked `index.html` and `src/`. Repeated probes after waiting showed the same state.
+- Stop point for this pass: no additional worker was started because the First 12 queue is blocked by the active `heizhang-xiaoce-foundation` worker and the one-worker limit. Dirty reconciliation was not run while this worker is active to avoid touching its worktree underneath ClaudeCode.
 
 - 2026-04-27 19:42-19:48 +0800: Re-read compact queue `/home/openclaw/babel-runtime/plan/MICROGAME_PRODUCTION_BATCH_2026-04-27.json`; First 12 order is `peigei-ri`, `huijiang-peibi`, `duanti-yunliao`, `dengyou-fenpei`, `tiban-mingdan`, `bingpeng-yezhen`, `gongpai-jiaohuan`, `zhuiwu-yujing`, `heizhang-xiaoce`, `shuiyuan-lunzhi`, `jiaoshoujia-qiangxiu`, `tianti-zuihou-yiji`.
 - Ran `babel_ops.sh microgame reconcile-dirty --apply --review --reset-review-failed`. It opened and closed manager audit issues #127, #128, and #129 for failed rework reviews, but most First 12 worktrees stayed dirty. The repeated review failure was `npm test` against repos missing `package.json`; other dirty states were blocked as `dirty_without_registered_worker` or placeholder/no-report cases.
