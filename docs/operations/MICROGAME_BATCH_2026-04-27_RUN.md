@@ -1,6 +1,6 @@
 # Microgame Batch 2026-04-27 Run
 
-Last updated: 2026-05-01 04:05:38 +0800
+Last updated: 2026-05-01 04:20:24 +0800
 
 Source queue:
 
@@ -9,11 +9,11 @@ Source queue:
 
 ## First 12 Queue State
 
-- `peigei-ri`: dirty with active planner-owned plan changes (`MECHANIC_SPEC.md`, `SCENE_INTERACTION_SPEC.md`); current stage is `peigei-ri-planner/running`, so the lane is waiting on the active worker.
+- `peigei-ri`: dirty with active planner-owned plan changes (`DIRECTION_LOCK.md`, `MINI_GDD.md`, `MECHANIC_SPEC.md`); current stage is `peigei-ri-planner/running`, so the lane is waiting on the active worker.
 - `huijiang-peibi`: clean; current stage is `huijiang-peibi-ui/running`, so the lane is waiting on the active worker.
 - `duanti-yunliao`: clean; current action is `idle_or_seed_next_game`.
 - `dengyou-fenpei`: clean; current action is `idle_or_seed_next_game`.
-- `tiban-mingdan`: dirty with active content-worker changes (`src/main.js`, `src/content/`); current stage is `tiban-mingdan-content/running`, so the lane is waiting on the active worker.
+- `tiban-mingdan`: dirty with active UI-worker change (`index.html`); current stage is `tiban-mingdan-ui/running`, so the lane is waiting on the active worker.
 - `bingpeng-yezhen`: clean; current action is `idle_or_seed_next_game`.
 - `gongpai-jiaohuan`: clean; current stage is `gongpai-jiaohuan-content/queued`, and strict packet audit passed for the queued content worker.
 - `zhuiwu-yujing`: clean; current stage is `zhuiwu-yujing-foundation/blocked`. Manager-local `LINE_BRIEF.md` exists, but the game workdir is missing `plan/microgames/zhuiwu-yujing/LINE_BRIEF.md`, `MECHANIC_SPEC.md`, and `SCENE_INTERACTION_SPEC.md`, so dispatch remains stopped.
@@ -23,6 +23,14 @@ Source queue:
 - `tianti-zuihou-yiji`: clean; current stage is `tianti-zuihou-yiji-foundation/blocked`. Manager-local `LINE_BRIEF.md` exists, but the game workdir is missing `plan/microgames/tianti-zuihou-yiji/LINE_BRIEF.md`, `MECHANIC_SPEC.md`, and `SCENE_INTERACTION_SPEC.md`, so dispatch remains stopped.
 
 ## This Turn
+
+- 2026-05-01 04:14-04:19 +0800: Re-read the compact First 12 queue, manager-local context index, target queued line briefs (`gongpai-jiaohuan`, `heizhang-xiaoce`, `shuiyuan-lunzhi`), active `peigei-ri/LINE_BRIEF.md`, and the legacy takeover registry. Legacy takeover slugs remain separate from the First 12 queue.
+- Current manager status at the start of this pass: `running=3`, `review=0`, `queued=28`, `dirty=1`, `dispatchable=4`, `blocked=18`, `done=33`. Running workers are `peigei-ri-planner`, `huijiang-peibi-ui`, and `tiban-mingdan-ui`.
+- Strict packet audit passed for the first runnable safe First 12 queued packets: `gongpai-jiaohuan-foundation`, `heizhang-xiaoce-state`, and `shuiyuan-lunzhi-state`.
+- Ran the preferred dispatcher `microgame_batch_prepare_next.sh --start-worker`; it did not start a worker because the configured cap is full: `game worker concurrency limit reached: 3 >= 3`.
+- Probed active workers once. `peigei-ri-planner` is still `running` with planner-owned plan-file changes and no report yet; `huijiang-peibi-ui` is `running` with a clean worktree and no report yet; `tiban-mingdan-ui` is `running` with `index.html` dirty and no report yet. No cleanup was attempted because all three registry states are still `running`.
+- Blocked First 12 lanes remain stopped rather than dispatching invention work: `zhuiwu-yujing`, `jiaoshoujia-qiangxiu`, and `tianti-zuihou-yiji` are blocked by missing prepared `MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md` in their game plan directories, while their manager-local `LINE_BRIEF.md` files require stopping the lane instead of inventing scene interaction.
+- Final status after verification: `running=3`, `review=0`, `queued=28`, `dirty=2`, `dispatchable=4`, `blocked=18`, `done=33`. `huijiang-peibi-ui` now carries the status note `stale_no_output: no worker output, report, or source changes after 900s`, but it remains registry-`running`; no cleanup was attempted. No handoff was reviewable, and no worker was started manually while the cap was full.
 
 - 2026-05-01 03:58-04:05 +0800: Re-read the compact First 12 queue, manager-local context index, target queued line briefs (`gongpai-jiaohuan`, `heizhang-xiaoce`, `shuiyuan-lunzhi`), blocked line briefs (`zhuiwu-yujing`, `jiaoshoujia-qiangxiu`, `tianti-zuihou-yiji`), and the legacy takeover registry. Legacy takeover slugs remain separate from the First 12 queue.
 - Ran the preferred dispatcher with the compact cap enforced: `CLAUDECODE_MAX_RUNNING=1 microgame_batch_prepare_next.sh --start-worker`. It did not start a worker because the cap is exceeded: `game worker concurrency limit reached: 3 >= 1`.
