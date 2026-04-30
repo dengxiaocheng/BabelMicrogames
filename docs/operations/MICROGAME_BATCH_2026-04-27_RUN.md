@@ -1068,6 +1068,17 @@ Source queue:
 - Started `bingpeng-yezhen-ui` through `microgame_batch_prepare_next.sh --slug bingpeng-yezhen --start-worker`. Probe confirms registry status `running`, clean git status, and packet context includes `MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`.
 - Follow-up probes show `bingpeng-yezhen-ui` remains `running` with no report yet and no game source diff yet. Current action is `wait_running_worker`; no second worker was started.
 
+## 2026-05-01 03:20 Manager Pass
+
+- Re-read the compact queue, line-context index, all First 12 `LINE_BRIEF.md` files, and the legacy takeover registry. First 12 lanes all have non-choice scene interaction contracts in the manager-local line briefs; legacy takeover lanes remain planner-only and were not mixed into First 12 execution dispatch.
+- Initial `microgame_batch_prepare_next.sh --start-worker` was blocked by the configured cap: `game worker concurrency limit reached: 3 >= 3`. One-shot probes showed running workers at that point were `duanti-yunliao-ui`, `huijiang-peibi-planner`, and `tiban-mingdan-planner`.
+- Strict packet audit passed for prepared queued packets: `peigei-ri-integration`, `bingpeng-yezhen-integration`, `gongpai-jiaohuan-foundation`, `heizhang-xiaoce-content`, and `shuiyuan-lunzhi-content`.
+- Strict packet audit failed for `zhuiwu-yujing-foundation`, `jiaoshoujia-qiangxiu-foundation`, and `tianti-zuihou-yiji-foundation`; no worker was started for those packets. Exact findings for each failed packet: missing `MECHANIC_SPEC.md` context file; missing `SCENE_INTERACTION_SPEC.md` context file; missing primary input interaction contract; missing minimum interaction contract; missing no-choice-only interaction rule; required state is still generic.
+- Ran the prescribed dirty reconciliation command. It accepted and pushed `huijiang-peibi-planner` (`7181125`) and `tiban-mingdan-planner` (`8895c6e`), and opened/closed manager audit issues `#2030` and `#2031`.
+- After planner acceptance, strict packet audit passed for `huijiang-peibi-foundation` and `tiban-mingdan-content`.
+- Fixed a process-boundary blocker in `huijiang-peibi`: its tracked `.gitignore` only ignored `.codex-runtime/github-token.env`, leaving worker registry state visible as source dirt. Updated it to ignore `.codex-runtime/`, committed `e91b1d9` (`Ignore Codex runtime state`), and pushed.
+- Stop point: cap remains full at `3 >= 3`. Current running workers are `bingpeng-yezhen-integration`, `duanti-yunliao-ui`, and `peigei-ri-planner`; review count is `0`. `huijiang-peibi` is clean and dispatchable again, while the three failed foundation packets above need s-control-plane packet-generator repair before they are safe to start.
+
 ## Notes
 
 - All missing first-12 repos were bootstrapped through `microgame_batch_prepare_next.sh --slug <slug>` without `--start-worker`.
