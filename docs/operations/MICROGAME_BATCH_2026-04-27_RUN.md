@@ -1004,6 +1004,16 @@ Source queue:
 - While keeping only one ClaudeCode worker running, refreshed and strictly audited the next clean First 12 candidates without starting them: `tiban-mingdan-content` passed in `rework`, `bingpeng-yezhen-state` passed in `queued`, `heizhang-xiaoce-state` passed in `queued`, and `shuiyuan-lunzhi-state` passed in `queued`.
 - Current stop point for this continuation: `dengyou-fenpei-integration` is the single running worker. The next safe dispatch candidates after it finishes are the strict-audited packets above; all other First 12 lanes remain blocked by dirty worktrees or recorded failed review state.
 
+## 2026-05-01 01:43 Manager Pass
+
+- Re-read the compact queue, manager-local line context, and legacy takeover registry. Legacy takeover entries are still planner-only candidates and were not mixed into First 12 execution dispatch.
+- Mechanical review accepted `bingpeng-yezhen-state`: strict packet audit passed, `npm test` passed with 29/29 tests, changed files matched the worker report (`src/game.js`, `src/game.test.js`, `src/main.js`), commit `bdb4b5c` was pushed to `BabelMicrogame-BingpengYezhen`, and manager audit issue `#2024` was opened and closed.
+- The preferred batch command without a slug selected `peigei-ri` and stopped before start because `/home/openclaw/babel-microgames/peigei-ri` is dirty with `M index.html` and `M src/ui/renderer.js`. Dirty reconciliation left `peigei-ri-ui` blocked with `dirty_review_failed_after_rework`; this lane remains unsafe to dispatch.
+- Continued to the next clean First 12 candidate. Read the `bingpeng-yezhen` line brief, refreshed `bingpeng-yezhen` through `microgame_batch_prepare_next.sh --slug bingpeng-yezhen`, and strict-audited `bingpeng-yezhen-content` successfully after refresh.
+- Started `bingpeng-yezhen-content` through `microgame_batch_prepare_next.sh --slug bingpeng-yezhen --start-worker`. Probe confirms registry status `running`, clean git status, and packet context includes `MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`.
+- Follow-up probes show `bingpeng-yezhen-content` is still `running`; it has modified only declared write-scope paths so far (`src/game.js`, `src/content/`), but no report or finish status exists yet. Current action is `wait_running_worker`.
+- Current running worker: `claudecode_worker_bingpeng_yezhen`. No additional worker was started.
+
 ## Notes
 
 - All missing first-12 repos were bootstrapped through `microgame_batch_prepare_next.sh --slug <slug>` without `--start-worker`.
