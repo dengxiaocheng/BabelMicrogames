@@ -1,6 +1,6 @@
 # Microgame Batch 2026-04-27 Run
 
-Last updated: 2026-05-01 01:30:40 +0800
+Last updated: 2026-05-01 02:26:55 +0800
 
 Source queue:
 
@@ -14,15 +14,33 @@ Source queue:
 - `duanti-yunliao`: dirty; current stage is `duanti-yunliao-state/blocked`, and dispatch is blocked on `clean_worktree_before_dispatch` with `dirty_review_failed_after_rework`.
 - `dengyou-fenpei`: clean; all registered workers are `done`, and current action is `idle_or_seed_next_game`.
 - `tiban-mingdan`: dirty; current stage is `tiban-mingdan-content/blocked`, and dispatch is blocked on `clean_worktree_before_dispatch` with `dirty_without_report: missing report file`.
-- `bingpeng-yezhen`: clean; `bingpeng-yezhen-state` packet passed strict audit and is running in `claudecode_worker_bingpeng_yezhen`; current action is `wait_running_worker`.
+- `bingpeng-yezhen`: dirty; current stage is `bingpeng-yezhen-integration/blocked`, and dispatch is blocked on `clean_worktree_before_dispatch` with `dirty_without_report: missing report file`.
 - `gongpai-jiaohuan`: dirty; current stage is `gongpai-jiaohuan-foundation/blocked`, and dispatch is blocked on `clean_worktree_before_dispatch` with `dirty_review_failed_after_rework`.
 - `zhuiwu-yujing`: dirty; current stage is `zhuiwu-yujing-foundation/blocked`, and dispatch is blocked on `clean_worktree_before_dispatch` with `dirty_review_failed_after_rework`.
-- `heizhang-xiaoce`: clean; `heizhang-xiaoce-state` is queued, but cannot start while `bingpeng-yezhen-state` is running.
-- `shuiyuan-lunzhi`: clean; `shuiyuan-lunzhi-state` is queued, but cannot start while `bingpeng-yezhen-state` is running.
+- `heizhang-xiaoce`: clean; `heizhang-xiaoce-state` passed strict packet audit and is running in `claudecode_worker_heizhang_xiaoce`.
+- `shuiyuan-lunzhi`: clean; `shuiyuan-lunzhi-state` is queued but cannot start while `heizhang-xiaoce-state` is running.
 - `jiaoshoujia-qiangxiu`: dirty; current stage is `jiaoshoujia-qiangxiu-state/blocked`, and dispatch is blocked on `clean_worktree_before_dispatch` with `dirty_review_failed_after_rework`.
 - `tianti-zuihou-yiji`: dirty; current stage is `tianti-zuihou-yiji-foundation/blocked`, and dispatch is blocked on `clean_worktree_before_dispatch` with `dirty_review_failed_after_rework`.
 
 ## This Turn
+
+- 2026-05-01 02:24-02:26 +0800: Re-read the compact First 12 queue, manager-local line context list, and legacy takeover registry summary. Legacy takeover slugs remain separate from the First 12 production queue.
+- Re-probed `heizhang-xiaoce-state` with `microgame_worker_probe.sh --workdir /home/openclaw/babel-microgames/heizhang-xiaoce --worker-id heizhang-xiaoce-state`: registry status is still `running`, `claude-output.log` is 0 bytes, no report exists, and the game worktree is clean. No cleanup was attempted because the registry still marks the worker running.
+- Re-audited `heizhang-xiaoce-state` with `babel_ops.sh microgame audit-packets --game-workdir /home/openclaw/babel-microgames/heizhang-xiaoce --worker-id heizhang-xiaoce-state --apply --strict`; result: `ok heizhang-xiaoce/heizhang-xiaoce-state [running]`.
+- Re-ran `babel_ops.sh microgame reconcile-dirty --apply --review --reset-review-failed`. It left nine dirty lanes blocked: `peigei-ri`, `duanti-yunliao`, `gongpai-jiaohuan`, `zhuiwu-yujing`, `jiaoshoujia-qiangxiu`, and `tianti-zuihou-yiji` remain `dirty_review_failed_after_rework`; `huijiang-peibi` remains `dirty_without_report: report has placeholder: 待填写`; `tiban-mingdan` and `bingpeng-yezhen` remain `dirty_without_report: missing report file`.
+- Contract-file scan across First 12: every lane has manager-local `LINE_BRIEF.md`; `huijiang-peibi`, `duanti-yunliao`, `zhuiwu-yujing`, `jiaoshoujia-qiangxiu`, and `tianti-zuihou-yiji` are still missing prepared `MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`, so those lanes stay stopped rather than asking ClaudeCode to invent interaction. `shuiyuan-lunzhi-state` remains the next clean queued First 12 worker, but it was not started because `heizhang-xiaoce-state` occupies the one-worker slot.
+
+- 2026-05-01 02:18-02:22 +0800: Re-read compact queue `/home/openclaw/babel-runtime/plan/MICROGAME_PRODUCTION_BATCH_2026-04-27.json`, manager-local line context directory `/home/openclaw/claudecode-manager/.codex-runtime/microgame-line-context`, and legacy takeover registry `/home/openclaw/babel-runtime/plan/legacy-claude-takeover/legacy_takeover.json`. The First 12 slugs all have manager-local `LINE_BRIEF.md`; none are legacy takeover slugs.
+- Ran `babel_ops.sh microgame reconcile-dirty --apply --review --reset-review-failed`. It left these First 12 lanes stopped on exact blockers: `peigei-ri`, `duanti-yunliao`, `gongpai-jiaohuan`, `jiaoshoujia-qiangxiu`, `tianti-zuihou-yiji`, and `zhuiwu-yujing` remain `dirty_review_failed_after_rework`; `huijiang-peibi` remains `dirty_without_report: report has placeholder: 待填写`; `tiban-mingdan` remains `dirty_without_report: missing report file`; `bingpeng-yezhen-integration` moved from running to `blocked` with `dirty_without_report: missing report file`.
+- Checked contract presence before dispatch. Manager-local `LINE_BRIEF.md` exists for all First 12; prepared game plan `MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md` are present for the dispatched lane `heizhang-xiaoce`. Lanes still missing prepared plan interaction files (`huijiang-peibi`, `duanti-yunliao`, `zhuiwu-yujing`, `jiaoshoujia-qiangxiu`, `tianti-zuihou-yiji`) were not dispatched.
+- Audited `heizhang-xiaoce-state` with `babel_ops.sh microgame audit-packets --game-workdir /home/openclaw/babel-microgames/heizhang-xiaoce --worker-id heizhang-xiaoce-state --apply --strict`; result: `ok heizhang-xiaoce/heizhang-xiaoce-state [queued]`.
+- Started the first clean, audited First 12 worker through the preferred batch entrypoint: `microgame_batch_prepare_next.sh --slug heizhang-xiaoce --start-worker`. It selected `heizhang-xiaoce`, reported `contract already synced`, and started tmux session `claudecode_worker_heizhang_xiaoce`.
+- Probed `heizhang-xiaoce-state` twice with `microgame_worker_probe.sh --workdir /home/openclaw/babel-microgames/heizhang-xiaoce --worker-id heizhang-xiaoce-state`. It remains `running`, `claude-output.log` is 0 bytes, no report exists yet, and git status is clean. No second worker was started, so `shuiyuan-lunzhi-state` remains queued behind the one-worker limit.
+
+- 2026-05-01 02:11-02:14 +0800: Re-read compact queue `/home/openclaw/babel-runtime/plan/MICROGAME_PRODUCTION_BATCH_2026-04-27.json`, manager-local line context under `/home/openclaw/claudecode-manager/.codex-runtime/microgame-line-context`, and legacy takeover registry `/home/openclaw/babel-runtime/plan/legacy-claude-takeover/legacy_takeover.json`. The First 12 slugs all have manager-local `LINE_BRIEF.md`; none are legacy takeover slugs.
+- Ran `babel_ops.sh microgame reconcile-dirty --apply --review --reset-review-failed`. It left eight dirty First 12 lanes blocked: `duanti-yunliao`, `gongpai-jiaohuan`, `jiaoshoujia-qiangxiu`, `peigei-ri`, `tianti-zuihou-yiji`, and `zhuiwu-yujing` remain `dirty_review_failed_after_rework`; `huijiang-peibi` remains `dirty_without_report: report has placeholder: 待填写`; `tiban-mingdan` remains `dirty_without_report: missing report file`.
+- Probed `bingpeng-yezhen-integration` with `microgame_worker_probe.sh --workdir /home/openclaw/babel-microgames/bingpeng-yezhen --worker-id bingpeng-yezhen-integration`. It is still `running`, has no report yet, `claude-output.log` is 0 bytes, and the game worktree is clean; no cleanup was attempted because the registry still marks it running.
+- Read local `LINE_BRIEF.md` for clean candidate lanes `dengyou-fenpei`, `heizhang-xiaoce`, and `shuiyuan-lunzhi`. `heizhang-xiaoce-state` and `shuiyuan-lunzhi-state` both passed `babel_ops.sh microgame audit-packets --apply --strict` and remain queued. No second worker was started because the one-worker limit is occupied by `bingpeng-yezhen-integration`.
 
 - 2026-05-01 01:23-01:30 +0800: Re-read compact queue `/home/openclaw/babel-runtime/plan/MICROGAME_PRODUCTION_BATCH_2026-04-27.json`, manager-local line context under `/home/openclaw/claudecode-manager/.codex-runtime/microgame-line-context`, and legacy takeover registry `/home/openclaw/babel-runtime/plan/legacy-claude-takeover/legacy_takeover.json`. The First 12 slugs all have manager-local `LINE_BRIEF.md`; none are legacy takeover slugs.
 - Ran `babel_ops.sh microgame reconcile-dirty --apply --review --reset-review-failed`. It left eight dirty First 12 lanes blocked with explicit reasons: `peigei-ri`, `duanti-yunliao`, `gongpai-jiaohuan`, `jiaoshoujia-qiangxiu`, `tianti-zuihou-yiji`, and `zhuiwu-yujing` remain `dirty_review_failed_after_rework`; `huijiang-peibi` remains `dirty_without_report: report has placeholder: 待填写`; `tiban-mingdan` remains `dirty_without_report: missing report file`.
