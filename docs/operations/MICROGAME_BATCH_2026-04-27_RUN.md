@@ -1,6 +1,6 @@
 # Microgame Batch 2026-04-27 Run
 
-Last updated: 2026-05-01 04:37:51 +0800
+Last updated: 2026-05-01 05:16:11 +0800
 
 Source queue:
 
@@ -9,20 +9,27 @@ Source queue:
 
 ## First 12 Queue State
 
-- `peigei-ri`: clean; current stage is `peigei-ri-planner/rework`, and strict packet audit passed for the rework packet.
-- `huijiang-peibi`: clean after control-plane dirty reconciliation stashed the active UI-worker scratch change; current stage is `huijiang-peibi-ui/running`, so the lane is waiting on the active worker.
+- `peigei-ri`: clean; current stage is `peigei-ri-integration/running`, so the lane is waiting on the active worker.
+- `huijiang-peibi`: clean; current stage is `huijiang-peibi-integration/running`, so the lane is waiting on the active worker.
 - `duanti-yunliao`: clean; current action is `idle_or_seed_next_game`.
 - `dengyou-fenpei`: clean; current action is `idle_or_seed_next_game`.
-- `tiban-mingdan`: clean; current stage is `tiban-mingdan-integration/running`, so the lane is waiting on the active worker.
+- `tiban-mingdan`: dirty with active integration-worker changes; current stage is `tiban-mingdan-integration/running`, so the lane is waiting on the active worker.
 - `bingpeng-yezhen`: clean; current action is `idle_or_seed_next_game`.
-- `gongpai-jiaohuan`: dirty with active content-worker changes; current stage is `gongpai-jiaohuan-content/running`, and strict packet audit passed before the worker started.
-- `zhuiwu-yujing`: clean; current stage is `zhuiwu-yujing-foundation/blocked`. Manager-local `LINE_BRIEF.md` exists, but the game workdir is missing `plan/microgames/zhuiwu-yujing/LINE_BRIEF.md`, `MECHANIC_SPEC.md`, and `SCENE_INTERACTION_SPEC.md`, so dispatch remains stopped.
+- `gongpai-jiaohuan`: clean; current stage is `gongpai-jiaohuan-integration/queued`, and strict packet audit passed for the queued packet.
+- `zhuiwu-yujing`: clean; current stage is `zhuiwu-yujing-foundation/blocked`. Manager-local `LINE_BRIEF.md` exists, but the prepared game plan directory is missing `MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`, so dispatch remains stopped.
 - `heizhang-xiaoce`: clean; current stage is `heizhang-xiaoce-content/queued`, and strict packet audit passed for the queued content worker.
 - `shuiyuan-lunzhi`: clean; current stage is `shuiyuan-lunzhi-content/queued`, and strict packet audit passed for the queued content worker.
-- `jiaoshoujia-qiangxiu`: clean; current stage is `jiaoshoujia-qiangxiu-foundation/blocked`. Manager-local `LINE_BRIEF.md` exists, but the game workdir is missing `plan/microgames/jiaoshoujia-qiangxiu/LINE_BRIEF.md`, `MECHANIC_SPEC.md`, and `SCENE_INTERACTION_SPEC.md`, so dispatch remains stopped.
-- `tianti-zuihou-yiji`: clean; current stage is `tianti-zuihou-yiji-foundation/blocked`. Manager-local `LINE_BRIEF.md` exists, but the game workdir is missing `plan/microgames/tianti-zuihou-yiji/LINE_BRIEF.md`, `MECHANIC_SPEC.md`, and `SCENE_INTERACTION_SPEC.md`, so dispatch remains stopped.
+- `jiaoshoujia-qiangxiu`: clean; current stage is `jiaoshoujia-qiangxiu-foundation/blocked`. Manager-local `LINE_BRIEF.md` exists, but the prepared game plan directory is missing `MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`, so dispatch remains stopped.
+- `tianti-zuihou-yiji`: clean; current stage is `tianti-zuihou-yiji-foundation/blocked`. Manager-local `LINE_BRIEF.md` exists, but the prepared game plan directory is missing `MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`, so dispatch remains stopped.
 
 ## This Turn
+
+- 2026-05-01 05:12-05:16 +0800: Re-read the compact First 12 queue, manager-local context index, target queued line briefs (`gongpai-jiaohuan`, `heizhang-xiaoce`, `shuiyuan-lunzhi`), blocked line briefs (`zhuiwu-yujing`, `jiaoshoujia-qiangxiu`, `tianti-zuihou-yiji`), and the legacy takeover registry. Legacy takeover slugs remain separate from the First 12 queue.
+- Ran the preferred dispatcher `microgame_batch_prepare_next.sh --start-worker`; it did not start another worker because the configured cap is full: `game worker concurrency limit reached: 3 >= 3`.
+- Strict packet audit passed for ready queued First 12 packets `gongpai-jiaohuan-integration`, `heizhang-xiaoce-content`, and `shuiyuan-lunzhi-content`.
+- Probed active First 12 workers once. `peigei-ri-integration`, `huijiang-peibi-integration`, and `tiban-mingdan-integration` are registry-`running`; `tiban-mingdan` has active worker-owned edits to `src/main.js` and `src/test.js`, while the other two running workers still have missing reports and 0-byte worker logs. No cleanup was attempted because none is registry-non-running.
+- Verified prepared plan files for the stopped lanes. `zhuiwu-yujing`, `jiaoshoujia-qiangxiu`, and `tianti-zuihou-yiji` each have manager-local `LINE_BRIEF.md`, but their game plan directories contain only the base direction/task files and are missing `MECHANIC_SPEC.md` plus `SCENE_INTERACTION_SPEC.md`; those foundation lanes remain stopped instead of asking ClaudeCode to invent interaction.
+- Current manager status for this pass: `running=3`, `review=0`, `queued=23`, `dirty=1`, `dispatchable=4`, `blocked=18`, `rework=0`, `done=38`. No worker was started manually while the cap was full.
 
 - 2026-05-01 04:35-04:38 +0800: Re-read the compact First 12 queue, manager-local context index, target queued/rework line briefs (`peigei-ri`, `heizhang-xiaoce`, `shuiyuan-lunzhi`), blocked line briefs (`zhuiwu-yujing`, `jiaoshoujia-qiangxiu`, `tianti-zuihou-yiji`), and the legacy takeover registry. Legacy takeover slugs remain separate from the First 12 queue.
 - Probed active First 12 workers once: `huijiang-peibi-ui`, `gongpai-jiaohuan-content`, and `tiban-mingdan-integration` are still registry-`running`; no cleanup was attempted because none is registry-non-running.
