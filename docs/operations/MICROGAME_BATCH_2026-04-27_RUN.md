@@ -1088,6 +1088,17 @@ Source queue:
 - Fixed a process-boundary blocker in `huijiang-peibi`: its tracked `.gitignore` only ignored `.codex-runtime/github-token.env`, leaving worker registry state visible as source dirt. Updated it to ignore `.codex-runtime/`, committed `e91b1d9` (`Ignore Codex runtime state`), and pushed.
 - Stop point: cap remains full at `3 >= 3`. Current running workers are `bingpeng-yezhen-integration`, `duanti-yunliao-ui`, and `peigei-ri-planner`; review count is `0`. `huijiang-peibi` is clean and dispatchable again, while the three failed foundation packets above need s-control-plane packet-generator repair before they are safe to start.
 
+## 2026-05-01 03:49 Manager Pass
+
+- Re-read the compact queue, manager-local line context index, First 12 target `LINE_BRIEF.md` files for queued candidates, and the legacy takeover registry. Legacy takeover lanes remain planner-only and were not mixed into First 12 execution dispatch.
+- Refreshed status before dispatch work: `running=3`, `review=0`, `dispatchable=4`, `dirty=2`. Ran the prescribed dirty reconciliation command `babel_ops.sh microgame reconcile-dirty --apply --review --reset-review-failed`.
+- Reconciliation opened and closed manager audit issue `#2037`, committed `0ee651b` (`Record Codex manager audit`), and left the unsafe handoffs recorded instead of accepting them. Exact blockers reported by reconcile: `duanti-yunliao-qa` worker report missing changed file path `src/game.test.ts`; `gongpai-jiaohuan-foundation` dirty with no report file while the worker was still marked running.
+- Post-reconcile status was clean enough to continue with queued First 12 candidates: `duanti-yunliao-qa` is running, `huijiang-peibi-state` is running, and `peigei-ri-planner` is running.
+- Read line briefs and confirmed `MECHANIC_SPEC.md` plus `SCENE_INTERACTION_SPEC.md` exist for queued First 12 candidates `gongpai-jiaohuan`, `heizhang-xiaoce`, `shuiyuan-lunzhi`, and `tiban-mingdan`.
+- Strict packet audit passed for `gongpai-jiaohuan-state`, `heizhang-xiaoce-content`, `shuiyuan-lunzhi-content`, and `tiban-mingdan-ui`; none were started before audit.
+- Ran the preferred dispatcher `microgame_batch_prepare_next.sh --start-worker`; it refused to start another worker because the configured worker cap is full: `game worker concurrency limit reached: 3 >= 3`.
+- Current stop point: no First 12 worker was started in this pass, review count is `0`, and the queued audited packets above are the next safe candidates once a running slot opens. `zhuiwu-yujing-foundation`, `jiaoshoujia-qiangxiu-foundation`, and `tianti-zuihou-yiji-foundation` remain blocked by missing `MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`, so those lanes must stay stopped until the s control plane repairs packet/context generation.
+
 ## Notes
 
 - All missing first-12 repos were bootstrapped through `microgame_batch_prepare_next.sh --slug <slug>` without `--start-worker`.
