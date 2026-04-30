@@ -1,6 +1,6 @@
 # Microgame Batch 2026-04-27 Run
 
-Last updated: 2026-05-01 03:08:10 +0800
+Last updated: 2026-05-01 03:13:22 +0800
 
 Source queue:
 
@@ -9,20 +9,27 @@ Source queue:
 
 ## First 12 Queue State
 
-- `peigei-ri`: clean; current stage is `peigei-ri-ui/running`, packet audit passed before start, and the lane is waiting on the active worker.
-- `huijiang-peibi`: dirty with worker-owned `.codex-runtime/` and `package-lock.json`; current stage is `huijiang-peibi-foundation/running`, so the lane is waiting on the active worker.
-- `duanti-yunliao`: clean; `duanti-yunliao-state` was accepted, and current stage is `duanti-yunliao-ui/queued`.
+- `peigei-ri`: clean; current stage is `peigei-ri-integration/queued`, and strict packet audit passed for the queued integration worker.
+- `huijiang-peibi`: dirty with worker-owned changes; current stage is `huijiang-peibi-planner/running`, so the lane is waiting on the active worker.
+- `duanti-yunliao`: clean; current stage is `duanti-yunliao-ui/running`, so the lane is waiting on the active worker.
 - `dengyou-fenpei`: clean; all registered workers are `done`, and current action is `idle_or_seed_next_game`.
-- `tiban-mingdan`: clean; current stage is `tiban-mingdan-ui/queued`, waiting for worker concurrency.
-- `bingpeng-yezhen`: dirty with active worker changes in `src/game.test.js`; current stage is `bingpeng-yezhen-qa/running`, so the lane is waiting on the active worker.
-- `gongpai-jiaohuan`: clean; current stage is `gongpai-jiaohuan-foundation/queued`, waiting for worker concurrency.
-- `zhuiwu-yujing`: clean; current stage is `zhuiwu-yujing-foundation/queued`, but dispatch is stopped because prepared `MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md` are missing.
-- `heizhang-xiaoce`: clean; current stage is `heizhang-xiaoce-content/queued`, waiting for worker concurrency.
-- `shuiyuan-lunzhi`: clean; current stage is `shuiyuan-lunzhi-content/queued`, waiting for worker concurrency.
-- `jiaoshoujia-qiangxiu`: clean; current stage is `jiaoshoujia-qiangxiu-foundation/queued`, but dispatch is stopped because prepared `MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md` are missing.
-- `tianti-zuihou-yiji`: clean; current stage is `tianti-zuihou-yiji-foundation/queued`, but dispatch is stopped because prepared `MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md` are missing.
+- `tiban-mingdan`: clean; current stage is `tiban-mingdan-planner/running`, so the lane is waiting on the active worker.
+- `bingpeng-yezhen`: clean; `bingpeng-yezhen-qa` was accepted, current stage is `bingpeng-yezhen-integration/queued`, and strict packet audit passed for the queued integration worker.
+- `gongpai-jiaohuan`: clean; current stage is `gongpai-jiaohuan-foundation/queued`, and strict packet audit passed for the queued foundation worker.
+- `zhuiwu-yujing`: clean; current stage is `zhuiwu-yujing-foundation/queued`, but strict packet audit failed because prepared `MECHANIC_SPEC.md`, `SCENE_INTERACTION_SPEC.md`, primary/minimum interaction contracts, the no-choice-only rule, and concrete required state are missing.
+- `heizhang-xiaoce`: clean; current stage is `heizhang-xiaoce-content/queued`, and strict packet audit passed for the queued content worker.
+- `shuiyuan-lunzhi`: clean; current stage is `shuiyuan-lunzhi-content/queued`, and strict packet audit passed for the queued content worker.
+- `jiaoshoujia-qiangxiu`: clean; current stage is `jiaoshoujia-qiangxiu-foundation/queued`, but strict packet audit failed because prepared `MECHANIC_SPEC.md`, `SCENE_INTERACTION_SPEC.md`, primary/minimum interaction contracts, the no-choice-only rule, and concrete required state are missing.
+- `tianti-zuihou-yiji`: clean; current stage is `tianti-zuihou-yiji-foundation/queued`, but strict packet audit failed because prepared `MECHANIC_SPEC.md`, `SCENE_INTERACTION_SPEC.md`, primary/minimum interaction contracts, the no-choice-only rule, and concrete required state are missing.
 
 ## This Turn
+
+- 2026-05-01 03:09-03:13 +0800: Re-read the compact First 12 queue, manager-local context index and all First 12 `LINE_BRIEF.md` files, plus the legacy takeover registry. Legacy takeover slugs remain separate from the First 12 queue.
+- Ran `babel_ops.sh microgame reconcile-dirty --apply --review --reset-review-failed`. It mechanically reviewed and accepted `bingpeng-yezhen-qa`: `npm test` passed with 32 tests, game commit `e30a012` was pushed to `dengxiaocheng/BabelMicrogame-BingpengYezhen`, and manager audit issue #2029 was opened and closed with manager audit commit `b824704`.
+- Reconcile left only active running-worker dirty blockers: `huijiang-peibi` and `peigei-ri` were dirty without report while their workers were still registered `running`, so no cleanup/reset was attempted.
+- Strict packet audit passed for queued First 12 workers `bingpeng-yezhen-integration`, `gongpai-jiaohuan-foundation`, `heizhang-xiaoce-content`, `peigei-ri-integration`, and `shuiyuan-lunzhi-content`.
+- Strict packet audit failed and dispatch remains stopped for `jiaoshoujia-qiangxiu-foundation`, `tianti-zuihou-yiji-foundation`, and `zhuiwu-yujing-foundation`. Exact findings for each: missing `MECHANIC_SPEC.md` context file; missing `SCENE_INTERACTION_SPEC.md` context file; missing primary input interaction contract; missing minimum interaction contract; missing no-choice-only interaction rule; required state is still generic.
+- Ran the preferred dispatcher `microgame_batch_prepare_next.sh --start-worker`; it did not start a worker because the configured worker concurrency cap is full: `game worker concurrency limit reached: 3 >= 3`. Final visible worker sessions are `claudecode_worker_duanti_yunliao`, `claudecode_worker_huijiang_peibi`, and `claudecode_worker_tiban_mingdan`; review remains `0`.
 
 - 2026-05-01 03:05-03:08 +0800: After `duanti-yunliao-state` moved to rework with incomplete Direction Check fields, ran the prescribed dirty reconciliation. `npm test` passed with 19 tests, the handoff was accepted, game commit `9eb46b8` was pushed to `dengxiaocheng/BabelMicrogame-DuantiYunliao`, and manager audit issue #2028 was opened and closed with manager audit commit `5c7d853`.
 - Autorun filled the freed slot with audited First 12 worker `peigei-ri-ui`. Final live workers are `bingpeng-yezhen-qa`, `huijiang-peibi-foundation`, and `peigei-ri-ui`; review remains `0`. Dirty First 12 worktrees are active worker lanes `bingpeng-yezhen` and `huijiang-peibi`, so no cleanup was attempted.
