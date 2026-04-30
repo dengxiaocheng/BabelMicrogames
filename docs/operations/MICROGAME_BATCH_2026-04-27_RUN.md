@@ -1,6 +1,6 @@
 # Microgame Batch 2026-04-27 Run
 
-Last updated: 2026-05-01 05:29:44 +0800
+Last updated: 2026-05-01 05:32:05 +0800
 
 Source queue:
 
@@ -9,20 +9,28 @@ Source queue:
 
 ## First 12 Queue State
 
-- `peigei-ri`: clean; current stage is `peigei-ri-qa/queued`, and strict packet audit passed for the queued QA packet.
-- `huijiang-peibi`: clean; current stage is `huijiang-peibi-qa/queued`, and strict packet audit passed for the queued QA packet.
+- `peigei-ri`: clean; current stage is `peigei-ri-integration/running`, so the lane is waiting on the active worker.
+- `huijiang-peibi`: clean; current stage is `huijiang-peibi-integration/running`, so the lane is waiting on the active worker.
 - `duanti-yunliao`: clean; current action is `idle_or_seed_next_game`.
 - `dengyou-fenpei`: clean; current action is `idle_or_seed_next_game`.
-- `tiban-mingdan`: clean; current stage is `tiban-mingdan-qa/queued`, and strict packet audit passed for the queued QA packet.
+- `tiban-mingdan`: clean; current stage is `tiban-mingdan-qa/running`, so the lane is waiting on the active worker.
 - `bingpeng-yezhen`: clean; current action is `idle_or_seed_next_game`.
-- `gongpai-jiaohuan`: dirty with active integration-worker changes in `plan/microgames/gongpai-jiaohuan/ACCEPTANCE_PLAYTHROUGH.md`, `src/game.js`, and `src/ui/`; current stage is `gongpai-jiaohuan-integration/running`, so the lane is waiting on the active worker.
+- `gongpai-jiaohuan`: clean; current stage is `gongpai-jiaohuan-qa/queued`, and strict packet audit passed for the queued QA packet.
 - `zhuiwu-yujing`: clean; current stage is `zhuiwu-yujing-foundation/blocked`. Manager-local `LINE_BRIEF.md` exists, but the prepared game plan directory is missing `MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`, so dispatch remains stopped.
-- `heizhang-xiaoce`: dirty with active content-worker changes in `src/content/`; current stage is `heizhang-xiaoce-content/running`, so the lane is waiting on the active worker.
-- `shuiyuan-lunzhi`: clean; current stage is `shuiyuan-lunzhi-content/running`, so the lane is waiting on the active worker.
+- `heizhang-xiaoce`: clean; current stage is `heizhang-xiaoce-ui/queued`, and strict packet audit passed for the queued UI packet.
+- `shuiyuan-lunzhi`: clean; current stage is `shuiyuan-lunzhi-ui/queued`, and strict packet audit passed for the queued UI packet.
 - `jiaoshoujia-qiangxiu`: clean; current stage is `jiaoshoujia-qiangxiu-foundation/blocked`. Manager-local `LINE_BRIEF.md` exists, but the prepared game plan directory is missing `MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`, so dispatch remains stopped.
 - `tianti-zuihou-yiji`: clean; current stage is `tianti-zuihou-yiji-foundation/blocked`. Manager-local `LINE_BRIEF.md` exists, but the prepared game plan directory is missing `MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`, so dispatch remains stopped.
 
 ## This Turn
+
+- 2026-05-01 05:30-05:32 +0800: After verification showed `gongpai-jiaohuan-integration` and `heizhang-xiaoce-content` had moved to `rework`, ran `babel_ops.sh microgame reconcile-dirty --apply --review --reset-review-failed`.
+- Reconciliation opened/closed manager audit issue #2054 for `gongpai-jiaohuan-integration` rework after its review failed on the configured test command (`npm test` could not find `package.json`) and incomplete Direction Check fields; the lane is now clean and advanced to `gongpai-jiaohuan-qa/queued`.
+- Reconciliation accepted `heizhang-xiaoce-content`, pushed game commit `f6403e7` to `dengxiaocheng/BabelMicrogame-HeizhangXiaoce`, and opened/closed manager audit issue #2055.
+- Autorun filled the cap with already-audited First 12 workers `peigei-ri-integration`, `huijiang-peibi-integration`, and `tiban-mingdan-qa`. A dispatcher call again returned `game worker concurrency limit reached: 3 >= 3`.
+- Strict packet audit passed for newly queued First 12 packets `gongpai-jiaohuan-qa`, `heizhang-xiaoce-ui`, and `shuiyuan-lunzhi-ui`.
+- Probed active First 12 workers once. `peigei-ri-integration`, `huijiang-peibi-integration`, and `tiban-mingdan-qa` remain registry-`running`; all have missing reports and no dirty worktrees, so no handoff review or cleanup was attempted.
+- Final status for this pass: `running=3`, `review=0`, `queued=21`, `dirty=0`, `dispatchable=4`, `blocked=18`, `rework=0`, `done=40`.
 
 - 2026-05-01 05:24-05:29 +0800: Re-read the compact First 12 queue, manager-local context index, all First 12 line briefs, and the legacy takeover registry. Legacy takeover slugs remain separate from the First 12 queue.
 - Strict packet audit passed for queued First 12 QA packets `peigei-ri-qa`, `huijiang-peibi-qa`, and `tiban-mingdan-qa`; each corresponding game plan has both `MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`.
