@@ -1,6 +1,6 @@
 # Microgame Batch 2026-04-27 Run
 
-Last updated: 2026-05-01 03:13:22 +0800
+Last updated: 2026-05-01 03:46:02 +0800
 
 Source queue:
 
@@ -9,13 +9,13 @@ Source queue:
 
 ## First 12 Queue State
 
-- `peigei-ri`: clean; current stage is `peigei-ri-integration/queued`, and strict packet audit passed for the queued integration worker.
-- `huijiang-peibi`: dirty with worker-owned changes; current stage is `huijiang-peibi-planner/running`, so the lane is waiting on the active worker.
-- `duanti-yunliao`: clean; current stage is `duanti-yunliao-ui/running`, so the lane is waiting on the active worker.
+- `peigei-ri`: clean; current stage is `peigei-ri-planner/rework`, and strict packet audit passed for the rework packet.
+- `huijiang-peibi`: clean; current stage is `huijiang-peibi-state/running`, so the lane is waiting on the active worker.
+- `duanti-yunliao`: dirty with worker-owned QA changes; current stage is `duanti-yunliao-qa/running`, so the lane is waiting on the active worker.
 - `dengyou-fenpei`: clean; all registered workers are `done`, and current action is `idle_or_seed_next_game`.
-- `tiban-mingdan`: clean; current stage is `tiban-mingdan-planner/running`, so the lane is waiting on the active worker.
-- `bingpeng-yezhen`: clean; `bingpeng-yezhen-qa` was accepted, current stage is `bingpeng-yezhen-integration/queued`, and strict packet audit passed for the queued integration worker.
-- `gongpai-jiaohuan`: clean; current stage is `gongpai-jiaohuan-foundation/queued`, and strict packet audit passed for the queued foundation worker.
+- `tiban-mingdan`: clean; current stage is `tiban-mingdan-ui/queued`, and strict packet audit passed for the queued UI worker.
+- `bingpeng-yezhen`: clean; current action is `idle_or_seed_next_game`.
+- `gongpai-jiaohuan`: dirty with worker-owned foundation changes; current stage is `gongpai-jiaohuan-foundation/running`, so the lane is waiting on the active worker.
 - `zhuiwu-yujing`: clean; current stage is `zhuiwu-yujing-foundation/queued`, but strict packet audit failed because prepared `MECHANIC_SPEC.md`, `SCENE_INTERACTION_SPEC.md`, primary/minimum interaction contracts, the no-choice-only rule, and concrete required state are missing.
 - `heizhang-xiaoce`: clean; current stage is `heizhang-xiaoce-content/queued`, and strict packet audit passed for the queued content worker.
 - `shuiyuan-lunzhi`: clean; current stage is `shuiyuan-lunzhi-content/queued`, and strict packet audit passed for the queued content worker.
@@ -23,6 +23,15 @@ Source queue:
 - `tianti-zuihou-yiji`: clean; current stage is `tianti-zuihou-yiji-foundation/queued`, but strict packet audit failed because prepared `MECHANIC_SPEC.md`, `SCENE_INTERACTION_SPEC.md`, primary/minimum interaction contracts, the no-choice-only rule, and concrete required state are missing.
 
 ## This Turn
+
+- 2026-05-01 03:33-03:44 +0800: Re-read the compact First 12 queue, manager-local context index and all First 12 `LINE_BRIEF.md` files, plus the legacy takeover registry. Legacy takeover slugs remain separate from the First 12 queue.
+- Ran the preferred dispatcher `microgame_batch_prepare_next.sh --start-worker`; it did not start a worker because the configured worker concurrency cap is full: `game worker concurrency limit reached: 3 >= 3`.
+- Single probe/status pass on active First 12 workers found `peigei-ri-planner` still `running`; `huijiang-peibi-foundation` had reached `handoff_queued` and was already under mechanical review; `duanti-yunliao-integration` was `done`. Refreshed manager status then showed autorun had advanced to `huijiang-peibi-state/running` and `duanti-yunliao-qa/running`.
+- Strict packet audit passed for queued First 12 workers `gongpai-jiaohuan-foundation`, `heizhang-xiaoce-content`, `shuiyuan-lunzhi-content`, and `tiban-mingdan-ui`.
+- Strict packet audit failed and dispatch remains stopped for `jiaoshoujia-qiangxiu-foundation`, `tianti-zuihou-yiji-foundation`, and `zhuiwu-yujing-foundation`. Exact findings for each: missing `MECHANIC_SPEC.md` context file; missing `SCENE_INTERACTION_SPEC.md` context file; missing primary input interaction contract; missing minimum interaction contract; missing no-choice-only interaction rule; required state is still generic.
+- After validation, autorun had advanced again: `peigei-ri-planner` moved to `rework`, and the freed slot was filled by already-audited `gongpai-jiaohuan-foundation`.
+- Strict packet audit also passed for the `peigei-ri-planner` rework packet: `ok peigei-ri/peigei-ri-planner [rework]`.
+- Current manager status for this pass: `running=3`, `review=0`, `queued=31`, `dirty=2`, `dispatchable=5`, `rework=1`. The dirty worktrees are active worker lanes `duanti-yunliao` and `gongpai-jiaohuan`, so no dirty reconciliation was attempted under running workers. No new worker was started manually because the cap is full; next safe action is to let autorun/registry surface a handoff or a free slot, then mechanically review or dispatch an already audited queued First 12 packet.
 
 - 2026-05-01 03:09-03:13 +0800: Re-read the compact First 12 queue, manager-local context index and all First 12 `LINE_BRIEF.md` files, plus the legacy takeover registry. Legacy takeover slugs remain separate from the First 12 queue.
 - Ran `babel_ops.sh microgame reconcile-dirty --apply --review --reset-review-failed`. It mechanically reviewed and accepted `bingpeng-yezhen-qa`: `npm test` passed with 32 tests, game commit `e30a012` was pushed to `dengxiaocheng/BabelMicrogame-BingpengYezhen`, and manager audit issue #2029 was opened and closed with manager audit commit `b824704`.
