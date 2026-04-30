@@ -1,6 +1,6 @@
 # First 12 Queue Status - 2026-05-01
 
-Last manager pass: `2026-05-01 07:34:01 CST`
+Last manager pass: `2026-05-01 07:43:25 CST`
 
 Source queue: `/home/openclaw/babel-runtime/plan/MICROGAME_PRODUCTION_BATCH_2026-04-27.json`
 Line context index: `.codex-runtime/microgame-line-context/INDEX.md`
@@ -361,3 +361,38 @@ Exact failed-audit findings recorded for `gongtou-dianming-ui`:
   - `jiaoshoujia-qiangxiu`: missing `plan/microgames/jiaoshoujia-qiangxiu/MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`; LINE_BRIEF says stop instead of inventing interaction.
   - `tianti-zuihou-yiji`: missing `plan/microgames/tianti-zuihou-yiji/MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`; LINE_BRIEF says stop instead of inventing interaction.
 - No additional dirty reconciliation was run after final validation because the dirty worktree belongs to an active running worker. No cleanup was run because active workers still report `running`. No handoff review was run because status reports `review=0`.
+
+## Follow-up Pass 07:43 CST
+
+- Re-read the compact JSON First 12 queue, the manager-local line context index, the target `LINE_BRIEF.md` files for `peigei-ri` and `huijiang-peibi`, and refreshed scene-interaction extracts for the remaining First 12 slugs. The legacy Claude takeover registry exists, but none of its slugs overlap the First 12 queue.
+- Ran `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh`; it selected/prepared `huijiang-peibi` without direct dispatch. `huijiang-peibi` has `LINE_BRIEF.md`, `MECHANIC_SPEC.md`, and `SCENE_INTERACTION_SPEC.md`, so it is a valid lane.
+- Ran `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker`; it refused dispatch because the configured cap is full: `game worker concurrency limit reached: 3 >= 3`.
+- Probed current or recently active First 12 workers once, without entering a manual wait loop:
+  - `gongpai-jiaohuan-ui`: moved from `running` to `rework`; report exists, but Direction Check is incomplete and dirty files were `index.html`, `src/main.js`, and `src/style.css`.
+  - `heizhang-xiaoce-qa`: `running`; worker-owned dirty `src/game.test.js` was present during probe, and no report handoff was present.
+  - `huijiang-peibi-integration`: `running`; zero-byte Claude output, missing report, clean git status, live tmux/process present.
+  - `peigei-ri-integration`: status rotated during the pass; current status now reports it `running` again after the control plane restarted/requeued it.
+- Strict packet audits completed in this pass:
+  - `ok huijiang-peibi/huijiang-peibi-integration [running]`
+  - `ok huijiang-peibi/huijiang-peibi-qa [queued]`
+  - `ok gongpai-jiaohuan/gongpai-jiaohuan-ui [rework]`
+  - `ok heizhang-xiaoce/heizhang-xiaoce-qa [running]`
+  - `ok peigei-ri/peigei-ri-qa [queued]`
+  - `ok shuiyuan-lunzhi/shuiyuan-lunzhi-ui [queued]`
+- Because `gongpai-jiaohuan-ui` became non-running with a dirty worktree, ran dirty reconciliation through `s` with `microgame reconcile-dirty --apply --review --reset-review-failed`.
+- Reconciliation opened and closed manager audit issue `#2063`: `https://github.com/dengxiaocheng/BabelMicrogames/issues/2063`.
+- Exact rejected-handoff blocker from reconciliation:
+  - slug: `gongpai-jiaohuan`
+  - worker_id: `gongpai-jiaohuan-ui`
+  - worker_status: `rework`
+  - dirty files: `index.html`, `src/main.js`, `src/style.css`
+  - review failure: `changed files outside write scope: index.html`
+  - direction-check failure: missing fields `本次改动强化了哪一句核心体验`, `本次改动是否引入了 Direction Lock 禁止的内容`, `核心循环是否仍然是原来的循环`, and `是否新增了无关系统`
+- Final manager status after reconciliation: `games=14 dirty=1 dispatchable=3 review=0 queued=18 running=3 blocked=18 rework=0 done=44`.
+- Current running First 12 workers are `gongpai-jiaohuan-ui`, `huijiang-peibi-integration`, and `peigei-ri-integration`; worker capacity remains full at 3.
+- Current waiting First 12 packets with fresh strict audit coverage include `peigei-ri-qa`, `shuiyuan-lunzhi-ui`, and `huijiang-peibi-qa`; do not dispatch them until capacity drops below 3.
+- Hard blocked First 12 lanes remain stopped because generated game-plan contracts are missing:
+  - `zhuiwu-yujing`: missing `plan/microgames/zhuiwu-yujing/MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`; LINE_BRIEF says stop instead of inventing interaction.
+  - `jiaoshoujia-qiangxiu`: missing `plan/microgames/jiaoshoujia-qiangxiu/MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`; LINE_BRIEF says stop instead of inventing interaction.
+  - `tianti-zuihou-yiji`: missing `plan/microgames/tianti-zuihou-yiji/MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`; LINE_BRIEF says stop instead of inventing interaction.
+- No cleanup was run because currently active workers still report `running`. No handoff review was run because status reports `review=0`.
