@@ -1,6 +1,6 @@
 # Microgame Batch 2026-04-27 Run
 
-Last updated: 2026-05-01 03:04:21 +0800
+Last updated: 2026-05-01 03:08:10 +0800
 
 Source queue:
 
@@ -9,12 +9,12 @@ Source queue:
 
 ## First 12 Queue State
 
-- `peigei-ri`: clean; current stage is `peigei-ri-ui/queued`, packet audit passed, and dispatch is waiting for worker concurrency.
-- `huijiang-peibi`: dirty with worker-owned `.codex-runtime/`; current stage is `huijiang-peibi-foundation/running`, so the lane is waiting on the active worker.
-- `duanti-yunliao`: dirty with active worker changes in `src/game.ts` and `src/game.test.ts`; current stage is `duanti-yunliao-state/running`, so the lane is waiting on the active worker.
+- `peigei-ri`: clean; current stage is `peigei-ri-ui/running`, packet audit passed before start, and the lane is waiting on the active worker.
+- `huijiang-peibi`: dirty with worker-owned `.codex-runtime/` and `package-lock.json`; current stage is `huijiang-peibi-foundation/running`, so the lane is waiting on the active worker.
+- `duanti-yunliao`: clean; `duanti-yunliao-state` was accepted, and current stage is `duanti-yunliao-ui/queued`.
 - `dengyou-fenpei`: clean; all registered workers are `done`, and current action is `idle_or_seed_next_game`.
 - `tiban-mingdan`: clean; current stage is `tiban-mingdan-ui/queued`, waiting for worker concurrency.
-- `bingpeng-yezhen`: clean; current stage is `bingpeng-yezhen-qa/running`, so the lane is waiting on the active worker.
+- `bingpeng-yezhen`: dirty with active worker changes in `src/game.test.js`; current stage is `bingpeng-yezhen-qa/running`, so the lane is waiting on the active worker.
 - `gongpai-jiaohuan`: clean; current stage is `gongpai-jiaohuan-foundation/queued`, waiting for worker concurrency.
 - `zhuiwu-yujing`: clean; current stage is `zhuiwu-yujing-foundation/queued`, but dispatch is stopped because prepared `MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md` are missing.
 - `heizhang-xiaoce`: clean; current stage is `heizhang-xiaoce-content/queued`, waiting for worker concurrency.
@@ -23,6 +23,9 @@ Source queue:
 - `tianti-zuihou-yiji`: clean; current stage is `tianti-zuihou-yiji-foundation/queued`, but dispatch is stopped because prepared `MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md` are missing.
 
 ## This Turn
+
+- 2026-05-01 03:05-03:08 +0800: After `duanti-yunliao-state` moved to rework with incomplete Direction Check fields, ran the prescribed dirty reconciliation. `npm test` passed with 19 tests, the handoff was accepted, game commit `9eb46b8` was pushed to `dengxiaocheng/BabelMicrogame-DuantiYunliao`, and manager audit issue #2028 was opened and closed with manager audit commit `5c7d853`.
+- Autorun filled the freed slot with audited First 12 worker `peigei-ri-ui`. Final live workers are `bingpeng-yezhen-qa`, `huijiang-peibi-foundation`, and `peigei-ri-ui`; review remains `0`. Dirty First 12 worktrees are active worker lanes `bingpeng-yezhen` and `huijiang-peibi`, so no cleanup was attempted.
 
 - 2026-05-01 02:55-03:04 +0800: Re-read compact First 12 queue, manager-local line context index, `peigei-ri/LINE_BRIEF.md`, the legacy takeover registry, and the relevant prepared interaction contracts before dispatch. Legacy takeover slugs remain separate from the First 12 queue.
 - Contract scan: manager-local `LINE_BRIEF.md` exists for all First 12. Prepared `MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md` exist for `peigei-ri`, `huijiang-peibi`, `duanti-yunliao`, `dengyou-fenpei`, `tiban-mingdan`, `bingpeng-yezhen`, `gongpai-jiaohuan`, `heizhang-xiaoce`, and `shuiyuan-lunzhi`. They are missing for `zhuiwu-yujing`, `jiaoshoujia-qiangxiu`, and `tianti-zuihou-yiji`, so those lanes are stopped rather than asking ClaudeCode to invent scene interaction.
