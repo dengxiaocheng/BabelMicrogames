@@ -1,10 +1,18 @@
 # First 12 Queue Status - 2026-05-01
 
-Last manager pass: `2026-05-01 18:22:35 CST`
+Last manager pass: `2026-05-01 18:24:44 CST`
 
 Source queue: `/home/openclaw/babel-runtime/plan/MICROGAME_PRODUCTION_BATCH_2026-04-27.json`
 Line context index: `.codex-runtime/microgame-line-context/INDEX.md`
 Legacy takeover registry: `/home/openclaw/babel-runtime/plan/legacy-claude-takeover/legacy_takeover.json`
+
+## Follow-up Pass 18:24 CST
+
+- Reviewed `shuiyuan-lunzhi-pages` after strict packet audit passed. Test command `npm test` passed (`22` tests), the handoff was accepted, commit `5e6dbf0` was pushed to `BabelMicrogame-ShuiyuanLunzhi`, and manager audit issue `#2127` was opened and closed.
+- Re-audited the next safe First 12 packets after status dropped below cap. `gongpai-jiaohuan-pages`, `heizhang-xiaoce-pages`, and `tiban-mingdan-pages` were already running by the time audit returned; `zhuiwu-yujing-pages` remained queued and audit passed.
+- Final status then showed a race-created over-cap state: `running=7` with `duanti-yunliao-pages`, `gongpai-jiaohuan-pages`, `heizhang-xiaoce-pages`, `jiaoshoujia-qiangxiu-ui`, `peigei-ri-integration`, `tianti-zuihou-yiji-ui`, and `tiban-mingdan-pages` running.
+- No raw kill or cleanup was run because these are active running workers. A final sanctioned batch call with `--max-running 6` refused dispatch with exact output `game worker concurrency limit reached: 7 >= 6`.
+- Carry-forward: let workers finish or registry/autorun settle below cap before dispatching `zhuiwu-yujing-pages`; non-First-12 `gongtou-dianming-ui` remains `repair_worker_packet_contract`.
 
 ## Follow-up Pass 18:22 CST
 
