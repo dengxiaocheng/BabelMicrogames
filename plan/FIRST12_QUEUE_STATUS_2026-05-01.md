@@ -1,10 +1,35 @@
 # First 12 Queue Status - 2026-05-01
 
-Last manager pass: `2026-05-01 13:35:48 CST`
+Last manager pass: `2026-05-01 13:46:37 CST`
 
 Source queue: `/home/openclaw/babel-runtime/plan/MICROGAME_PRODUCTION_BATCH_2026-04-27.json`
 Line context index: `.codex-runtime/microgame-line-context/INDEX.md`
 Legacy takeover registry: `/home/openclaw/babel-runtime/plan/legacy-claude-takeover/legacy_takeover.json`
+
+## Follow-up Pass 13:46 CST
+
+- Re-read compact JSON `first_queue`, manager-local `microgame-line-context/INDEX.md`, target `LINE_BRIEF.md` files for `peigei-ri`, `jiaoshoujia-qiangxiu`, and `tianti-zuihou-yiji`, and the legacy Claude takeover registry. No First 12 slug is a legacy takeover lane.
+- Contract gate: active/next First 12 lanes have manager-local `LINE_BRIEF.md` and game-workdir `MECHANIC_SPEC.md` plus `SCENE_INTERACTION_SPEC.md`. The active interaction contracts require scene inputs: ration dragging/weighing, scaffold hotspot repair queue ordering, and bridge material/person drag-drop; no choice-only packet was accepted.
+- Strict packet audits passed:
+  - `ok peigei-ri/peigei-ri-integration [running]`
+  - `ok jiaoshoujia-qiangxiu/jiaoshoujia-qiangxiu-content [running]`
+  - `ok jiaoshoujia-qiangxiu/jiaoshoujia-qiangxiu-ui [rework]` before reconciliation reset it
+  - `ok tianti-zuihou-yiji/tianti-zuihou-yiji-foundation [running]`
+  - `ok tianti-zuihou-yiji/tianti-zuihou-yiji-state [blocked]`, then `ok tianti-zuihou-yiji/tianti-zuihou-yiji-state [running]`
+  - downstream `tianti-zuihou-yiji-{content,ui,integration,qa}` packets audit clean but remain blocked until state is accepted
+- Preferred batch start first refused with `game worker concurrency limit reached: 3 >= 3`.
+- Dirty reconciliation used the approved path: `/home/openclaw/babel-runtime/scripts/babel_ops.sh microgame reconcile-dirty --apply --review --reset-review-failed`.
+  - Accepted and pushed `tianti-zuihou-yiji-foundation` as commit `600a74c`, after `npm test` reported `33 passed, 0 failed`.
+  - Recorded manager audit issue `#2099` and pushed manager audit commit `a1ed6ff`.
+  - Reset `jiaoshoujia-qiangxiu` dirty ambiguity for fast iteration; `jiaoshoujia-qiangxiu-content` restarted clean at `2026-05-01T05:42:49Z`, while `ui/integration/qa` are queued with `dev_reset_dirty_blocker`.
+- `tianti-zuihou-yiji-state` still carried the stale block `foundation has no report and no source tree` after foundation acceptance. `sync-contract` reported already synced, and the foundation report/source tree existed, so the manager used the s-owned status entrypoint in the game repo: `babel_ops.sh worker set-status --worker-id tianti-zuihou-yiji-state --status queued --note 'foundation accepted by manager; source tree and report now exist; unblock next state executor only'`.
+- Preferred batch start then selected First 12 target `tianti-zuihou-yiji`, prepared it, and started `tianti-zuihou-yiji-state` in tmux. No non-First-12 worker was started.
+- Current running cap is filled by First 12 workers:
+  - `peigei-ri-integration`: running; dirty files are `index.html` and `src/state/engine.js`. `index.html` is outside the packet write scope, so treat this as a review risk if the handoff arrives with that path still changed.
+  - `jiaoshoujia-qiangxiu-content`: running; current worktree clean at final status.
+  - `tianti-zuihou-yiji-state`: running; current worktree clean at final status.
+- Remaining First 12 block: downstream `tianti-zuihou-yiji-{content,ui,integration,qa}` still carry the old foundation block and must not be dispatched until `tianti-zuihou-yiji-state` is accepted and the stale downstream block is cleared through s-owned tooling.
+- Final manager status: `games=14 dirty=2 dispatchable=1 review=0 queued=9 running=3 blocked=4 rework=0 done=74`. Dirty repos are active running workers, so no raw cleanup was run. `git diff --check` passed.
 
 ## Follow-up Pass 13:35 CST
 
