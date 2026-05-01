@@ -1189,6 +1189,13 @@ Source queue:
 - One-shot probes found all three active workers still `running` with no report file yet. Final status is `games=14`, `dirty=0`, `dispatchable=1`, `review=0`, `queued=11`, `running=3`, `blocked=0`, `rework=0`, and `done=76`.
 - Stop point: no First 12 handoff is ready to review and no worker can be started until one running slot opens. The only dispatchable manager-status item is outside First 12 (`gongtou-dianming-ui`), so it was left untouched for this objective.
 
+## 2026-05-01 15:44 Manager Recheck
+
+- Re-ran `microgame_batch_prepare_next.sh --start-worker`; it again refused dispatch with the scheduler-capacity blocker `game worker concurrency limit reached: 3 >= 3`.
+- Probed the three active First 12 workers: `peigei-ri-integration`, `jiaoshoujia-qiangxiu-ui`, and `tianti-zuihou-yiji-content` all remain `running` and have no current report file to review.
+- Re-ran strict packet audit for the queued First 12 packets `peigei-ri-qa`, `jiaoshoujia-qiangxiu-integration`, `jiaoshoujia-qiangxiu-qa`, `tianti-zuihou-yiji-ui`, `tianti-zuihou-yiji-integration`, and `tianti-zuihou-yiji-qa`; all passed and remain queued.
+- Stop point: no worker was started and no handoff was reviewed. Current status remains `games=14`, `dirty=0`, `dispatchable=1`, `review=0`, `queued=11`, `running=3`, `blocked=0`, `rework=0`, and `done=76`; the sole blocker for First 12 progress is capacity until one running worker finishes.
+
 ## Notes
 
 - All missing first-12 repos were bootstrapped through `microgame_batch_prepare_next.sh --slug <slug>` without `--start-worker`.
