@@ -1,5 +1,24 @@
 # First 12 Dispatch Blocked - 2026-05-01
 
+## Follow-up: 2026-05-02T01:18:15+08:00
+
+- Compact queue read first from `/home/openclaw/babel-runtime/plan/MICROGAME_PRODUCTION_BATCH_2026-04-27.json`.
+- Manager-local line context index and all twelve First 12 `LINE_BRIEF.md` files were read before dispatch; every lane has a concrete scene interaction contract and rejects choice-only implementation.
+- Legacy takeover registry read from `/home/openclaw/babel-runtime/plan/legacy-claude-takeover/legacy_takeover.json`; it remains separate planner-only legacy context and was not used as fallback.
+- First 12 queue order confirmed: `peigei-ri`, `huijiang-peibi`, `duanti-yunliao`, `dengyou-fenpei`, `tiban-mingdan`, `bingpeng-yezhen`, `gongpai-jiaohuan`, `zhuiwu-yujing`, `heizhang-xiaoce`, `shuiyuan-lunzhi`, `jiaoshoujia-qiangxiu`, `tianti-zuihou-yiji`.
+- Pre-dispatch manager status summary: `games=20 dirty=0 dispatchable=0 review=0 queued=7 running=2 blocked=0 rework=0 done=96`; queue detail: `launchable_games=0 active_game_locks=2 queued_behind_running=2 packet_contract_repair=1 idle_or_seed=14`.
+- Status-visible active First 12 workers: `peigei-ri-integration` and `tianti-zuihou-yiji-integration`.
+- Preferred dispatch command used:
+
+```bash
+sh /home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker --max-running 6
+```
+
+- Result: exit code `3`, output `no batch item requires preparation`.
+- Decision: no safe launchable First 12 item is available under the current queue and concurrency rules. Per the explicit batch-command rule, no registry hand-inspection, fallback lane invention, direct worker start, packet-audit/start fallback, dirty-reconcile fallback, legacy-lane fallback, raw kill, or stale-session cleanup was performed after the batch call.
+- Packet audit: no worker packet was prepared by this pass, so there was no packet to trust or audit.
+- Validation status after recording: `games=20 dirty=0 dispatchable=0 review=0 queued=7 running=2 blocked=0 rework=0 done=96`; active First 12 workers remain `peigei-ri-integration` and `tianti-zuihou-yiji-integration`. `git diff --check` passed.
+
 ## Follow-up: 2026-05-02T01:08:13+08:00
 
 - Compact queue read first from `/home/openclaw/babel-runtime/plan/MICROGAME_PRODUCTION_BATCH_2026-04-27.json`.
