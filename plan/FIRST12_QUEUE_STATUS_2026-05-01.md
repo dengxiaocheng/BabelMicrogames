@@ -27,6 +27,7 @@ Legacy takeover registry: `/home/openclaw/babel-runtime/plan/legacy-claude-takeo
 - Preferred dispatch attempt `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker` refused with exact blocker `game worker concurrency limit reached: 3 >= 3`; no worker was started from that command.
 - One-shot probes confirm the cap is filled by First 12 workers: `peigei-ri-integration`, `jiaoshoujia-qiangxiu-ui`, and restarted `tianti-zuihou-yiji-content`; all three have live tmux/processes and missing reports at probe time. No stale-session cleanup was run.
 - Final manager status before validation: `games=14 dirty=0 dispatchable=1 review=0 queued=11 running=3 blocked=0 rework=0 done=76`. The one dispatchable lane is non-First-12 `gongtou-dianming-ui`, so it was left untouched for this First 12 objective.
+- Validation: `sh /home/openclaw/babel-runtime/scripts/claudecode_manager_status.sh` ended at `games=14 dirty=1 dispatchable=1 review=0 queued=11 running=3 blocked=0 rework=0 done=76`; the dirty worktree is active running `peigei-ri-integration` with `src/state/engine.js`, so no dirty reconciliation was run against it. `git diff --check` passed and the manager worktree was clean after committing this note.
 
 ## Follow-up Pass 15:22 CST
 
