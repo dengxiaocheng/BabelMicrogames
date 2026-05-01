@@ -1,10 +1,32 @@
 # First 12 Queue Status - 2026-05-01
 
-Last manager pass: `2026-05-01 18:03:43 CST`
+Last manager pass: `2026-05-01 18:19:58 CST`
 
 Source queue: `/home/openclaw/babel-runtime/plan/MICROGAME_PRODUCTION_BATCH_2026-04-27.json`
 Line context index: `.codex-runtime/microgame-line-context/INDEX.md`
 Legacy takeover registry: `/home/openclaw/babel-runtime/plan/legacy-claude-takeover/legacy_takeover.json`
+
+## Follow-up Pass 18:19 CST
+
+- Re-read compact JSON `first_queue`, manager-local `microgame-line-context/INDEX.md`, all twelve First 12 `LINE_BRIEF.md` files, and the legacy takeover registry before dispatch decisions.
+- Contract gate: all twelve First 12 lanes have explicit scene interaction contracts; none require choice-only UI or invented interactions.
+- Preferred dispatch used `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker --max-running 6`. It selected `huijiang-peibi`, synced the contract, prepared the lane, and attempted `claudecode_worker_huijiang_peibi`.
+- Initial strict audit for `huijiang-peibi-pages` failed before the packet generator completed repair. Exact findings: missing one-sentence/core-loop/required-state summaries, missing Direction Lock and stop-instead-of-drifting constraints, missing Suggestions-only/no-direct-new-direction rules, missing core-loop reinforcement acceptance, missing `MECHANIC_SPEC.md`, `SCENE_INTERACTION_SPEC.md`, and `TASK_BREAKDOWN.md` context files, missing primary/minimum interaction contracts, and missing no-choice-only interaction rule.
+- Sanctioned probe showed no active `huijiang-peibi-pages` process at that moment. A later control-plane generation pass rewrote the context and packet files; repeat strict audit passed: `ok huijiang-peibi/huijiang-peibi-pages [running]`.
+- Used approved dirty reconciliation once while running lanes were dirty. It blocked active workers with missing reports instead of claiming them: `peigei-ri-integration` dirty files `plan/microgames/peigei-ri/ACCEPTANCE_PLAYTHROUGH.md`, `src/state/engine.js`; `tianti-zuihou-yiji-content` dirty file `src/content.js`.
+- Strict packet audits passed for First 12 launchable/queued packets checked this pass: `duanti-yunliao-pages`, `dengyou-fenpei-pages`, `tiban-mingdan-pages`, `bingpeng-yezhen-pages`, `gongpai-jiaohuan-pages`, `zhuiwu-yujing-pages`, `heizhang-xiaoce-pages`, `shuiyuan-lunzhi-pages`, `peigei-ri-qa`, and `tianti-zuihou-yiji-ui`.
+- Current cap state: `running=6`, `review=0`. Running First 12 lanes are `bingpeng-yezhen-pages`, `dengyou-fenpei-pages`, `duanti-yunliao-pages`, `huijiang-peibi-pages`, `jiaoshoujia-qiangxiu-ui`, and `peigei-ri-integration`.
+- Remaining safe First 12 packets are queued behind max-running or same-game locks: `gongpai-jiaohuan-pages`, `heizhang-xiaoce-pages`, `shuiyuan-lunzhi-pages`, `tianti-zuihou-yiji-ui`, `tiban-mingdan-pages`, and `zhuiwu-yujing-pages`. No further worker was started because the requested cap is full.
+- Final status at validation: `games=14 dirty=4 dispatchable=6 review=0 queued=19 running=6 blocked=0 rework=0 done=76`; the dirty worktrees are active running workers with no reviewable handoff yet. `git diff --check` passed.
+
+## Follow-up Pass 18:10 CST
+
+- Re-read compact JSON `first_queue`, manager-local `microgame-line-context/INDEX.md`, all twelve First 12 `LINE_BRIEF.md` files, and the legacy takeover registry before dispatch decisions.
+- Contract gate: all twelve First 12 lanes still have manager-local scene interaction contracts, and each required input is scene-appropriate rather than choice-only UI.
+- Manager status before dispatch attempt: `games=14 dirty=0 dispatchable=0 review=0 queued=11 running=3 blocked=0 rework=0 done=76`. Queue detail: `launchable_games=0 active_game_locks=3 queued_behind_running=6 packet_contract_repair=1 idle_or_seed=9`.
+- Preferred dispatch attempt used `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker --max-running 6`; it exited `3` with exact output `no batch item requires preparation`.
+- Per manager rule for that result, no worker registry was inspected by hand, no fallback lane was invented, and no worker was started directly.
+- Current stop point: there is no safe launchable First 12 item under the current queue and concurrency rules.
 
 ## Follow-up Pass 18:03 CST
 
