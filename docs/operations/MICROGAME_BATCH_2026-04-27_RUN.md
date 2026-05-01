@@ -1205,6 +1205,14 @@ Source queue:
 - Ran the prescribed dirty reconciliation command `babel_ops.sh microgame reconcile-dirty --apply --review --reset-review-failed`. It left `tianti-zuihou-yiji` blocked with `dirty_ambiguous_owner: tianti-zuihou-yiji-foundation,tianti-zuihou-yiji-pages`; the dirty file is `index.html`.
 - Final `microgame_batch_prepare_next.sh --start-worker --max-running 6` returned exit code 3 with `no batch item requires preparation`. Per queue rule, no fallback worker was started and no registry-driven manual lane was invented. Stop point: there is no safe launchable First 12 item under the current queue and concurrency rules; `tianti-zuihou-yiji` needs the s control plane or the rightful worker owner to resolve the ambiguous dirty `index.html`.
 
+## 2026-05-01 19:53 Manager Recheck
+
+- Re-read the compact queue JSON, manager-local line context index, all First 12 `LINE_BRIEF.md` files, and the legacy takeover registry before dispatch decisions.
+- Ran `microgame_batch_prepare_next.sh --start-worker --max-running 6`. It selected `tianti-zuihou-yiji` and stopped before contract sync because `/home/openclaw/babel-microgames/tianti-zuihou-yiji` was dirty with `M index.html`.
+- Ran the prescribed dirty reconciliation command `babel_ops.sh microgame reconcile-dirty --apply --review --reset-review-failed`. It left `tianti-zuihou-yiji` blocked with `dirty_ambiguous_owner: tianti-zuihou-yiji-foundation,tianti-zuihou-yiji-pages`; the dirty file is `index.html`.
+- Final `microgame_batch_prepare_next.sh --start-worker --max-running 6` returned exit code 3 with `no batch item requires preparation`. Per queue rule, no fallback worker was started and no registry-driven manual lane was invented. Stop point: there is no safe launchable First 12 item under the current queue and concurrency rules.
+- Required validation immediately after the note showed the control-plane state had moved cleanly: `games=20 dirty=0 dispatchable=0 review=0 queued=8 running=2 blocked=0 rework=0 done=95`. The running First 12 workers were `peigei-ri-integration` and `tianti-zuihou-yiji-ui`; no additional dispatch was attempted.
+
 ## Notes
 
 - All missing first-12 repos were bootstrapped through `microgame_batch_prepare_next.sh --slug <slug>` without `--start-worker`.

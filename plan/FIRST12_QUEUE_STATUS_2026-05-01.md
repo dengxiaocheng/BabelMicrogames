@@ -1,6 +1,6 @@
 # First 12 Queue Status - 2026-05-01
 
-Last manager pass: `2026-05-01 18:24:44 CST`
+Last manager pass: `2026-05-01 20:36:15 CST`
 
 Source queue: `/home/openclaw/babel-runtime/plan/MICROGAME_PRODUCTION_BATCH_2026-04-27.json`
 Line context index: `.codex-runtime/microgame-line-context/INDEX.md`
@@ -1990,3 +1990,27 @@ Exact failed-audit findings recorded for `gongtou-dianming-ui`:
 - Final manager status after dispatch: `games=14 dirty=1 dispatchable=1 review=0 queued=8 running=3 blocked=3 rework=0 done=76`. Running First 12 workers are `peigei-ri-integration`, `jiaoshoujia-qiangxiu-ui`, and `tianti-zuihou-yiji-content`; capacity is full at 3.
 - The remaining `tianti-zuihou-yiji-ui`, `tianti-zuihou-yiji-integration`, and `tianti-zuihou-yiji-qa` records still carry the stale blocked note above. Keep them stopped while content is running; after content is accepted, reset/audit the next lane rather than starting a second worker for the same game.
 - The only dirty worktree in final status is active worker-owned `jiaoshoujia-qiangxiu`; no dirty reconciliation should touch it while `jiaoshoujia-qiangxiu-ui` remains `running`. No handoff review was run because status reports `review=0`.
+
+## Follow-up Pass 19:53 CST
+
+- Re-read the compact JSON First 12 queue, the manager-local line context index, all twelve First 12 `LINE_BRIEF.md` files, and the legacy Claude takeover registry before dispatch decisions. All twelve First 12 lines have explicit scene interaction contracts; no legacy takeover lane was used for this First 12 objective.
+- Preferred dispatch via `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker --max-running 6` selected `tianti-zuihou-yiji`, then stopped before contract sync because `/home/openclaw/babel-microgames/tianti-zuihou-yiji` was dirty with `M index.html`.
+- Used the prescribed reconciliation path: `/home/openclaw/babel-runtime/scripts/babel_ops.sh microgame reconcile-dirty --apply --review --reset-review-failed`. It left the lane blocked with `dirty_ambiguous_owner: tianti-zuihou-yiji-foundation,tianti-zuihou-yiji-pages`; dirty file `index.html`.
+- Retried the preferred batch command after reconciliation. It returned exit code 3 with `no batch item requires preparation`.
+- Current stop point: no safe launchable First 12 item exists under the current queue and concurrency rules. Per queue rule, no manual registry fallback or direct worker start was attempted.
+- Required validation after the note showed the control-plane state had advanced: `games=20 dirty=0 dispatchable=0 review=0 queued=8 running=2 blocked=0 rework=0 done=95`. Active First 12 workers were `peigei-ri-integration` and `tianti-zuihou-yiji-ui`; no further dispatch was attempted.
+
+## Follow-up Pass 20:00 CST
+
+- Re-read the compact JSON First 12 queue, the manager-local line context index, all twelve First 12 `LINE_BRIEF.md` files, and the legacy Claude takeover registry before dispatch decisions. All twelve First 12 lanes still have explicit scene interaction contracts, and no legacy takeover lane was used for this First 12 objective.
+- Manager status before dispatch attempt reported `games=20 dirty=1 dispatchable=0 review=0 queued=8 running=2 blocked=0 rework=0 done=95`; active game locks were `peigei-ri-integration` and `tianti-zuihou-yiji-ui`.
+- Preferred dispatch via `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker --max-running 6` returned exit code 3 with exact output `no batch item requires preparation`.
+- Current stop point: no safe launchable First 12 item exists under the current queue and concurrency rules. Per queue rule, no manual registry fallback, direct worker start, or registry hand inspection was attempted.
+
+## Follow-up Pass 20:36 CST
+
+- Re-read the compact JSON First 12 queue, the manager-local line context index, all twelve First 12 `LINE_BRIEF.md` files, and the legacy Claude takeover registry before dispatch decisions. All twelve First 12 lanes still have explicit scene interaction contracts, and no legacy takeover lane was used as a fallback.
+- Manager status before dispatch attempt reported `games=20 dirty=1 dispatchable=0 review=0 queued=8 running=2 blocked=0 rework=0 done=95`; queue detail was `launchable_games=0 active_game_locks=2 queued_behind_running=3 packet_contract_repair=1 idle_or_seed=14`.
+- Active First 12 locks at status time were `peigei-ri-integration` and `tianti-zuihou-yiji-ui`; `tianti-zuihou-yiji` was dirty while its UI worker was still running, so no dirty reconciliation was used as a review claim.
+- Preferred dispatch via `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker --max-running 6` returned exit code 3 with exact output `no batch item requires preparation`.
+- Current stop point: no safe launchable First 12 item exists under the current queue and concurrency rules. Per queue rule, no manual registry fallback, direct worker start, or registry hand inspection was attempted after this result.
