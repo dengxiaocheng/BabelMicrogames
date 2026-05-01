@@ -1171,6 +1171,15 @@ Source queue:
 - Ran the preferred dispatcher `microgame_batch_prepare_next.sh --start-worker`; it refused to start another worker because the configured worker cap is full: `game worker concurrency limit reached: 3 >= 3`.
 - Current stop point: no First 12 worker was started in this pass, review count is `0`, and the queued audited packets above are the next safe candidates once a running slot opens. `zhuiwu-yujing-foundation`, `jiaoshoujia-qiangxiu-foundation`, and `tianti-zuihou-yiji-foundation` remain blocked by missing `MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`, so those lanes must stay stopped until the s control plane repairs packet/context generation.
 
+## 2026-05-01 14:27 Manager Pass
+
+- Re-read the compact queue JSON, manager-local line context index, all First 12 `LINE_BRIEF.md` files, and the legacy takeover registry. Legacy takeover lanes were not dispatched because the immediate objective remains First 12.
+- Refreshed manager status before dispatch: `games=14`, `dirty=2`, `dispatchable=1`, `review=0`, `queued=8`, `running=3`, `blocked=3`, `rework=0`, and `done=76`.
+- Ran the preferred high-level command `microgame_batch_prepare_next.sh --start-worker`. It refused dispatch because the configured cap is full: `game worker concurrency limit reached: 3 >= 3`.
+- One-shot probes confirmed the active First 12 workers are `peigei-ri-integration`, `jiaoshoujia-qiangxiu-ui`, and `tianti-zuihou-yiji-content`. The `tianti-zuihou-yiji` dirty worktree is caused by that running content worker and was not treated as a reconcile blocker.
+- Strict packet audit passed for queued First 12 packets `peigei-ri-qa`, `jiaoshoujia-qiangxiu-integration`, and `jiaoshoujia-qiangxiu-qa`; none were started because the worker cap is still full.
+- Stop point: no review handoff is pending, no worker was started, and the current block is scheduler capacity only. Final status remains `running=3`, `review=0`, `queued=8`, `blocked=3`; next safe action is to let autorun/review advance when one running worker finishes.
+
 ## Notes
 
 - All missing first-12 repos were bootstrapped through `microgame_batch_prepare_next.sh --slug <slug>` without `--start-worker`.
