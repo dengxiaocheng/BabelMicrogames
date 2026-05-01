@@ -686,3 +686,19 @@ Exact failed-audit findings recorded for `gongtou-dianming-ui`:
   - `tianti-zuihou-yiji`: missing `plan/microgames/tianti-zuihou-yiji/MECHANIC_SPEC.md` and `plan/microgames/tianti-zuihou-yiji/SCENE_INTERACTION_SPEC.md`; LINE_BRIEF says stop instead of inventing interaction.
 - Final validation after this note update reports `games=14 dirty=1 dispatchable=2 review=0 queued=14 running=3 blocked=18 rework=0 done=48`; the dirty worktree is `heizhang-xiaoce` with worker-owned in-flight changes to `src/game.js` and `src/game.test.js` while `heizhang-xiaoce-state` remains `running`.
 - No dirty reconciliation was run because the dirty worktree belongs to an active running worker and dispatch is blocked by the worker cap, not unrelated dirty state. No cleanup was run because the active workers still report `running`. No handoff review was run because status reports `review=0`.
+
+## Follow-up Pass 09:13 CST
+
+- Re-read the compact JSON First 12 queue, the manager-local line context index, target line briefs for currently relevant First 12 lanes, and the legacy Claude takeover registry before dispatch decisions. Legacy takeover slugs remain separate `/home/openclaw/claude/game*` planner lanes and do not overlap the First 12 queue.
+- Ran dirty reconciliation through `s` first because status showed a dispatch-blocking `heizhang-xiaoce` rework/dirty lane: `/home/openclaw/babel-runtime/scripts/babel_ops.sh microgame reconcile-dirty --apply --review --reset-review-failed`.
+- Reconciliation accepted `heizhang-xiaoce-planner`, pushed game commit `8d9e054` to `dengxiaocheng/BabelMicrogame-HeizhangXiaoce`, and opened/closed manager audit issue `#2071`: `https://github.com/dengxiaocheng/BabelMicrogames/issues/2071`.
+- After reconciliation, status reported `games=14 dirty=0 dispatchable=2 review=0 queued=11 running=3 blocked=18 rework=0 done=52`.
+- Current running First 12 workers are `peigei-ri-integration`, `gongpai-jiaohuan-qa`, and `heizhang-xiaoce-ui`; worker capacity is full.
+- Current queued First 12 packet checked this pass: `shuiyuan-lunzhi-state`. Read `shuiyuan-lunzhi/LINE_BRIEF.md`; its interaction contract requires controlling bucket fill and route movement with `spillage`, `queue_order`, and `trust` changes, not choice-only buttons.
+- Strict packet audit completed before trusting the queued packet: `ok shuiyuan-lunzhi/shuiyuan-lunzhi-state [queued]`.
+- Ran `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker`; it refused dispatch because the configured cap is full: `game worker concurrency limit reached: 3 >= 3`.
+- Hard blocked First 12 lanes remain stopped because generated game-plan contracts are missing:
+  - `zhuiwu-yujing`: missing `plan/microgames/zhuiwu-yujing/MECHANIC_SPEC.md` and `plan/microgames/zhuiwu-yujing/SCENE_INTERACTION_SPEC.md`; LINE_BRIEF says stop instead of inventing interaction.
+  - `jiaoshoujia-qiangxiu`: missing `plan/microgames/jiaoshoujia-qiangxiu/MECHANIC_SPEC.md` and `plan/microgames/jiaoshoujia-qiangxiu/SCENE_INTERACTION_SPEC.md`; LINE_BRIEF says stop instead of inventing interaction.
+  - `tianti-zuihou-yiji`: missing `plan/microgames/tianti-zuihou-yiji/MECHANIC_SPEC.md` and `plan/microgames/tianti-zuihou-yiji/SCENE_INTERACTION_SPEC.md`; LINE_BRIEF says stop instead of inventing interaction.
+- No handoff review was run because status reports `review=0`. No cleanup was run because active workers still report `running`. Next safe action is to let autorun/registry free a slot or surface a review handoff, then audit the target packet before any dispatch.
