@@ -1,10 +1,22 @@
 # First 12 Queue Status - 2026-05-01
 
-Last manager pass: `2026-05-01 13:33:32 CST`
+Last manager pass: `2026-05-01 13:35:48 CST`
 
 Source queue: `/home/openclaw/babel-runtime/plan/MICROGAME_PRODUCTION_BATCH_2026-04-27.json`
 Line context index: `.codex-runtime/microgame-line-context/INDEX.md`
 Legacy takeover registry: `/home/openclaw/babel-runtime/plan/legacy-claude-takeover/legacy_takeover.json`
+
+## Follow-up Pass 13:35 CST
+
+- Status changed after the 13:33 probe: `zhuiwu-yujing-qa` completed, `jiaoshoujia-qiangxiu-ui` moved to clean `rework`, and running count dropped below the configured cap.
+- Ran the approved dirty/review path before dispatch: `/home/openclaw/babel-runtime/scripts/babel_ops.sh microgame reconcile-dirty --apply --review --reset-review-failed`.
+- Reconciliation accepted and pushed `jiaoshoujia-qiangxiu-foundation` as commit `1aa6066`, recorded manager audit issue `#2098`, and ended with `no dirty microgame repos`.
+- Autorun filled the open slots with First 12 work:
+  - `tianti-zuihou-yiji-foundation` started at `2026-05-01T05:34:23Z`; strict audit after start: `ok tianti-zuihou-yiji/tianti-zuihou-yiji-foundation [running]`.
+  - `jiaoshoujia-qiangxiu-content` rework started at `2026-05-01T05:35:08Z`; target `LINE_BRIEF.md`, `MECHANIC_SPEC.md`, and `SCENE_INTERACTION_SPEC.md` were read first; strict audit: `ok jiaoshoujia-qiangxiu/jiaoshoujia-qiangxiu-content [running]`.
+- Preferred start command with `CLAUDECODE_MAX_RUNNING=3` now refuses with `game worker concurrency limit reached: 3 >= 3`; the cap is filled by `peigei-ri-integration`, `tianti-zuihou-yiji-foundation`, and `jiaoshoujia-qiangxiu-content`.
+- Current manager status after refill: `games=14 dirty=0 dispatchable=1 review=0 queued=8 running=3 blocked=5 rework=1 done=73`.
+- Remaining rework is clean `jiaoshoujia-qiangxiu-ui`; no stale tmux session remains for it. No raw cleanup was run.
 
 ## Follow-up Pass 13:33 CST
 
