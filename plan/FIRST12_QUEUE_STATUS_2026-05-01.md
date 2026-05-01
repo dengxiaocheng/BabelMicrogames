@@ -1,10 +1,251 @@
 # First 12 Queue Status - 2026-05-01
 
-Last manager pass: `2026-05-01 10:16:13 CST`
+Last manager pass: `2026-05-01 11:45:02 CST`
 
 Source queue: `/home/openclaw/babel-runtime/plan/MICROGAME_PRODUCTION_BATCH_2026-04-27.json`
 Line context index: `.codex-runtime/microgame-line-context/INDEX.md`
 Legacy takeover registry: `/home/openclaw/babel-runtime/plan/legacy-claude-takeover/legacy_takeover.json`
+
+## Follow-up Pass 11:45 CST
+
+- Re-read the compact JSON `first_queue`, manager-local `microgame-line-context/INDEX.md`, all twelve First 12 `LINE_BRIEF.md` files, and the legacy Claude takeover registry before dispatch decisions. No First 12 slug is a legacy takeover lane.
+- Contract gate: all twelve First 12 slugs have manager-local `LINE_BRIEF.md`; all twelve game workdirs have `plan/microgames/<slug>/MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`.
+- Dry-run selected the next First 12 lane: `zhuiwu-yujing`.
+- Strict packet audit passed for the active/runnable First 12 set:
+  - `ok peigei-ri/peigei-ri-integration [running]`
+  - `ok peigei-ri/peigei-ri-qa [queued]`
+  - `ok dengyou-fenpei/dengyou-fenpei-planner [running]`
+  - `ok bingpeng-yezhen/bingpeng-yezhen-planner [running]`
+  - `ok zhuiwu-yujing/zhuiwu-yujing-planner [queued]`
+  - `ok jiaoshoujia-qiangxiu/jiaoshoujia-qiangxiu-planner [queued]`
+  - `ok tianti-zuihou-yiji/tianti-zuihou-yiji-planner [queued]`
+- Ran `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker`; it refused to start `zhuiwu-yujing-planner` with exact blocker `game worker concurrency limit reached: 3 >= 3`, so no new worker was launched.
+- Probed the three running workers once:
+  - `peigei-ri-integration`: registry `running`, started `2026-05-01T03:44:45Z`, report missing, zero-byte Claude output, git status clean, live tmux/process present.
+  - `dengyou-fenpei-planner`: registry `running`, started `2026-05-01T03:40:20Z`, report missing, zero-byte Claude output, dirty files are planner-owned `plan/microgames/dengyou-fenpei/DIRECTION_LOCK.md`, `MECHANIC_SPEC.md`, `MINI_GDD.md`, and `SCENE_INTERACTION_SPEC.md`, live tmux/process present.
+  - `bingpeng-yezhen-planner`: registry `running`, started `2026-05-01T03:40:21Z`, report missing, zero-byte Claude output, dirty files are planner-owned `plan/microgames/bingpeng-yezhen/DIRECTION_LOCK.md`, `MECHANIC_SPEC.md`, and `MINI_GDD.md`, live tmux/process present.
+- Refreshed manager status: `games=14 dirty=2 dispatchable=4 review=0 queued=27 running=3 blocked=0 rework=0 done=60`. The two dirty lanes are active planner workers, `review=0`, and all running registries still say `running`; no dirty reconciliation, handoff review, or stale-session cleanup was safe in this pass.
+
+## Follow-up Pass 11:42 CST
+
+- Re-read the compact JSON `first_queue`, manager-local `microgame-line-context/INDEX.md`, all twelve First 12 `LINE_BRIEF.md` files, and the legacy Claude takeover registry before dispatch decisions. No First 12 slug is a legacy takeover lane.
+- Contract gate: all twelve First 12 slugs have manager-local `LINE_BRIEF.md`; all twelve game workdirs have `plan/microgames/<slug>/MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`.
+- Dry-run selected the next First 12 lane: `zhuiwu-yujing`.
+- Strict packet audit passed:
+  - `ok peigei-ri/peigei-ri-integration [running]`
+  - `ok peigei-ri/peigei-ri-qa [queued]`
+  - `ok dengyou-fenpei/dengyou-fenpei-planner [running]`
+  - `ok bingpeng-yezhen/bingpeng-yezhen-planner [running]`
+  - `ok zhuiwu-yujing/zhuiwu-yujing-planner [queued]`
+  - `ok jiaoshoujia-qiangxiu/jiaoshoujia-qiangxiu-planner [queued]`
+  - `ok tianti-zuihou-yiji/tianti-zuihou-yiji-planner [queued]`
+- Ran `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker --max-running 3`; it refused to start `zhuiwu-yujing-planner` with exact blocker `game worker concurrency limit reached: 3 >= 3`, so no new worker was launched.
+- Probed the three running workers once:
+  - `peigei-ri-integration`: registry `running`, report missing, zero-byte Claude output, git status clean, live tmux/process present.
+  - `dengyou-fenpei-planner`: registry `running`, report missing, zero-byte Claude output, git status clean, live tmux/process present.
+  - `bingpeng-yezhen-planner`: registry `running`, report missing, zero-byte Claude output, git status clean, live tmux/process present.
+- Refreshed manager status before this note: `games=14 dirty=0 dispatchable=4 review=0 queued=27 running=3 blocked=0 rework=0 done=60`. With the configured cap full and `review=0`, there is no safe manual dispatch or handoff review to run in this pass.
+
+## Follow-up Pass 11:39 CST
+
+- Re-read the compact JSON `first_queue`, manager-local `microgame-line-context/INDEX.md`, all twelve First 12 `LINE_BRIEF.md` files, and the legacy Claude takeover registry before dispatch decisions. No First 12 slug is a legacy takeover lane.
+- Contract gate: all twelve First 12 slugs have manager-local `LINE_BRIEF.md`; all twelve game workdirs have `plan/microgames/<slug>/MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`, so no lane is currently stopped for missing scene interaction contracts.
+- Strict packet audit passed:
+  - `ok peigei-ri/peigei-ri-integration [running]`
+  - `ok peigei-ri/peigei-ri-qa [queued]`
+  - `ok dengyou-fenpei/dengyou-fenpei-planner [running]`
+  - `ok bingpeng-yezhen/bingpeng-yezhen-planner [running]`
+  - `ok zhuiwu-yujing/zhuiwu-yujing-planner [queued]`
+  - `ok jiaoshoujia-qiangxiu/jiaoshoujia-qiangxiu-planner [queued]`
+  - `ok tianti-zuihou-yiji/tianti-zuihou-yiji-planner [queued]`
+- Dry-run selected the next First 12 lane: `zhuiwu-yujing`.
+- Ran `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker`; it refused to start a fourth worker with exact blocker `game worker concurrency limit reached: 3 >= 3`, so no new worker was launched.
+- Probed the three running workers once:
+  - `peigei-ri-integration`: registry `running`, report missing, zero-byte Claude output, git status clean, live tmux/process present.
+  - `dengyou-fenpei-planner`: registry `running`, report missing, zero-byte Claude output, worker-owned dirty plan files within declared write scope.
+  - `bingpeng-yezhen-planner`: registry `running`, report missing, zero-byte Claude output, worker-owned dirty plan files within declared write scope.
+- Refreshed manager status: `games=14 dirty=2 dispatchable=4 review=0 queued=27 running=3 blocked=0 rework=0 done=60`. The dirty lanes are the two running planner workers, so no dirty reconciliation or cleanup was run.
+- `git diff --check` passed.
+
+## Follow-up Pass 11:35 CST
+
+- Re-read the compact JSON `first_queue`, manager-local `microgame-line-context/INDEX.md`, target `LINE_BRIEF.md` files for `peigei-ri`, `bingpeng-yezhen`, and `dengyou-fenpei`, and the legacy Claude takeover registry before trusting current worker state. No First 12 slug is a legacy takeover lane.
+- Ran `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --dry-run`; it returned `no batch item requires preparation`, so no manual First 12 worker was started by this pass.
+- Autorun filled the configured cap while this pass was active:
+  - `peigei-ri-integration` remains `running`.
+  - `bingpeng-yezhen-planner` is now `running`.
+  - `dengyou-fenpei-planner` is now `running`.
+- Strict packet audit passed:
+  - `ok peigei-ri/peigei-ri-integration [running]`
+  - `ok peigei-ri/peigei-ri-qa [queued]`
+  - `ok bingpeng-yezhen/bingpeng-yezhen-planner [running]`
+  - `ok dengyou-fenpei/dengyou-fenpei-planner [running]`
+  - `ok zhuiwu-yujing/zhuiwu-yujing-planner [queued]`
+  - `ok jiaoshoujia-qiangxiu/jiaoshoujia-qiangxiu-planner [queued]`
+  - `ok tianti-zuihou-yiji/tianti-zuihou-yiji-planner [queued]`
+- Probed the three running workers once. All three registries say `running`, reports are still missing, Claude output logs are zero bytes, and live tmux/process entries are present. No cleanup was run because each registry still says `running`.
+- A later probe showed active planner writes from running workers: `bingpeng-yezhen` has modified `plan/microgames/bingpeng-yezhen/DIRECTION_LOCK.md` and `plan/microgames/bingpeng-yezhen/MINI_GDD.md`; `dengyou-fenpei` has modified `plan/microgames/dengyou-fenpei/MECHANIC_SPEC.md`. These were not reconciled because the workers are still running.
+- `peigei-ri-qa` remains queued and was not started because `peigei-ri-integration` is still running for the same game.
+- After the first final status refresh, the `s` control plane had repaired the three formerly blocked lanes by generating `MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`; their planner packets are now queued and strict-audited. They were not started because the configured cap is already full.
+- Refreshed manager status after repair and active planner writes: `games=14 dirty=2 dispatchable=4 review=0 queued=27 running=3 blocked=0 rework=0 done=60`. The remaining dispatchable lanes are queued behind the cap; non-First-12 `gongtou-dianming` was left untouched for this First 12 objective.
+
+## Follow-up Pass 11:30 CST
+
+- Re-read the compact JSON `first_queue`, manager-local `microgame-line-context/INDEX.md`, all twelve First 12 `LINE_BRIEF.md` files, and the legacy Claude takeover registry before dispatch decisions.
+- Legacy takeover entries remain unrelated `/home/openclaw/claude/game*` planner lanes; no First 12 slug is a legacy takeover lane.
+- Contract gate for First 12:
+  - `peigei-ri`, `huijiang-peibi`, `duanti-yunliao`, `dengyou-fenpei`, `tiban-mingdan`, `bingpeng-yezhen`, `gongpai-jiaohuan`, `heizhang-xiaoce`, and `shuiyuan-lunzhi` have game-workdir `MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`.
+  - `zhuiwu-yujing`, `jiaoshoujia-qiangxiu`, and `tianti-zuihou-yiji` remain stopped because both generated game-workdir contract files are missing: `MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`. Their `LINE_BRIEF.md` files say to stop the lane instead of inventing interaction.
+- Ran dirty reconciliation before dispatch because manager status initially reported `dirty=1`:
+  - `/home/openclaw/babel-runtime/scripts/babel_ops.sh microgame reconcile-dirty --apply --review --reset-review-failed`
+  - result: `peigei-ri` action `block` for `peigei-ri-integration`; dirty files were `index.html`, `plan/microgames/peigei-ri/ACCEPTANCE_PLAYTHROUGH.md`, and `src/ui/renderer.js`; note `dirty_without_report: missing Direction Check`.
+- Ran `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker`; it returned `no batch item requires preparation`, so no First 12 packet was prepared or started.
+- Strict packet audit passed:
+  - `ok peigei-ri/peigei-ri-integration [running]`
+  - `ok peigei-ri/peigei-ri-qa [queued]`
+- Strict packet audit failed, and these workers were not started:
+  - `zhuiwu-yujing/zhuiwu-yujing-foundation`: missing `MECHANIC_SPEC.md`, missing `SCENE_INTERACTION_SPEC.md`, missing primary input interaction contract, missing minimum interaction contract, missing no-choice-only interaction rule, required state is still generic.
+  - `jiaoshoujia-qiangxiu/jiaoshoujia-qiangxiu-foundation`: missing `MECHANIC_SPEC.md`, missing `SCENE_INTERACTION_SPEC.md`, missing primary input interaction contract, missing minimum interaction contract, missing no-choice-only interaction rule, required state is still generic.
+  - `tianti-zuihou-yiji/tianti-zuihou-yiji-foundation`: missing `MECHANIC_SPEC.md`, missing `SCENE_INTERACTION_SPEC.md`, missing primary input interaction contract, missing minimum interaction contract, missing no-choice-only interaction rule, required state is still generic.
+- Probed `peigei-ri-integration`: registry status remains `running`, started at `2026-05-01T03:29:33Z`, report is missing, Claude output is zero bytes, git status is clean after reconciliation, and live tmux/process entries are present. No cleanup was run because the registry still says `running`.
+- Refreshed manager status: `games=14 dirty=0 dispatchable=1 review=0 queued=6 running=1 blocked=18 rework=0 done=60`. The only dispatchable lane is non-First-12 `gongtou-dianming`, left untouched for this First 12 objective.
+
+## Follow-up Pass 11:22 CST
+
+- Re-read the compact JSON `first_queue`, manager-local `microgame-line-context/INDEX.md`, target `LINE_BRIEF.md` files for `peigei-ri`, `zhuiwu-yujing`, `jiaoshoujia-qiangxiu`, and `tianti-zuihou-yiji`, and the legacy Claude takeover registry before dispatch decisions.
+- Verified `peigei-ri` has game-workdir `MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`; `zhuiwu-yujing`, `jiaoshoujia-qiangxiu`, and `tianti-zuihou-yiji` still lack those generated game-workdir contract files, so they remain stopped per `LINE_BRIEF.md`.
+- Strict packet audit passed:
+  - `ok peigei-ri/peigei-ri-integration [running]`
+  - `ok peigei-ri/peigei-ri-qa [queued]`
+- Strict packet audit failed, and these workers were not started:
+  - `zhuiwu-yujing/zhuiwu-yujing-foundation`: missing `MECHANIC_SPEC.md`, missing `SCENE_INTERACTION_SPEC.md`, missing primary input interaction contract, missing minimum interaction contract, missing no-choice-only interaction rule, required state is still generic.
+  - `jiaoshoujia-qiangxiu/jiaoshoujia-qiangxiu-foundation`: missing `MECHANIC_SPEC.md`, missing `SCENE_INTERACTION_SPEC.md`, missing primary input interaction contract, missing minimum interaction contract, missing no-choice-only interaction rule, required state is still generic.
+  - `tianti-zuihou-yiji/tianti-zuihou-yiji-foundation`: missing `MECHANIC_SPEC.md`, missing `SCENE_INTERACTION_SPEC.md`, missing primary input interaction contract, missing minimum interaction contract, missing no-choice-only interaction rule, required state is still generic.
+- Ran `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker`; it returned `no batch item requires preparation`, so no First 12 packet was prepared or started.
+- Probed `peigei-ri-integration`: registry status remains `running`, started at `2026-05-01T03:12:58Z`, report is missing, Claude output is zero bytes, git status is clean, and live tmux/process entries are present. No cleanup was run because the registry still says `running`.
+- Refreshed manager status: `games=14 dirty=0 dispatchable=1 review=0 queued=6 running=1 blocked=18 rework=0 done=60`. The only dispatchable lane is non-First-12 `gongtou-dianming`, left untouched for this objective.
+- Validation: `git diff --check` passed.
+
+## Follow-up Pass 11:19 CST
+
+- Re-read the compact JSON `first_queue`, manager-local `microgame-line-context/INDEX.md`, target `peigei-ri/LINE_BRIEF.md`, and the legacy Claude takeover registry before dispatch decisions.
+- Ran `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker`; it returned `no batch item requires preparation`, so no new First 12 packet was prepared or started in this pass.
+- Strict packet audit passed for the active and queued `peigei-ri` packets:
+  - `ok peigei-ri/peigei-ri-integration [running]`
+  - `ok peigei-ri/peigei-ri-qa [queued]`
+- Strict packet audit failed for the missing-contract First 12 lanes; these workers were not started:
+  - `zhuiwu-yujing/zhuiwu-yujing-foundation`: missing `MECHANIC_SPEC.md`, missing `SCENE_INTERACTION_SPEC.md`, missing primary input interaction contract, missing minimum interaction contract, missing no-choice-only interaction rule, required state is still generic.
+  - `jiaoshoujia-qiangxiu/jiaoshoujia-qiangxiu-foundation`: missing `MECHANIC_SPEC.md`, missing `SCENE_INTERACTION_SPEC.md`, missing primary input interaction contract, missing minimum interaction contract, missing no-choice-only interaction rule, required state is still generic.
+  - `tianti-zuihou-yiji/tianti-zuihou-yiji-foundation`: missing `MECHANIC_SPEC.md`, missing `SCENE_INTERACTION_SPEC.md`, missing primary input interaction contract, missing minimum interaction contract, missing no-choice-only interaction rule, required state is still generic.
+- Probed `peigei-ri-integration` with `/home/openclaw/babel-runtime/scripts/microgame_worker_probe.sh --workdir /home/openclaw/babel-microgames/peigei-ri --worker-id peigei-ri-integration`: registry status remains `running`, started at `2026-05-01T03:12:58Z`, report is missing, Claude output is zero bytes, git status is clean, and live tmux/process entries are present. No cleanup was run because the registry still says `running`.
+- First 12 state after this pass: `peigei-ri-integration` is still running, `peigei-ri-qa` is queued behind the same game, eight other First 12 games are clean with current workers done, and `zhuiwu-yujing`, `jiaoshoujia-qiangxiu`, and `tianti-zuihou-yiji` remain blocked until the `s` control plane repairs the generated interaction/spec contracts.
+- No handoff review was run because manager status reports `review=0`; the only dispatchable lane is still non-First-12 `gongtou-dianming`, left untouched for this First 12 objective.
+
+## Follow-up Pass 11:16 CST
+
+- Re-read the compact JSON `first_queue`, manager-local `microgame-line-context/INDEX.md`, all twelve First 12 `LINE_BRIEF.md` files, and the legacy Claude takeover registry before dispatch decisions.
+- Contract gate for First 12:
+  - `peigei-ri`, `huijiang-peibi`, `duanti-yunliao`, `dengyou-fenpei`, `tiban-mingdan`, `bingpeng-yezhen`, `gongpai-jiaohuan`, `heizhang-xiaoce`, and `shuiyuan-lunzhi` have game-workdir `MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`.
+  - `zhuiwu-yujing`, `jiaoshoujia-qiangxiu`, and `tianti-zuihou-yiji` remain stopped because both generated game-workdir contract files are missing: `MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`. Their `LINE_BRIEF.md` files say to stop the lane instead of inventing interaction.
+- Ran `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker`; it returned `no batch item requires preparation`, so no First 12 packet was prepared or started in this pass.
+- Strict packet audit passed for the active First 12 worker: `ok peigei-ri/peigei-ri-integration [running]`.
+- Probed `peigei-ri-integration` with `/home/openclaw/babel-runtime/scripts/microgame_worker_probe.sh --workdir /home/openclaw/babel-microgames/peigei-ri --worker-id peigei-ri-integration`: registry status remains `running`, started at `2026-05-01T03:12:58Z`, report is missing, Claude output is zero bytes, git status is clean, and live tmux/process entries are present. No cleanup was run because the registry still says `running`.
+- First 12 registry state:
+  - `peigei-ri`: `peigei-ri-integration` is running; `peigei-ri-qa` remains queued behind the same game and was not started because a second worker for the same game is forbidden.
+  - `huijiang-peibi`, `duanti-yunliao`, `dengyou-fenpei`, `tiban-mingdan`, `bingpeng-yezhen`, `gongpai-jiaohuan`, `heizhang-xiaoce`, and `shuiyuan-lunzhi` are clean with all current workers done.
+  - `zhuiwu-yujing`, `jiaoshoujia-qiangxiu`, and `tianti-zuihou-yiji` remain blocked for missing `MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`.
+- Refreshed manager status: `games=14 dirty=0 dispatchable=1 review=0 queued=6 running=1 blocked=18 rework=0 done=60`. The only dispatchable lane shown is non-First-12 `gongtou-dianming`, left untouched for this First 12 objective.
+- No handoff review was run because status reports `review=0`; no dirty reconciliation was needed because status reports `dirty=0`.
+
+## Follow-up Pass 11:06 CST
+
+- Re-read the compact JSON `first_queue`, manager-local `microgame-line-context/INDEX.md`, all twelve First 12 `LINE_BRIEF.md` files, and the legacy Claude takeover registry before dispatch decisions.
+- Ran `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker`; it returned `no batch item requires preparation`, so no First 12 packet was prepared or started in this pass.
+- Probed `peigei-ri-integration` with `/home/openclaw/babel-runtime/scripts/microgame_worker_probe.sh --workdir /home/openclaw/babel-microgames/peigei-ri --worker-id peigei-ri-integration`: registry status remains `running`, report is missing, Claude output is zero bytes, git status is clean, and a live tmux/process is present. No cleanup was run because the registry still says `running`.
+- Current cap state: configured cap is effectively full at `running=1`; `peigei-ri-qa` remains queued behind the same game and was not started because a second worker for the same game is forbidden.
+- Hard blocked First 12 lanes remain stopped with exact reason:
+  - `zhuiwu-yujing`: missing `plan/microgames/zhuiwu-yujing/MECHANIC_SPEC.md` and `plan/microgames/zhuiwu-yujing/SCENE_INTERACTION_SPEC.md`; `LINE_BRIEF.md` says stop instead of inventing interaction.
+  - `jiaoshoujia-qiangxiu`: missing `plan/microgames/jiaoshoujia-qiangxiu/MECHANIC_SPEC.md` and `plan/microgames/jiaoshoujia-qiangxiu/SCENE_INTERACTION_SPEC.md`; `LINE_BRIEF.md` says stop instead of inventing interaction.
+  - `tianti-zuihou-yiji`: missing `plan/microgames/tianti-zuihou-yiji/MECHANIC_SPEC.md` and `plan/microgames/tianti-zuihou-yiji/SCENE_INTERACTION_SPEC.md`; `LINE_BRIEF.md` says stop instead of inventing interaction.
+- Refreshed manager status: `games=14 dirty=0 dispatchable=1 review=0 queued=6 running=1 blocked=18 rework=0 done=60`. The only dispatchable lane shown is non-First-12 `gongtou-dianming`, left untouched for this First 12 objective.
+- No handoff review was run because status reports `review=0`. Validation: `/home/openclaw/babel-runtime/scripts/claudecode_manager_status.sh` ran and `git diff --check` passed.
+
+## Follow-up Pass 11:03 CST
+
+- Re-read the compact JSON `first_queue`, manager-local `microgame-line-context/INDEX.md`, target `LINE_BRIEF.md` files for `peigei-ri`, `zhuiwu-yujing`, `jiaoshoujia-qiangxiu`, and `tianti-zuihou-yiji`, and the legacy Claude takeover registry before dispatch decisions.
+- Legacy takeover entries remain unrelated `/home/openclaw/claude/game*` planner lanes; no First 12 slug is a legacy takeover lane.
+- Ran `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker`; it returned `no batch item requires preparation`, so no First 12 packet was prepared and no worker was started.
+- Strict packet audits passed for the active and next First 12 `peigei-ri` packets:
+  - `ok peigei-ri/peigei-ri-integration [running]`
+  - `ok peigei-ri/peigei-ri-qa [queued]`
+- Probed `peigei-ri-integration` through `microgame_worker_probe.sh`: registry status `running`, started at `2026-05-01T02:58:34Z`, report missing, zero-byte Claude output, clean git status, live tmux/process present. No cleanup was run because the registry still says `running`.
+- Current First 12 state:
+  - `peigei-ri`: `peigei-ri-integration` remains running; `peigei-ri-qa` remains queued behind the same game and was not started because a second worker for the same game is forbidden.
+  - `huijiang-peibi`, `duanti-yunliao`, `dengyou-fenpei`, `tiban-mingdan`, `bingpeng-yezhen`, `gongpai-jiaohuan`, `heizhang-xiaoce`, and `shuiyuan-lunzhi` are clean with all current workers done.
+  - `zhuiwu-yujing`, `jiaoshoujia-qiangxiu`, and `tianti-zuihou-yiji` remain hard stopped because game-workdir `MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md` are missing; their manager-local `LINE_BRIEF.md` files say to stop the lane instead of inventing interaction.
+- Refreshed manager status after the pass: `games=14 dirty=0 dispatchable=1 review=0 queued=6 running=1 blocked=18 rework=0 done=60`. The only dispatchable lane shown is non-First-12 `gongtou-dianming`, left untouched for this First 12 objective.
+- No handoff review was run because status reports `review=0`. `git diff --check` passed.
+
+## Follow-up Pass 10:58 CST
+
+- Re-read the compact JSON `first_queue`, manager-local `microgame-line-context/INDEX.md`, all twelve First 12 `LINE_BRIEF.md` files, and the legacy Claude takeover registry before dispatch decisions.
+- Legacy takeover entries remain unrelated `/home/openclaw/claude/game*` planner lanes; no First 12 slug is a legacy takeover lane.
+- Contract gate for First 12:
+  - `peigei-ri`, `huijiang-peibi`, `duanti-yunliao`, `dengyou-fenpei`, `tiban-mingdan`, `bingpeng-yezhen`, `gongpai-jiaohuan`, `heizhang-xiaoce`, and `shuiyuan-lunzhi` have game-workdir `MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`.
+  - `zhuiwu-yujing`, `jiaoshoujia-qiangxiu`, and `tianti-zuihou-yiji` remain hard stopped because both game-workdir contract files are missing: `MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`. Their `LINE_BRIEF.md` files say to stop the lane instead of inventing interaction.
+- First 12 registry state: `peigei-ri-integration` is the only running First 12 worker; `peigei-ri-qa` is queued behind the same game and was not started because a second worker for the same game is forbidden.
+- Strict packet audits passed:
+  - `ok peigei-ri/peigei-ri-integration [running]`
+  - `ok peigei-ri/peigei-ri-qa [queued]`
+- Probed `peigei-ri-integration` once through `microgame_worker_probe.sh`: registry status `running`, started at `2026-05-01T02:43:23Z`, report missing, zero-byte Claude output, clean git status, live tmux/process present. No cleanup was run because the registry still says `running`.
+- Ran `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker`; it returned `no batch item requires preparation`, so no new First 12 packet was prepared and no worker was started.
+- Refreshed manager status after the pass: `games=14 dirty=0 dispatchable=1 review=0 queued=6 running=1 blocked=18 rework=0 done=60`. The only dispatchable lane shown is non-First-12 `gongtou-dianming`, left untouched for this First 12 objective. Final status now records `peigei-ri` note `stale_no_output: no worker output, report, or source changes after 900s`, but the registry still says `running`.
+- No handoff review was run because status reports `review=0`. `git diff --check` passed.
+
+## Follow-up Pass 10:50 CST
+
+- Re-read the compact JSON `first_queue`, manager-local `microgame-line-context/INDEX.md`, all twelve First 12 `LINE_BRIEF.md` files, and the legacy Claude takeover registry before dispatch decisions.
+- Legacy takeover entries remain unrelated `/home/openclaw/claude/game*` planner lanes; no First 12 slug is a legacy takeover lane.
+- Contract gate for First 12:
+  - `peigei-ri`, `huijiang-peibi`, `duanti-yunliao`, `dengyou-fenpei`, `tiban-mingdan`, `bingpeng-yezhen`, `gongpai-jiaohuan`, `heizhang-xiaoce`, and `shuiyuan-lunzhi` have game-workdir `MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`.
+  - `zhuiwu-yujing`, `jiaoshoujia-qiangxiu`, and `tianti-zuihou-yiji` remain hard stopped because both game-workdir contract files are missing: `MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`. Their `LINE_BRIEF.md` files say to stop the lane instead of inventing interaction.
+- Strict packet audit passed for the active First 12 worker: `ok peigei-ri/peigei-ri-integration [running]`.
+- Strict packet audit also passed for the queued follow-up: `ok peigei-ri/peigei-ri-qa [queued]`. It was not started because `peigei-ri-integration` is still running for the same game.
+- Probed `peigei-ri-integration` once through `microgame_worker_probe.sh`: registry status `running`, started at `2026-05-01T02:43:23Z`, report missing, zero-byte Claude output, clean git status, live tmux/process present. No cleanup was run because the registry still says `running`.
+- Ran `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker`; it returned `no batch item requires preparation`, so no new First 12 packet was prepared and no worker was started.
+- Refreshed manager status after the pass: `games=14 dirty=0 dispatchable=1 review=0 queued=6 running=1 blocked=18 rework=0 done=60`. The only dispatchable lane shown is non-First-12 `gongtou-dianming`, left untouched for this First 12 objective.
+- No handoff review was run because status reports `review=0`.
+
+## Follow-up Pass 10:45 CST
+
+- Re-read the compact JSON `first_queue`, manager-local `microgame-line-context/INDEX.md`, all twelve First 12 `LINE_BRIEF.md` files, and the legacy Claude takeover registry before dispatch decisions.
+- Legacy takeover entries remain unrelated `/home/openclaw/claude/game*` planner lanes; no First 12 slug is a legacy takeover lane.
+- Contract gate for First 12:
+  - All twelve First 12 slugs have manager-local `LINE_BRIEF.md`.
+  - `peigei-ri`, `huijiang-peibi`, `duanti-yunliao`, `dengyou-fenpei`, `tiban-mingdan`, `bingpeng-yezhen`, `gongpai-jiaohuan`, `heizhang-xiaoce`, and `shuiyuan-lunzhi` have game-workdir `MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`.
+  - `zhuiwu-yujing`, `jiaoshoujia-qiangxiu`, and `tianti-zuihou-yiji` remain hard stopped because both game-workdir contract files are missing: `MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`. Their `LINE_BRIEF.md` files say to stop the lane instead of inventing interaction.
+- Current First 12 state:
+  - `peigei-ri`: `peigei-ri-integration` remains `running`; `peigei-ri-qa` remains queued. The game worktree is currently clean after autorun refreshed the worker and recorded `dev_reset_dirty_blocker: stashed dirty worktree for fast iteration`.
+  - `huijiang-peibi`, `duanti-yunliao`, `dengyou-fenpei`, `tiban-mingdan`, `bingpeng-yezhen`, `gongpai-jiaohuan`, `heizhang-xiaoce`, and `shuiyuan-lunzhi` are clean with all current workers done.
+- Strict packet audit passed for the active worker: `ok peigei-ri/peigei-ri-integration [running]`.
+- Probed `peigei-ri-integration` once through `microgame_worker_probe.sh`: registry status `running`, started at `2026-05-01T02:43:23Z`, report missing, zero-byte Claude output, clean git status, live tmux/process present. No cleanup was run because the registry still says `running`.
+- Ran `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker`; it returned `no batch item requires preparation`, so no new First 12 packet was prepared and no worker was started.
+- Refreshed manager status after the pass: `games=14 dirty=0 dispatchable=1 review=0 queued=6 running=1 blocked=18 rework=0 done=60`. The only dispatchable lane shown is non-First-12 `gongtou-dianming`, left untouched for this First 12 objective.
+- No handoff review was run because status reports `review=0`.
+
+## Follow-up Pass 10:35 CST
+
+- Re-read the compact JSON `first_queue`, manager-local `microgame-line-context/INDEX.md`, target `LINE_BRIEF.md` files for `peigei-ri`, `huijiang-peibi`, and `duanti-yunliao`, and the legacy Claude takeover registry before dispatch decisions.
+- Legacy takeover entries remain unrelated `/home/openclaw/claude/game*` planner lanes; no First 12 slug is a legacy takeover lane.
+- Current First 12 state:
+  - `peigei-ri`: `peigei-ri-integration` is still `running`; `peigei-ri-qa` remains queued.
+  - `huijiang-peibi`, `duanti-yunliao`, `dengyou-fenpei`, `tiban-mingdan`, `bingpeng-yezhen`, `gongpai-jiaohuan`, `heizhang-xiaoce`, and `shuiyuan-lunzhi` are clean with all current workers done.
+  - `zhuiwu-yujing`, `jiaoshoujia-qiangxiu`, and `tianti-zuihou-yiji` remain hard stopped because both game-workdir contract files are missing: `MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`. Their `LINE_BRIEF.md` files say to stop the lane instead of inventing interaction.
+- Strict packet audit passed for the active worker: `ok peigei-ri/peigei-ri-integration [running]`.
+- Probe result for `peigei-ri-integration`: registry status `running`, report missing, zero-byte Claude output, clean git status, live tmux/process present. Manager status now records blocker note `stale_no_output: no worker output, report, or source changes after 900s`.
+- Ran `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker`; it returned `no batch item requires preparation`, so no new First 12 packet was prepared and no worker was started. With the configured cap currently occupied by `peigei-ri-integration`, no second worker was manually started.
+- Refreshed manager status after the pass: `games=14 dirty=0 dispatchable=1 review=0 queued=6 running=1 blocked=18 rework=0 done=60`. The only dispatchable lane shown is non-First-12 `gongtou-dianming`, left untouched for this First 12 objective.
+- No handoff review was run because status reports `review=0`; no cleanup was run because `peigei-ri-integration` still reports `running`.
 
 ## Follow-up Pass 10:16 CST
 
