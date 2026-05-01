@@ -1,10 +1,36 @@
 # First 12 Queue Status - 2026-05-01
 
-Last manager pass: `2026-05-01 09:09:00 CST`
+Last manager pass: `2026-05-01 09:26:58 CST`
 
 Source queue: `/home/openclaw/babel-runtime/plan/MICROGAME_PRODUCTION_BATCH_2026-04-27.json`
 Line context index: `.codex-runtime/microgame-line-context/INDEX.md`
 Legacy takeover registry: `/home/openclaw/babel-runtime/plan/legacy-claude-takeover/legacy_takeover.json`
+
+## Follow-up Pass 09:26 CST
+
+- Re-read the compact JSON First 12 queue, manager-local line context index, all twelve First 12 `LINE_BRIEF.md` files, and the legacy Claude takeover registry before dispatch decisions.
+- Legacy takeover entries remain unrelated `/home/openclaw/claude/game*` lanes; no First 12 slug is a legacy takeover lane.
+- `shuiyuan-lunzhi-planner` surfaced a pending handoff. Mechanical review was run with `microgame_worker_review_handoff.sh`; it opened/closed manager audit issue `#2074` and rejected the handoff with the exact finding: `worker report still has placeholders`. The handoff was treated as rework, not accepted.
+- Dirty reconciliation was run because dirty state was blocking dispatch:
+  - `/home/openclaw/babel-runtime/scripts/babel_ops.sh microgame reconcile-dirty --apply --review --reset-review-failed`
+  - It reported transient `shuiyuan-lunzhi` dirty plan files while `shuiyuan-lunzhi-state` lacked a report; later registry state cleaned the worktree and restarted `shuiyuan-lunzhi-planner` with the placeholder-report note.
+- Batch dispatch was attempted after review/reconcile:
+  - First attempt stopped for the pending handoff review.
+  - Second attempt refused dispatch because the configured cap is full: `game worker concurrency limit reached: 3 >= 3`.
+- Strict packet audits passed for the current active workers:
+  - `ok peigei-ri/peigei-ri-integration [running]`
+  - `ok heizhang-xiaoce/heizhang-xiaoce-integration [running]`
+  - `ok shuiyuan-lunzhi/shuiyuan-lunzhi-planner [running]`
+- Probed current running workers once, without entering a manual wait loop:
+  - `peigei-ri-integration`: `running`, zero-byte Claude output, missing report, clean git status, live tmux/process present.
+  - `heizhang-xiaoce-integration`: `running`, zero-byte Claude output, missing report, worker-owned dirty `src/main.js` and untracked `src/index.html`, live tmux/process present.
+  - `shuiyuan-lunzhi-planner`: `running`, zero-byte Claude output, missing report, clean git status, live tmux/process present; current note records the prior placeholder report rejection.
+- Refreshed manager status: `games=14 dirty=1 dispatchable=1 review=0 queued=10 running=3 blocked=18 rework=0 done=54`; autorun remains running as `claudecode_manager_autorun`.
+- Hard blocked First 12 lanes remain stopped because generated game-workdir contracts are missing:
+  - `zhuiwu-yujing`: missing `plan/microgames/zhuiwu-yujing/MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`; LINE_BRIEF says stop instead of inventing interaction.
+  - `jiaoshoujia-qiangxiu`: missing `plan/microgames/jiaoshoujia-qiangxiu/MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`; LINE_BRIEF says stop instead of inventing interaction.
+  - `tianti-zuihou-yiji`: missing `plan/microgames/tianti-zuihou-yiji/MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`; LINE_BRIEF says stop instead of inventing interaction.
+- No cleanup was run because all cap-occupying workers still report `running`. Next safe action remains: let autorun/registry surface a completed handoff, review it mechanically, then rerun batch dispatch only after packet audit and scene-contract checks.
 
 ## Follow-up Pass 09:09 CST
 
