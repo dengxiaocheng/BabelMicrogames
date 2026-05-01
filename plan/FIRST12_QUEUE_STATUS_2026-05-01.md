@@ -1,10 +1,32 @@
 # First 12 Queue Status - 2026-05-01
 
-Last manager pass: `2026-05-01 15:22:53 CST`
+Last manager pass: `2026-05-01 15:27:03 CST`
 
 Source queue: `/home/openclaw/babel-runtime/plan/MICROGAME_PRODUCTION_BATCH_2026-04-27.json`
 Line context index: `.codex-runtime/microgame-line-context/INDEX.md`
 Legacy takeover registry: `/home/openclaw/babel-runtime/plan/legacy-claude-takeover/legacy_takeover.json`
+
+## Follow-up Pass 15:27 CST
+
+- Re-read compact JSON `first_queue`, manager-local `microgame-line-context/INDEX.md`, target `tianti-zuihou-yiji/LINE_BRIEF.md`, and legacy takeover registry before dispatch decisions. Legacy takeover lanes remain separate and have no First 12 slug match.
+- Contract gate: all twelve First 12 lanes have manager-local `LINE_BRIEF.md`, plus game-workdir `plan/microgames/<slug>/MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`; no lane was stopped for missing scene interaction contract. The restarted target remains scene input `拖放板/绳/楔搭桥并安排人员通过顺序`, not choice-only UI.
+- `tianti-zuihou-yiji-content` reached `handoff_queued`; strict packet audit passed: `ok tianti-zuihou-yiji/tianti-zuihou-yiji-content [handoff_queued]`.
+- Mechanical review via `/home/openclaw/babel-runtime/scripts/microgame_worker_review_handoff.sh --workdir /home/openclaw/babel-microgames/tianti-zuihou-yiji --worker-id tianti-zuihou-yiji-content` rejected the handoff with exact finding `handoff has no changed files` and recorded manager audit issue `#2104`.
+- Continued with the next safe First 12 item: after the helper marked `tianti-zuihou-yiji-content` rework, strict audit passed immediately before restart (`ok tianti-zuihou-yiji/tianti-zuihou-yiji-content [running]`). Autorun/control plane restarted it at `2026-05-01T07:26:18Z`; no duplicate manual start was issued.
+- Downstream stale `tianti-zuihou-yiji-{ui,integration,qa}` foundation blockers were cleared by the control plane to `queued` with note `reset resolved foundation blocker`; they remain behind the running content lane.
+- Strict packet audits passed for active and queued First 12 packets:
+  - `ok peigei-ri/peigei-ri-integration [running]`
+  - `ok peigei-ri/peigei-ri-qa [queued]`
+  - `ok jiaoshoujia-qiangxiu/jiaoshoujia-qiangxiu-ui [running]`
+  - `ok jiaoshoujia-qiangxiu/jiaoshoujia-qiangxiu-integration [queued]`
+  - `ok jiaoshoujia-qiangxiu/jiaoshoujia-qiangxiu-qa [queued]`
+  - `ok tianti-zuihou-yiji/tianti-zuihou-yiji-content [running]`
+  - `ok tianti-zuihou-yiji/tianti-zuihou-yiji-ui [queued]`
+  - `ok tianti-zuihou-yiji/tianti-zuihou-yiji-integration [queued]`
+  - `ok tianti-zuihou-yiji/tianti-zuihou-yiji-qa [queued]`
+- Preferred dispatch attempt `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker` refused with exact blocker `game worker concurrency limit reached: 3 >= 3`; no worker was started from that command.
+- One-shot probes confirm the cap is filled by First 12 workers: `peigei-ri-integration`, `jiaoshoujia-qiangxiu-ui`, and restarted `tianti-zuihou-yiji-content`; all three have live tmux/processes and missing reports at probe time. No stale-session cleanup was run.
+- Final manager status before validation: `games=14 dirty=0 dispatchable=1 review=0 queued=11 running=3 blocked=0 rework=0 done=76`. The one dispatchable lane is non-First-12 `gongtou-dianming-ui`, so it was left untouched for this First 12 objective.
 
 ## Follow-up Pass 15:22 CST
 
