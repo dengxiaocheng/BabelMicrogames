@@ -207,3 +207,37 @@ CLAUDECODE_MAX_RUNNING=6 /home/openclaw/babel-runtime/scripts/microgame_batch_pr
 
 - Result: exit code `3`, output `no batch item requires preparation`.
 - Decision: no safe launchable item is available under the current queue and concurrency rules. Per manager instruction for this exact result, no registry hand-inspection, fallback lane invention, direct worker start, raw kill, or stale-session cleanup was performed after the batch call.
+
+## Follow-up: 2026-05-01T20:54:45+08:00
+
+- Compact queue read first from `/home/openclaw/babel-runtime/plan/MICROGAME_PRODUCTION_BATCH_2026-04-27.json`.
+- Manager-local line context index read from `/home/openclaw/claudecode-manager/.codex-runtime/microgame-line-context/INDEX.md`.
+- All twelve First 12 `LINE_BRIEF.md` files were read before the dispatch attempt; each lane still has a scene interaction contract with a concrete non-choice input.
+- Legacy takeover registry read from `/home/openclaw/babel-runtime/plan/legacy-claude-takeover/legacy_takeover.json`; it remains separate from this First 12 production lane.
+- Preferred batch command used:
+
+```bash
+sh /home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker --max-running 6
+```
+
+- Result: exit code `3`, output `no batch item requires preparation`.
+- Post-dispatch manager status summary: `games=20 dirty=0 dispatchable=0 review=0 queued=8 running=2 blocked=0 rework=0 done=95`; queue detail: `launchable_games=0 active_game_locks=2 queued_behind_running=3 packet_contract_repair=1 idle_or_seed=14`.
+- Running First 12 workers at status time: `peigei-ri-integration` and `tianti-zuihou-yiji-ui`.
+- Decision: no safe launchable item is available under the current queue and concurrency rules. Per manager instruction for this exact result, no registry hand-inspection, fallback lane invention, direct worker start, raw kill, or stale-session cleanup was performed after the batch call.
+
+## Follow-up: 2026-05-01T21:18:35+08:00
+
+- Compact queue read first from `/home/openclaw/babel-runtime/plan/MICROGAME_PRODUCTION_BATCH_2026-04-27.json`.
+- Manager-local line context index read from `/home/openclaw/claudecode-manager/.codex-runtime/microgame-line-context/INDEX.md`.
+- All twelve First 12 `LINE_BRIEF.md` files were read before the dispatch attempt; each lane has a concrete scene interaction contract and rejects choice-only implementation.
+- Legacy takeover registry read from `/home/openclaw/babel-runtime/plan/legacy-claude-takeover/legacy_takeover.json`; it remains a separate legacy-planner lane and was not used as fallback.
+- Pre-dispatch manager status summary: `games=20 dirty=0 dispatchable=0 review=0 queued=8 running=2 blocked=0 rework=0 done=95`; queue detail: `launchable_games=0 active_game_locks=2 queued_behind_running=3 packet_contract_repair=1 idle_or_seed=14`.
+- Running First 12 workers at status time: `peigei-ri-integration` and `tianti-zuihou-yiji-ui`.
+- Preferred batch command used:
+
+```bash
+sh /home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker --max-running 6
+```
+
+- Result: exit code `3`, output `no batch item requires preparation`.
+- Decision: no safe launchable item is available under the current queue and concurrency rules. Per manager instruction for this exact result, no registry hand-inspection, fallback lane invention, direct worker start, raw kill, or stale-session cleanup was performed after the batch call.
