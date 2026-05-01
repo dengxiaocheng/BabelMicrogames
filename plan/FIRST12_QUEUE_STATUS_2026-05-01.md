@@ -1,10 +1,28 @@
 # First 12 Queue Status - 2026-05-01
 
-Last manager pass: `2026-05-01 13:09:11 CST`
+Last manager pass: `2026-05-01 13:16:09 CST`
 
 Source queue: `/home/openclaw/babel-runtime/plan/MICROGAME_PRODUCTION_BATCH_2026-04-27.json`
 Line context index: `.codex-runtime/microgame-line-context/INDEX.md`
 Legacy takeover registry: `/home/openclaw/babel-runtime/plan/legacy-claude-takeover/legacy_takeover.json`
+
+## Follow-up Pass 13:16 CST
+
+- Re-read compact JSON `first_queue`, manager-local `microgame-line-context/INDEX.md`, all twelve First 12 `LINE_BRIEF.md` files, and the legacy takeover registry before dispatch decisions. No legacy takeover slug matches the First 12 queue.
+- Contract gate: all twelve First 12 lanes have manager-local `LINE_BRIEF.md` scene interaction contracts, and current active/next First 12 lanes have planner-refined `MECHANIC_SPEC.md` plus `SCENE_INTERACTION_SPEC.md` under `plan/microgames/<slug>/`. The checked packets require scene inputs, not choice-only UI.
+- Strict packet audits passed for active and next queued First 12 packets:
+  - `ok peigei-ri/peigei-ri-integration [running]`
+  - `ok jiaoshoujia-qiangxiu/jiaoshoujia-qiangxiu-state [running]`
+  - `ok zhuiwu-yujing/zhuiwu-yujing-ui [running]`
+  - `ok tianti-zuihou-yiji/tianti-zuihou-yiji-foundation [queued]`
+- Preferred dispatch attempt `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker` stopped at the configured cap with exact blocker `game worker concurrency limit reached: 3 >= 3`; no worker was started.
+- Current manager status after final refresh: `games=14 dirty=1 dispatchable=2 review=0 queued=13 running=3 blocked=5 rework=0 done=69`.
+- Probed the three running First 12 workers once:
+  - `peigei-ri-integration`: registry `running`, report missing, zero-byte Claude output, live tmux/process present, worktree clean.
+  - `jiaoshoujia-qiangxiu-state`: registry `running`, report missing, zero-byte Claude output, live tmux/process present, worker-owned dirty files `src/state.js` and `src/test.test.js` are inside write scope.
+  - `zhuiwu-yujing-ui`: registry `running`, report missing, zero-byte Claude output, live tmux/process present, worktree clean.
+- `tianti-zuihou-yiji-foundation` remains strict-audited and queued behind the full cap. Downstream `tianti-zuihou-yiji` workers remain blocked until foundation is accepted; non-First-12 `gongtou-dianming-ui` was left untouched for this First 12 pass.
+- No dirty reconciliation was run because the only dirty worktree belongs to active running worker `jiaoshoujia-qiangxiu-state`. No handoff review was run because `review=0`. No stale-session cleanup was run because active workers still report `running`.
 
 ## Follow-up Pass 13:09 CST
 
