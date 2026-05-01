@@ -493,3 +493,23 @@ Exact failed-audit findings recorded for `gongtou-dianming-ui`:
   - `ok peigei-ri/peigei-ri-qa [queued]`
 - No dirty reconciliation was run because the only dirty worktree is worker-owned while `gongpai-jiaohuan-ui` remains `running`; dispatch is blocked by the worker cap, not unrelated dirty state.
 - No cleanup was run because the active workers still report `running`. No handoff review was run because status reports `review=0`.
+
+## Follow-up Pass 08:33 CST
+
+- Re-read the compact JSON First 12 queue, the manager-local line context index, all twelve First 12 `LINE_BRIEF.md` files, and the legacy Claude takeover registry before dispatch decisions.
+- Confirmed all First 12 slugs have scene interaction contracts, and no First 12 slug appears in the legacy takeover registry.
+- Current manager status before dispatch attempt: `games=14 dirty=0 dispatchable=2 review=0 queued=14 running=3 blocked=18 rework=0 done=48`.
+- Ran `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker`; it refused dispatch because the configured cap is full: `game worker concurrency limit reached: 3 >= 3`.
+- Probed the current running First 12 workers once, without entering a manual wait loop:
+  - `peigei-ri-integration`: `running`, zero-byte Claude output, missing report, clean git status, live tmux/process present.
+  - `heizhang-xiaoce-state`: `running`, zero-byte Claude output, missing report, clean git status, live tmux/process present.
+  - `gongpai-jiaohuan-integration`: `running`, zero-byte Claude output, missing report, clean git status, live tmux/process present.
+- Strict packet audit completed before trusting the next waiting First 12 packet:
+  - `ok shuiyuan-lunzhi/shuiyuan-lunzhi-integration [queued]`
+- Current waiting First 12 packet with fresh strict audit coverage is `shuiyuan-lunzhi-integration`; do not dispatch it until worker capacity drops below 3.
+- Hard blocked First 12 lanes remain stopped because generated game-plan contracts are missing:
+  - `zhuiwu-yujing`: missing `plan/microgames/zhuiwu-yujing/MECHANIC_SPEC.md` and `plan/microgames/zhuiwu-yujing/SCENE_INTERACTION_SPEC.md`; LINE_BRIEF says stop instead of inventing interaction.
+  - `jiaoshoujia-qiangxiu`: missing `plan/microgames/jiaoshoujia-qiangxiu/MECHANIC_SPEC.md` and `plan/microgames/jiaoshoujia-qiangxiu/SCENE_INTERACTION_SPEC.md`; LINE_BRIEF says stop instead of inventing interaction.
+  - `tianti-zuihou-yiji`: missing `plan/microgames/tianti-zuihou-yiji/MECHANIC_SPEC.md` and `plan/microgames/tianti-zuihou-yiji/SCENE_INTERACTION_SPEC.md`; LINE_BRIEF says stop instead of inventing interaction.
+- Final validation after this note update reports `games=14 dirty=1 dispatchable=2 review=0 queued=14 running=3 blocked=18 rework=0 done=48`; the dirty worktree is `heizhang-xiaoce` with worker-owned in-flight changes to `src/game.js` and `src/game.test.js` while `heizhang-xiaoce-state` remains `running`.
+- No dirty reconciliation was run because the dirty worktree belongs to an active running worker and dispatch is blocked by the worker cap, not unrelated dirty state. No cleanup was run because the active workers still report `running`. No handoff review was run because status reports `review=0`.
