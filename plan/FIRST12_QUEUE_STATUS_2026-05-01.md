@@ -1,10 +1,18 @@
 # First 12 Queue Status - 2026-05-01
 
-Last manager pass: `2026-05-01 17:28:13 CST`
+Last manager pass: `2026-05-01 17:29:33 CST`
 
 Source queue: `/home/openclaw/babel-runtime/plan/MICROGAME_PRODUCTION_BATCH_2026-04-27.json`
 Line context index: `.codex-runtime/microgame-line-context/INDEX.md`
 Legacy takeover registry: `/home/openclaw/babel-runtime/plan/legacy-claude-takeover/legacy_takeover.json`
+
+## Follow-up Pass 17:29 CST
+
+- During final validation after the 17:28 pass, `tianti-zuihou-yiji-content` briefly moved to `rework` with dirty state and note `claudecode run-once failed: 143`, reducing the active worker count to two.
+- Used the approved dirty/rework path: `/home/openclaw/babel-runtime/scripts/babel_ops.sh microgame reconcile-dirty --apply --review --reset-review-failed`. It reported no remaining dirty microgame repos; follow-up status showed the control plane had already restarted `tianti-zuihou-yiji-content` cleanly.
+- Strict packet audit passed for the restarted worker: `ok tianti-zuihou-yiji/tianti-zuihou-yiji-content [running]`. Probe showed it started at `2026-05-01T09:29:13Z`, has a live tmux/process, clean worktree, and report is still missing.
+- Final status: `games=14 dirty=0 dispatchable=0 review=0 queued=11 running=3 blocked=0 rework=0 done=76`. Active First 12 workers are `peigei-ri-integration`, `jiaoshoujia-qiangxiu-ui`, and restarted `tianti-zuihou-yiji-content`.
+- Validation: `sh /home/openclaw/babel-runtime/scripts/claudecode_manager_status.sh` and `git diff --check` both ran; `git diff --check` passed.
 
 ## Follow-up Pass 17:28 CST
 
