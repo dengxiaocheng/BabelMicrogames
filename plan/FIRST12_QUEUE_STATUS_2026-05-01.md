@@ -1,10 +1,70 @@
 # First 12 Queue Status - 2026-05-01
 
-Last manager pass: `2026-05-01 12:43:16 CST`
+Last manager pass: `2026-05-01 12:58:05 CST`
 
 Source queue: `/home/openclaw/babel-runtime/plan/MICROGAME_PRODUCTION_BATCH_2026-04-27.json`
 Line context index: `.codex-runtime/microgame-line-context/INDEX.md`
 Legacy takeover registry: `/home/openclaw/babel-runtime/plan/legacy-claude-takeover/legacy_takeover.json`
+
+## Follow-up Pass 12:58 CST
+
+- Re-read compact JSON `first_queue`, manager-local `microgame-line-context/INDEX.md`, target `LINE_BRIEF.md` and `SCENE_INTERACTION_SPEC.md` for queued First 12 lane `tianti-zuihou-yiji`, plus the legacy takeover registry. No legacy takeover slug matches the First 12 queue.
+- Contract gate for the next queued First 12 lane: `tianti-zuihou-yiji` has `LINE_BRIEF.md`, planner-refined `MECHANIC_SPEC.md`, and `SCENE_INTERACTION_SPEC.md`; its required interaction is drag/drop bridge construction plus draggable crossing-order sorting, not a choice-only implementation.
+- Strict packet audit passed for the queued First 12 dispatch candidate: `ok tianti-zuihou-yiji/tianti-zuihou-yiji-foundation [queued]`.
+- Preferred dispatch attempt `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker` stopped at the configured cap with exact blocker `game worker concurrency limit reached: 3 >= 3`; no fourth worker was started.
+- Probed the three running First 12 workers once:
+  - `peigei-ri-integration`: registry `running`, report missing, zero-byte Claude output, live tmux/process present, current git status clean.
+  - `jiaoshoujia-qiangxiu-planner`: registry `running`, report missing, zero-byte Claude output, live tmux/process present; by final status it has worker-owned planner output in `plan/microgames/jiaoshoujia-qiangxiu/` inside write scope.
+  - `zhuiwu-yujing-content`: registry `running`, report missing, live tmux/process present; worker-owned dirty output is in `src/main.js`, `src/scene.js`, and `src/content/`, all inside its declared write scope.
+- Final manager status after validation: `games=14 dirty=2 dispatchable=2 review=0 queued=16 running=3 blocked=5 rework=0 done=66`. The dirty lanes are active running `jiaoshoujia-qiangxiu-planner` and `zhuiwu-yujing-content`, so dirty reconciliation was not run against them. Dispatchable First 12 lane `tianti-zuihou-yiji-foundation` remains queued behind the full cap; non-First-12 `gongtou-dianming-ui` was left untouched for this First 12 pass.
+- `tianti-zuihou-yiji` downstream block remains: `state/content/ui/integration/qa` stay blocked with exact note `blocked by manager: foundation has no report and no source tree; rerun tianti-zuihou-yiji-foundation first`. Do not dispatch downstream executors until foundation is accepted.
+- No handoff review was available (`review=0`). No stale-session cleanup was run because all active worker registries still report `running`. `git diff --check` passed.
+
+## Follow-up Pass 12:54 CST
+
+- Re-read compact JSON `first_queue`, manager-local `microgame-line-context/INDEX.md`, active/nearby First 12 `LINE_BRIEF.md` files for `peigei-ri`, `huijiang-peibi`, `duanti-yunliao`, `dengyou-fenpei`, `zhuiwu-yujing`, `jiaoshoujia-qiangxiu`, and `tianti-zuihou-yiji`, plus the full legacy takeover registry. No legacy takeover slug matches the First 12 queue.
+- Contract gate for active/next lanes: `LINE_BRIEF.md`, `MECHANIC_SPEC.md`, and `SCENE_INTERACTION_SPEC.md` are present for `peigei-ri`, `zhuiwu-yujing`, `jiaoshoujia-qiangxiu`, and `tianti-zuihou-yiji`. The checked primary inputs are scene interactions, not choice-only buttons.
+- Strict packet audit passed for the active and next queued First 12 packets:
+  - `ok peigei-ri/peigei-ri-integration [running]`
+  - `ok peigei-ri/peigei-ri-qa [queued]`
+  - `ok zhuiwu-yujing/zhuiwu-yujing-content [running]`
+  - `ok zhuiwu-yujing/zhuiwu-yujing-ui [queued]`
+  - `ok zhuiwu-yujing/zhuiwu-yujing-integration [queued]`
+  - `ok zhuiwu-yujing/zhuiwu-yujing-qa [queued]`
+  - `ok jiaoshoujia-qiangxiu/jiaoshoujia-qiangxiu-planner [running]`
+  - `ok jiaoshoujia-qiangxiu/jiaoshoujia-qiangxiu-foundation [queued]`
+  - `ok tianti-zuihou-yiji/tianti-zuihou-yiji-foundation [queued]`
+- Preferred dispatch attempt `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker` stopped at the configured cap with exact blocker `game worker concurrency limit reached: 3 >= 3`; no fourth worker was started.
+- Probed the three running First 12 workers once:
+  - `peigei-ri-integration`: registry `running`, report missing, zero-byte Claude output, live tmux/process present, current git status clean.
+  - `zhuiwu-yujing-content`: registry `running`, report missing, zero-byte Claude output, live tmux/process present, current git status clean.
+  - `jiaoshoujia-qiangxiu-planner`: registry `running`, report missing, zero-byte Claude output, live tmux/process present; probe-time dirty files were planner-owned `plan/microgames/jiaoshoujia-qiangxiu/` files inside write scope.
+- Final manager status after validation: `games=14 dirty=0 dispatchable=2 review=0 queued=16 running=3 blocked=5 rework=0 done=66`. Dispatchable First 12 lane `tianti-zuihou-yiji-foundation` is strict-audited and queued behind the full cap; non-First-12 `gongtou-dianming-ui` was left untouched for this First 12 pass.
+- `tianti-zuihou-yiji` downstream block remains: `state/content/ui/integration/qa` stay blocked with exact note `blocked by manager: foundation has no report and no source tree; rerun tianti-zuihou-yiji-foundation first`. Do not dispatch downstream executors until foundation is accepted.
+- No handoff review was available (`review=0`). No dirty reconciliation or stale-session cleanup was run because final status has no dirty worktree and all active worker registries still report `running`.
+
+## Follow-up Pass 12:47 CST
+
+- Re-read compact JSON `first_queue`, manager-local `microgame-line-context/INDEX.md`, all twelve First 12 `LINE_BRIEF.md` files, and the legacy Claude takeover registry before dispatch decisions. No First 12 slug is a legacy takeover lane.
+- Contract gate: all twelve First 12 lanes have manager-local `LINE_BRIEF.md`; all twelve game workdirs have `plan/microgames/<slug>/MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`. No choice-only lane was accepted.
+- Strict packet audit passed for active and next queued First 12 packets:
+  - `ok peigei-ri/peigei-ri-integration [rework]`; immediate registry/status refresh showed it running again under session `5054f813-5c65-41fd-90d2-d6bc95364bf1`, so no cleanup was run.
+  - `ok peigei-ri/peigei-ri-qa [queued]`
+  - `ok zhuiwu-yujing/zhuiwu-yujing-content [running]`
+  - `ok zhuiwu-yujing/zhuiwu-yujing-ui [queued]`
+  - `ok zhuiwu-yujing/zhuiwu-yujing-integration [queued]`
+  - `ok zhuiwu-yujing/zhuiwu-yujing-qa [queued]`
+  - `ok jiaoshoujia-qiangxiu/jiaoshoujia-qiangxiu-planner [running]`
+  - `ok jiaoshoujia-qiangxiu/jiaoshoujia-qiangxiu-foundation [queued]`
+  - `ok tianti-zuihou-yiji/tianti-zuihou-yiji-foundation [queued]`
+- Preferred start attempt `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker` refused with exact blocker `game worker concurrency limit reached: 3 >= 3`, so no fourth worker was started.
+- Probed the three running First 12 workers once:
+  - `peigei-ri-integration`: registry `running`, report missing, live tmux/process present; worker-owned dirty files are `src/main.js` and `src/ui/renderer.js`.
+  - `jiaoshoujia-qiangxiu-planner`: registry `running`, report missing, live tmux/process present, current git status clean.
+  - `zhuiwu-yujing-content`: registry `running`, report missing, live tmux/process present, current git status clean.
+- Current manager status before note update: `games=14 dirty=1 dispatchable=1 review=0 queued=16 running=3 blocked=5 rework=0 done=66`. The one dispatchable lane is non-First-12 `gongtou-dianming`, so it was left untouched for this First 12 pass.
+- `tianti-zuihou-yiji` block remains: `tianti-zuihou-yiji-foundation` is queued, while downstream `state/content/ui/integration/qa` stay blocked with exact note `blocked by manager: foundation has no report and no source tree; rerun tianti-zuihou-yiji-foundation first`.
+- No handoff review was available (`review=0`). No stale worker cleanup was run because all active worker registries still report `running`.
 
 ## Follow-up Pass 12:43 CST
 
