@@ -1,10 +1,28 @@
 # First 12 Queue Status - 2026-05-01
 
-Last manager pass: `2026-05-01 15:32:59 CST`
+Last manager pass: `2026-05-01 17:24:16 CST`
 
 Source queue: `/home/openclaw/babel-runtime/plan/MICROGAME_PRODUCTION_BATCH_2026-04-27.json`
 Line context index: `.codex-runtime/microgame-line-context/INDEX.md`
 Legacy takeover registry: `/home/openclaw/babel-runtime/plan/legacy-claude-takeover/legacy_takeover.json`
+
+## Follow-up Pass 17:24 CST
+
+- Re-read compact JSON `first_queue`, manager-local `microgame-line-context/INDEX.md`, and the legacy takeover registry before dispatch decisions. No legacy takeover slug was used for the First 12 lane.
+- Contract gate: all twelve First 12 lanes currently have manager-local `LINE_BRIEF.md`, plus game-workdir `plan/microgames/<slug>/MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`; no choice-only or missing-contract lane was dispatched.
+- Preferred batch start first selected `peigei-ri` but stopped with exact blocker `game worktree is dirty before contract sync: /home/openclaw/babel-microgames/peigei-ri`, with dirty files `index.html` and `src/state/engine.js`.
+- Used the approved dirty path: `/home/openclaw/babel-runtime/scripts/babel_ops.sh microgame reconcile-dirty --apply --review --reset-review-failed`. It refused to auto-claim the edits with `dirty_ambiguous_owner: peigei-ri-foundation,peigei-ri-ui`; follow-up status then showed the worktree clean.
+- Re-ran `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker --max-running 3`; it refused with exact blocker `game worker concurrency limit reached: 3 >= 3`. No new worker was started.
+- Strict packet audits passed for the active First 12 workers:
+  - `ok peigei-ri/peigei-ri-integration [running]`
+  - `ok jiaoshoujia-qiangxiu/jiaoshoujia-qiangxiu-ui [running]`
+  - `ok tianti-zuihou-yiji/tianti-zuihou-yiji-content [running]`
+- One-shot probes confirmed all three active First 12 workers are still running, live tmux/processes exist, and reports are still missing:
+  - `peigei-ri-integration`: started `2026-05-01T09:23:17Z`, clean worktree.
+  - `jiaoshoujia-qiangxiu-ui`: started `2026-05-01T09:17:19Z`, clean worktree.
+  - `tianti-zuihou-yiji-content`: started `2026-05-01T09:21:30Z`, clean worktree.
+- Final status: `games=14 dirty=0 dispatchable=0 review=0 queued=11 running=3 blocked=0 rework=0 done=76`. Non-First-12 `gongtou-dianming-ui` moved to `repair_worker_packet_contract`, so no non-First-12 worker was dispatched.
+- Validation: `sh /home/openclaw/babel-runtime/scripts/claudecode_manager_status.sh` and `git diff --check` both ran; `git diff --check` passed.
 
 ## Follow-up Pass 15:33 CST
 
