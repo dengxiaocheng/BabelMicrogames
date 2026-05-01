@@ -1,10 +1,28 @@
 # First 12 Queue Status - 2026-05-01
 
-Last manager pass: `2026-05-01 17:43:02 CST`
+Last manager pass: `2026-05-01 18:03:43 CST`
 
 Source queue: `/home/openclaw/babel-runtime/plan/MICROGAME_PRODUCTION_BATCH_2026-04-27.json`
 Line context index: `.codex-runtime/microgame-line-context/INDEX.md`
 Legacy takeover registry: `/home/openclaw/babel-runtime/plan/legacy-claude-takeover/legacy_takeover.json`
+
+## Follow-up Pass 18:03 CST
+
+- Re-read compact JSON `first_queue`, manager-local `microgame-line-context/INDEX.md`, all twelve First 12 `LINE_BRIEF.md` files, and the legacy takeover registry before dispatch decisions. Legacy takeover lanes remain separate and were not used for this First 12 objective.
+- Contract gate: all twelve First 12 lanes still have manager-local scene interaction contracts, and each required interaction is scene-appropriate rather than choice-only UI: weighing ration blocks, ratio sliders plus hold-to-mix, grid route/load movement, lamp placement/brightness, drag-card scheduling, treatment drag/drop under countdown, badge/record drag consistency, area warning signals, evidence encoding/hiding, bucket amount plus route movement, scaffold hotspot repair queueing, and bridge material/person drag-drop.
+- Initial manager status: `games=14 dirty=0 dispatchable=0 review=0 queued=11 running=3 blocked=0 rework=0 done=76`. Queue detail: `launchable_games=0 active_game_locks=3 queued_behind_running=6 packet_contract_repair=1 idle_or_seed=9`.
+- Initial preferred dispatch attempt used `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker --max-running 6`; it exited `3` with exact output `no batch item requires preparation`.
+- During validation, `jiaoshoujia-qiangxiu-ui` moved to blocked dirty state with note `dirty_without_report: missing report file`, reducing the live First 12 worker count to two.
+- Used the approved dirty path: `/home/openclaw/babel-runtime/scripts/babel_ops.sh microgame reconcile-dirty --apply --review --reset-review-failed`. It recorded the exact blocker and did not safely claim the dirty file:
+  - slug: `jiaoshoujia-qiangxiu`
+  - dirty file: `src/risk-map.js`
+  - status/action: `dirty` / `block`
+  - worker: `jiaoshoujia-qiangxiu-ui` / `blocked`
+  - note: `dirty_without_report: missing report file`
+- Retried the preferred batch command after reconcile. It selected `jiaoshoujia-qiangxiu`, confirmed `contract already synced`, prepared the lane, and started tmux session `claudecode_worker_jiaoshoujia_qiangxiu`.
+- Strict packet audit passed after start: `ok jiaoshoujia-qiangxiu/jiaoshoujia-qiangxiu-ui [running]`.
+- Final status after restart: `games=14 dirty=0 dispatchable=0 review=0 queued=11 running=3 blocked=0 rework=0 done=76`. Active First 12 workers are `peigei-ri-integration`, `jiaoshoujia-qiangxiu-ui`, and `tianti-zuihou-yiji-content`.
+- Validation after writing this note: `sh /home/openclaw/babel-runtime/scripts/claudecode_manager_status.sh` and `git diff --check` both ran; `git diff --check` passed.
 
 ## Follow-up Pass 17:37 CST
 
