@@ -1196,6 +1196,15 @@ Source queue:
 - Re-ran strict packet audit for the queued First 12 packets `peigei-ri-qa`, `jiaoshoujia-qiangxiu-integration`, `jiaoshoujia-qiangxiu-qa`, `tianti-zuihou-yiji-ui`, `tianti-zuihou-yiji-integration`, and `tianti-zuihou-yiji-qa`; all passed and remain queued.
 - Stop point: no worker was started and no handoff was reviewed. Current status remains `games=14`, `dirty=0`, `dispatchable=1`, `review=0`, `queued=11`, `running=3`, `blocked=0`, `rework=0`, and `done=76`; the sole blocker for First 12 progress is capacity until one running worker finishes.
 
+## 2026-05-01 19:17 Manager Pass
+
+- Re-read the compact queue JSON, manager-local line context index, all First 12 `LINE_BRIEF.md` files, and the legacy takeover registry. All First 12 line briefs are present and contain non-choice scene interaction contracts; legacy takeover lanes were not mixed into First 12 execution dispatch.
+- Ran `microgame_batch_prepare_next.sh --start-worker --max-running 6`. It stopped for pending First 12 handoff review: `/home/openclaw/babel-microgames/jiaoshoujia-qiangxiu` worker `jiaoshoujia-qiangxiu-integration`.
+- Mechanical review accepted `jiaoshoujia-qiangxiu-integration`: `npm test` passed with 25/25 tests, changed files were `plan/microgames/jiaoshoujia-qiangxiu/ACCEPTANCE_PLAYTHROUGH.md`, `src/game.js`, and `src/state.js`, commit `7b6ae64` was pushed to `BabelMicrogame-JiaoshoujiaQiangxiu`, and manager audit issue `#2142` was opened and closed.
+- Re-ran the batch command. It selected `tianti-zuihou-yiji` but stopped before contract sync because `/home/openclaw/babel-microgames/tianti-zuihou-yiji` was dirty with `M index.html`.
+- Ran the prescribed dirty reconciliation command `babel_ops.sh microgame reconcile-dirty --apply --review --reset-review-failed`. It left `tianti-zuihou-yiji` blocked with `dirty_ambiguous_owner: tianti-zuihou-yiji-foundation,tianti-zuihou-yiji-pages`; the dirty file is `index.html`.
+- Final `microgame_batch_prepare_next.sh --start-worker --max-running 6` returned exit code 3 with `no batch item requires preparation`. Per queue rule, no fallback worker was started and no registry-driven manual lane was invented. Stop point: there is no safe launchable First 12 item under the current queue and concurrency rules; `tianti-zuihou-yiji` needs the s control plane or the rightful worker owner to resolve the ambiguous dirty `index.html`.
+
 ## Notes
 
 - All missing first-12 repos were bootstrapped through `microgame_batch_prepare_next.sh --slug <slug>` without `--start-worker`.
