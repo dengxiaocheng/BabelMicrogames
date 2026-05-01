@@ -1,10 +1,21 @@
 # First 12 Queue Status - 2026-05-01
 
-Last manager pass: `2026-05-01 18:19:58 CST`
+Last manager pass: `2026-05-01 18:22:35 CST`
 
 Source queue: `/home/openclaw/babel-runtime/plan/MICROGAME_PRODUCTION_BATCH_2026-04-27.json`
 Line context index: `.codex-runtime/microgame-line-context/INDEX.md`
 Legacy takeover registry: `/home/openclaw/babel-runtime/plan/legacy-claude-takeover/legacy_takeover.json`
+
+## Follow-up Pass 18:22 CST
+
+- Post-validation state changed while workers finished. Approved dirty/review reconciliation accepted and pushed `dengyou-fenpei-pages` (`a9e505d`) and `huijiang-peibi-pages` (`3158206`), with manager audit issues `#2122` and `#2123` opened and closed.
+- The same reconcile pass blocked `duanti-yunliao-pages` with exact note `dirty_without_registered_worker` and dirty files `.github/workflows/deploy.yml`, `README.md`, `index.html`, `package-lock.json`, `package.json`, and `vite.config.ts`. Autorun later cleaned/restarted that lane and it is running again.
+- Reviewed `bingpeng-yezhen-pages` via the sanctioned handoff reviewer after strict packet audit passed. It was rejected with exact finding `handoff has no changed files`; manager audit issue `#2124` was opened and closed. Current action is `dispatch_rework_worker`.
+- A duplicate explicit review of already-accepted `huijiang-peibi-pages` was not idempotent and also produced `handoff has no changed files`; manager audit issue `#2125` was opened and closed. Current action is `dispatch_rework_worker`, even though the earlier reconcile had already committed and pushed the Pages fix.
+- Final validation superseded the transient rework state: status ended at `games=14 dirty=4 dispatchable=3 review=0 queued=16 running=6 blocked=0 rework=0 done=79`. `bingpeng-yezhen` and `huijiang-peibi` are now idle/done.
+- Current cap state: `running=6`, `review=0`, `rework=0`. Running First 12 lanes are `duanti-yunliao-pages`, `gongpai-jiaohuan-pages`, `heizhang-xiaoce-pages`, `jiaoshoujia-qiangxiu-ui`, `peigei-ri-integration`, and `shuiyuan-lunzhi-pages`.
+- Current blocked reason to carry forward: non-First-12 `gongtou-dianming-ui` remains `repair_worker_packet_contract`. The dirty First 12 worktrees are active running workers, not reviewable handoffs.
+- No additional worker was started manually because the requested `--max-running 6` cap is full and no handoff remains reviewable.
 
 ## Follow-up Pass 18:19 CST
 
