@@ -1,10 +1,24 @@
 # First 12 Queue Status - 2026-05-01
 
-Last manager pass: `2026-05-01 12:58:05 CST`
+Last manager pass: `2026-05-01 13:09:11 CST`
 
 Source queue: `/home/openclaw/babel-runtime/plan/MICROGAME_PRODUCTION_BATCH_2026-04-27.json`
 Line context index: `.codex-runtime/microgame-line-context/INDEX.md`
 Legacy takeover registry: `/home/openclaw/babel-runtime/plan/legacy-claude-takeover/legacy_takeover.json`
+
+## Follow-up Pass 13:09 CST
+
+- Re-read compact JSON `first_queue`, manager-local `microgame-line-context/INDEX.md`, all twelve First 12 `LINE_BRIEF.md` files, and the legacy takeover registry before dispatch decisions. No legacy takeover slug matches the First 12 queue.
+- Contract gate: all twelve First 12 lanes have manager-local `LINE_BRIEF.md` with scene-appropriate interaction contracts, not choice-only UI. The active/next lanes continue to consume planner-refined files under `plan/microgames/<slug>/`.
+- Preferred dispatch attempt `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker` stopped at the configured cap with exact blocker `game worker concurrency limit reached: 3 >= 3`; no fourth worker was started.
+- Strict packet audit passed for the next queued First 12 dispatch candidate: `ok tianti-zuihou-yiji/tianti-zuihou-yiji-foundation [queued]`.
+- Probed the three running First 12 workers once:
+  - `peigei-ri-integration`: registry `running`, report missing, zero-byte Claude output, live tmux/process present, worktree clean.
+  - `jiaoshoujia-qiangxiu-foundation`: registry `running`, report missing, zero-byte Claude output, live tmux/process present, worktree clean.
+  - `zhuiwu-yujing-ui`: registry `running`, report missing, live tmux/process present. A transient dirty `src/scene.js` state was reviewed by the approved reconciliation path and the final status is clean.
+- Dirty reconciliation command `/home/openclaw/babel-runtime/scripts/babel_ops.sh microgame reconcile-dirty --apply --review --reset-review-failed` initially blocked on `zhuiwu-yujing-ui` because the worker was still `running` with missing report; final status then returned to `dirty=0`, so no manual reset or cleanup was run.
+- Final manager status: `games=14 dirty=0 dispatchable=2 review=0 queued=14 running=3 blocked=5 rework=0 done=68`. Running First 12 workers fill the cap: `peigei-ri-integration`, `jiaoshoujia-qiangxiu-foundation`, and `zhuiwu-yujing-ui`.
+- `tianti-zuihou-yiji-foundation` remains strict-audited and queued behind the full cap. Downstream `tianti-zuihou-yiji` workers remain blocked until foundation is accepted; non-First-12 `gongtou-dianming-ui` was left untouched for this First 12 pass.
 
 ## Follow-up Pass 12:58 CST
 
