@@ -1,10 +1,19 @@
 # First 12 Queue Status - 2026-05-01
 
-Last manager pass: `2026-05-01 15:31:31 CST`
+Last manager pass: `2026-05-01 15:32:59 CST`
 
 Source queue: `/home/openclaw/babel-runtime/plan/MICROGAME_PRODUCTION_BATCH_2026-04-27.json`
 Line context index: `.codex-runtime/microgame-line-context/INDEX.md`
 Legacy takeover registry: `/home/openclaw/babel-runtime/plan/legacy-claude-takeover/legacy_takeover.json`
+
+## Follow-up Pass 15:33 CST
+
+- During final validation, `jiaoshoujia-qiangxiu-ui` briefly moved to `rework` with exact Direction Check blocker: `missing field: 本次改动强化了哪一句核心体验; missing field: 本次改动是否引入了 Direction Lock 禁止的内容; missing field: 核心循环是否仍然是原来的循环; missing field: 是否新增了无关系统`.
+- Used the approved dirty/review reset path: `/home/openclaw/babel-runtime/scripts/babel_ops.sh microgame reconcile-dirty --apply --review --reset-review-failed`. It returned `no dirty microgame repos`; follow-up status showed the control plane had already reset and restarted `jiaoshoujia-qiangxiu-ui`.
+- Restarted `jiaoshoujia-qiangxiu-ui` was probed once: status `running`, started `2026-05-01T07:32:34Z`, report missing, clean `git_status`, live tmux/process present.
+- Strict packet audit after restart passed: `ok jiaoshoujia-qiangxiu/jiaoshoujia-qiangxiu-ui [running]`.
+- Preferred dispatch attempt `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker` again refused with exact blocker `game worker concurrency limit reached: 3 >= 3`; no worker was started.
+- Current stop point remains scheduler capacity. Active First 12 workers are `peigei-ri-integration`, `jiaoshoujia-qiangxiu-ui`, and `tianti-zuihou-yiji-content`.
 
 ## Follow-up Pass 15:31 CST
 
