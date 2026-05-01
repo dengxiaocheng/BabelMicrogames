@@ -1,10 +1,19 @@
 # First 12 Queue Status - 2026-05-01
 
-Last manager pass: `2026-05-01 20:36:15 CST`
+Last manager pass: `2026-05-01 20:47:50 CST`
 
 Source queue: `/home/openclaw/babel-runtime/plan/MICROGAME_PRODUCTION_BATCH_2026-04-27.json`
 Line context index: `.codex-runtime/microgame-line-context/INDEX.md`
 Legacy takeover registry: `/home/openclaw/babel-runtime/plan/legacy-claude-takeover/legacy_takeover.json`
+
+## Follow-up Pass 20:47 CST
+
+- Re-read compact JSON `first_queue`, manager-local `microgame-line-context/INDEX.md`, all twelve First 12 `LINE_BRIEF.md` files, and the legacy takeover registry before dispatch decisions.
+- Contract gate: every First 12 lane still has a scene interaction contract with a concrete non-choice input, so no lane was stopped for missing local interaction context before invoking the dispatcher.
+- Pre-dispatch manager status: `games=20 dirty=0 dispatchable=0 review=0 queued=8 running=2 blocked=0 rework=0 done=95`. Queue detail: `launchable_games=0 active_game_locks=2 queued_behind_running=3 packet_contract_repair=1 idle_or_seed=14`.
+- Active First 12 workers at status time: `peigei-ri-integration` and `tianti-zuihou-yiji-ui`.
+- Preferred dispatch command `CLAUDECODE_MAX_RUNNING=6 /home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker --max-running 6` exited `3` with exact output `no batch item requires preparation`.
+- Stop point: no safe launchable First 12 item is available under the current queue and concurrency rules. Per the explicit batch-command rule, no registry hand-inspection, fallback lane invention, or direct worker start was performed after that result.
 
 ## Follow-up Pass 18:24 CST
 
@@ -2014,3 +2023,29 @@ Exact failed-audit findings recorded for `gongtou-dianming-ui`:
 - Active First 12 locks at status time were `peigei-ri-integration` and `tianti-zuihou-yiji-ui`; `tianti-zuihou-yiji` was dirty while its UI worker was still running, so no dirty reconciliation was used as a review claim.
 - Preferred dispatch via `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker --max-running 6` returned exit code 3 with exact output `no batch item requires preparation`.
 - Current stop point: no safe launchable First 12 item exists under the current queue and concurrency rules. Per queue rule, no manual registry fallback, direct worker start, or registry hand inspection was attempted after this result.
+
+## Follow-up Pass 20:37 CST
+
+- Required validation showed the state had changed to `games=20 dirty=1 dispatchable=0 review=0 queued=8 running=1 blocked=1 rework=0 done=95`; `tianti-zuihou-yiji-ui` became blocked with note `dirty_ambiguous_owner: tianti-zuihou-yiji-foundation,tianti-zuihou-yiji-pages`.
+- Used the prescribed dirty path: `/home/openclaw/babel-runtime/scripts/babel_ops.sh microgame reconcile-dirty --apply --review --reset-review-failed`. It rejected the handoff and recorded manager audit issue `#2151`.
+- Exact reconcile finding: `changed files outside write scope: index.html`; dirty files were `index.html`, `src/main.js`, and `src/scene.js`; status/action remained `dirty` / `block`; worker `tianti-zuihou-yiji-ui` stayed `blocked`; note `dirty_review_failed`; `review_exit_status=1`.
+- Retried the preferred batch command. It selected and prepared `tianti-zuihou-yiji`, then failed to start with exact output `tmux session already exists: claudecode_worker_tianti_zuihou_yiji`.
+- Sanctioned probe showed `tianti-zuihou-yiji-ui` registry status `blocked` while the tmux session and a Claude process still existed. No raw kill was run and no stale-session cleanup was run because the worker process was still present.
+- Strict packet audit passed for the prepared packet: `ok tianti-zuihou-yiji/tianti-zuihou-yiji-ui [blocked]`.
+- Current stop point: `tianti-zuihou-yiji-ui` requires s control-plane or rightful owner repair of the dirty review failure and the conflicting blocked/live tmux state before it is safe to start another worker for that game. No alternate lane was hand-started.
+
+## Follow-up Pass 20:39 CST
+
+- Follow-up validation showed autorun/control-plane movement: `tianti-zuihou-yiji` was clean and `tianti-zuihou-yiji-integration` was running; `peigei-ri` was dirty while `peigei-ri-integration` had shifted to blocked.
+- Strict packet audits passed for both active/blocked First 12 packets checked after the state change:
+  - `ok tianti-zuihou-yiji/tianti-zuihou-yiji-integration [running]`
+  - `ok peigei-ri/peigei-ri-integration [blocked]`
+- Sanctioned probe for `peigei-ri-integration` showed registry status `blocked`, missing report, dirty files `index.html`, `plan/microgames/peigei-ri/ACCEPTANCE_PLAYTHROUGH.md`, and `src/state/engine.js`, plus an existing tmux session and Claude process. No raw kill or cleanup was run.
+- Used the prescribed dirty path again. Reconcile left `peigei-ri` blocked with dirty files `index.html`, `plan/microgames/peigei-ri/ACCEPTANCE_PLAYTHROUGH.md`, and `src/state/engine.js`; worker reported as `peigei-ri-qa` / `queued`; matched workers `peigei-ri-foundation` and `peigei-ri-ui`; note `dirty_ambiguous_owner: peigei-ri-foundation,peigei-ri-ui`.
+- Final preferred batch retry returned exit code 3 with exact output `no batch item requires preparation`.
+- Current stop point: no safe launchable First 12 item exists under the current queue and concurrency rules. `peigei-ri` needs s control-plane or rightful owner repair of ambiguous dirty files; `tianti-zuihou-yiji-integration` is already running and was not duplicated.
+- Final validation superseded the transient `peigei-ri` dirty block: status ended at `games=20 dirty=1 dispatchable=0 review=0 queued=7 running=2 blocked=1 rework=0 done=95`, with queue detail `launchable_games=0 active_game_locks=2 queued_behind_running=2 packet_contract_repair=1 idle_or_seed=14`.
+- Final active First 12 workers are clean `peigei-ri-integration` and running `tianti-zuihou-yiji-integration` with worker-owned dirty state. Strict packet audits passed in their current running state:
+  - `ok peigei-ri/peigei-ri-integration [running]`
+  - `ok tianti-zuihou-yiji/tianti-zuihou-yiji-integration [running]`
+- Final validation `git diff --check` passed. No direct worker start, registry fallback, raw kill, or stale-session cleanup was performed.
