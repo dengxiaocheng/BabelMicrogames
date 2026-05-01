@@ -1,10 +1,28 @@
 # First 12 Queue Status - 2026-05-01
 
-Last manager pass: `2026-05-01 13:16:09 CST`
+Last manager pass: `2026-05-01 13:33:32 CST`
 
 Source queue: `/home/openclaw/babel-runtime/plan/MICROGAME_PRODUCTION_BATCH_2026-04-27.json`
 Line context index: `.codex-runtime/microgame-line-context/INDEX.md`
 Legacy takeover registry: `/home/openclaw/babel-runtime/plan/legacy-claude-takeover/legacy_takeover.json`
+
+## Follow-up Pass 13:33 CST
+
+- Re-read compact JSON `first_queue`, manager-local `microgame-line-context/INDEX.md`, target `tianti-zuihou-yiji/LINE_BRIEF.md`, and the legacy takeover registry before dispatch decisions. No legacy takeover slug matches the First 12 queue.
+- Contract gate: all twelve First 12 lanes currently have manager-local `LINE_BRIEF.md`, plus planner-refined `MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md` under their game workdirs. `tianti-zuihou-yiji` requires drag/drop bridge construction and draggable crossing-order sorting, not choice-only UI.
+- Batch dry-run selected the next First 12 target: `tianti-zuihou-yiji` at `/home/openclaw/babel-microgames/tianti-zuihou-yiji`.
+- Strict packet audits passed:
+  - `ok peigei-ri/peigei-ri-integration [running]`
+  - `ok jiaoshoujia-qiangxiu/jiaoshoujia-qiangxiu-ui [running]`
+  - `ok zhuiwu-yujing/zhuiwu-yujing-qa [running]`
+  - `ok tianti-zuihou-yiji/tianti-zuihou-yiji-foundation [queued]`
+- Preferred dispatch attempt with the configured cap refused exactly: `game worker concurrency limit reached: 3 >= 3`. No fourth worker was started.
+- Current manager status: `games=14 dirty=1 dispatchable=2 review=0 queued=9 running=3 blocked=5 rework=1 done=72`.
+- Probed the three running First 12 workers once:
+  - `peigei-ri-integration`: registry `running`, report missing, live tmux/process present, worktree clean.
+  - `jiaoshoujia-qiangxiu-ui`: registry `running`, report missing, live tmux/process present, dirty worktree includes `index.html`, `src/content/events.js`, `src/game.js`, `src/risk-map.js`, and `src/state.js`; `index.html` is outside the packet write scope and must be treated as a review risk if handed off.
+  - `zhuiwu-yujing-qa`: registry `running`, report missing, live tmux/process present, worktree clean.
+- No handoff review was available (`review=0`). No dirty reconciliation or stale-session cleanup was run because the only dirty lane is an active running worker and all active worker registries still report `running`.
 
 ## Follow-up Pass 13:16 CST
 
