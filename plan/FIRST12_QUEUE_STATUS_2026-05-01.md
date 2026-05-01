@@ -1,10 +1,25 @@
 # First 12 Queue Status - 2026-05-01
 
-Last manager pass: `2026-05-02 01:02:06 CST`
+Last manager pass: `2026-05-02 01:08:13 CST`
 
 Source queue: `/home/openclaw/babel-runtime/plan/MICROGAME_PRODUCTION_BATCH_2026-04-27.json`
 Line context index: `.codex-runtime/microgame-line-context/INDEX.md`
 Legacy takeover registry: `/home/openclaw/babel-runtime/plan/legacy-claude-takeover/legacy_takeover.json`
+
+## Follow-up Pass 01:08 CST
+
+- Re-read compact JSON `first_queue`, manager-local `microgame-line-context/INDEX.md`, all twelve First 12 `LINE_BRIEF.md` files, and the legacy takeover registry before the dispatch decision.
+- Contract gate: all twelve First 12 lanes have concrete scene interaction contracts with non-choice primary/minimum interactions.
+- Initial manager status: `games=20 dirty=1 dispatchable=0 review=0 queued=7 running=2 blocked=0 rework=0 done=96`. Status-visible active First 12 workers: `peigei-ri-integration` and `tianti-zuihou-yiji-integration`.
+- Preferred dispatch command `sh /home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker --max-running 6` first selected `tianti-zuihou-yiji`, prepared it, then exited `1` with exact output `tmux session already exists: claudecode_worker_tianti_zuihou_yiji`.
+- Strict packet audit for `/home/openclaw/babel-microgames/tianti-zuihou-yiji` worker `tianti-zuihou-yiji-qa` passed with `ok tianti-zuihou-yiji/tianti-zuihou-yiji-qa [queued]`.
+- Stale-session cleanup was not forced because the cleanup helper returned `registry still has running workers: 1`.
+- Worker probes showed `peigei-ri-integration` still running, `tianti-zuihou-yiji-integration` in `handoff_queued`, and `tianti-zuihou-yiji-qa` running with approved Plan Source `plan/microgames/tianti-zuihou-yiji/TASK_BREAKDOWN.md`.
+- A later preferred dispatch stopped on pending handoff review for `/home/openclaw/babel-microgames/tianti-zuihou-yiji` worker `tianti-zuihou-yiji-integration`.
+- Mechanical handoff review opened/closed manager audit issue `#2158` and rejected the handoff with exact finding `handoff has no changed files`. The target git status/diff were clean while the report claimed changes in `src/main.js` and `plan/microgames/tianti-zuihou-yiji/ACCEPTANCE_PLAYTHROUGH.md`; per review rules this was treated as rework.
+- Manager status before final retry: `games=20 dirty=0 dispatchable=0 review=0 queued=6 running=2 blocked=0 rework=1 done=96`.
+- Final preferred dispatch retry exited `3` with exact output `no batch item requires preparation`.
+- Stop point: no additional safe launchable First 12 item is available under the current queue and concurrency rules. Per the explicit batch-command rule, no registry hand-inspection, fallback lane invention, direct worker start, packet-audit/start fallback, dirty-reconcile fallback, raw kill, stale-session cleanup, or legacy-lane fallback was performed after that final exit-3 result.
 
 ## Follow-up Pass 01:02 CST
 

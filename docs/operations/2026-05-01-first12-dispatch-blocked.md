@@ -1,5 +1,34 @@
 # First 12 Dispatch Blocked - 2026-05-01
 
+## Follow-up: 2026-05-02T01:08:13+08:00
+
+- Compact queue read first from `/home/openclaw/babel-runtime/plan/MICROGAME_PRODUCTION_BATCH_2026-04-27.json`.
+- Manager-local line context index and all twelve First 12 `LINE_BRIEF.md` files were read before dispatch; every lane still has a concrete scene interaction contract and rejects choice-only implementation.
+- Legacy takeover registry read from `/home/openclaw/babel-runtime/plan/legacy-claude-takeover/legacy_takeover.json`; it remains separate planner-only legacy context and was not used as fallback.
+- Initial manager status this pass: `games=20 dirty=1 dispatchable=0 review=0 queued=7 running=2 blocked=0 rework=0 done=96`; active First 12 workers were `peigei-ri-integration` and `tianti-zuihou-yiji-integration`.
+- Preferred dispatch command used:
+
+```bash
+sh /home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker --max-running 6
+```
+
+- First result: selected `tianti-zuihou-yiji`, prepared the next packet, then exited `1` with `tmux session already exists: claudecode_worker_tianti_zuihou_yiji`.
+- Strict packet audit was run before trusting the prepared QA packet:
+
+```bash
+sh /home/openclaw/babel-runtime/scripts/babel_ops.sh microgame audit-packets --game-workdir /home/openclaw/babel-microgames/tianti-zuihou-yiji --worker-id tianti-zuihou-yiji-qa --apply --strict
+```
+
+- Packet audit passed exactly: `ok tianti-zuihou-yiji/tianti-zuihou-yiji-qa [queued]`.
+- Cleanup was not forced: `microgame_worker_cleanup_finished.sh --workdir /home/openclaw/babel-microgames/tianti-zuihou-yiji --worker-id tianti-zuihou-yiji-integration` returned `registry still has running workers: 1`.
+- Probes showed `peigei-ri-integration` running, `tianti-zuihou-yiji-integration` in `handoff_queued`, and `tianti-zuihou-yiji-qa` running with Plan Source `plan/microgames/tianti-zuihou-yiji/TASK_BREAKDOWN.md`.
+- A subsequent preferred dispatch was blocked by pending review: `pending worker handoff review: /home/openclaw/babel-microgames/tianti-zuihou-yiji	tianti-zuihou-yiji-integration`.
+- Mechanical handoff review was run for `tianti-zuihou-yiji-integration`; it opened/closed manager audit issue `#2158` and rejected the handoff with exact finding `handoff has no changed files`.
+- Review basis: target git status and diff were clean/empty while the worker report claimed changes in `src/main.js` and `plan/microgames/tianti-zuihou-yiji/ACCEPTANCE_PLAYTHROUGH.md`, so the handoff was treated as rework instead of accepted.
+- Manager status before the final retry showed `games=20 dirty=0 dispatchable=0 review=0 queued=6 running=2 blocked=0 rework=1 done=96`; active First 12 workers remained `peigei-ri-integration` and `tianti-zuihou-yiji-qa`.
+- Final preferred dispatch retry exited `3` with exact output `no batch item requires preparation`.
+- Stop point: no additional safe launchable First 12 item is available under the current queue and concurrency rules. Per the explicit batch-command rule, no registry hand-inspection, fallback lane invention, direct worker start, packet-audit/start fallback, dirty-reconcile fallback, raw kill, stale-session cleanup, or legacy-lane fallback was performed after the final exit-3 result.
+
 ## Follow-up: 2026-05-02T01:02:06+08:00
 
 - Compact queue read first from `/home/openclaw/babel-runtime/plan/MICROGAME_PRODUCTION_BATCH_2026-04-27.json`.
