@@ -1180,6 +1180,15 @@ Source queue:
 - Strict packet audit passed for queued First 12 packets `peigei-ri-qa`, `jiaoshoujia-qiangxiu-integration`, and `jiaoshoujia-qiangxiu-qa`; none were started because the worker cap is still full.
 - Stop point: no review handoff is pending, no worker was started, and the current block is scheduler capacity only. Final status remains `running=3`, `review=0`, `queued=8`, `blocked=3`; next safe action is to let autorun/review advance when one running worker finishes.
 
+## 2026-05-01 15:37 Manager Pass
+
+- Re-read the compact queue JSON, manager-local line context index, First 12 line briefs for active queued lanes, and the legacy takeover registry. Legacy takeover lanes remain planner-only and were not mixed into First 12 execution dispatch.
+- Current First 12 active workers are `peigei-ri-integration`, `jiaoshoujia-qiangxiu-ui`, and `tianti-zuihou-yiji-content`. The `tianti-zuihou-yiji` worktree is dirty only from its running content worker (`src/state.js`, `src/content/`), so it was not reconciled underneath the worker.
+- Ran `microgame_batch_prepare_next.sh --start-worker`; it refused dispatch because the configured cap is full: `game worker concurrency limit reached: 3 >= 3`.
+- Strict packet audit passed for queued First 12 packets `peigei-ri-qa`, `jiaoshoujia-qiangxiu-integration`, `jiaoshoujia-qiangxiu-qa`, `tianti-zuihou-yiji-ui`, `tianti-zuihou-yiji-integration`, and `tianti-zuihou-yiji-qa`; none were started because the worker cap is still full.
+- One-shot probes found all three active workers still `running` with no report file yet. Final status is `games=14`, `dirty=0`, `dispatchable=1`, `review=0`, `queued=11`, `running=3`, `blocked=0`, `rework=0`, and `done=76`.
+- Stop point: no First 12 handoff is ready to review and no worker can be started until one running slot opens. The only dispatchable manager-status item is outside First 12 (`gongtou-dianming-ui`), so it was left untouched for this objective.
+
 ## Notes
 
 - All missing first-12 repos were bootstrapped through `microgame_batch_prepare_next.sh --slug <slug>` without `--start-worker`.
