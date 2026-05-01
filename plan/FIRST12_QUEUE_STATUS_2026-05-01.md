@@ -1,10 +1,61 @@
 # First 12 Queue Status - 2026-05-01
 
-Last manager pass: `2026-05-01 17:29:33 CST`
+Last manager pass: `2026-05-01 17:43:02 CST`
 
 Source queue: `/home/openclaw/babel-runtime/plan/MICROGAME_PRODUCTION_BATCH_2026-04-27.json`
 Line context index: `.codex-runtime/microgame-line-context/INDEX.md`
 Legacy takeover registry: `/home/openclaw/babel-runtime/plan/legacy-claude-takeover/legacy_takeover.json`
+
+## Follow-up Pass 17:37 CST
+
+- Re-read compact JSON `first_queue`, manager-local `microgame-line-context/INDEX.md`, all twelve First 12 `LINE_BRIEF.md` files, and the legacy takeover registry before dispatch decisions. Legacy takeover lanes remain separate and were not used for this First 12 objective.
+- Contract gate: all twelve First 12 lanes have manager-local scene interaction contracts. The contracts remain scene inputs rather than choice-only UI: ration dragging/weighing, material ratio sliders plus hold-to-mix, grid route/load movement, lamp placement/brightness, drag-card scheduling, treatment drag/drop under countdown, badge/record drag consistency, area warning signals, evidence encoding/hiding, bucket amount plus route movement, scaffold hotspot repair queueing, and bridge material/person drag-drop.
+- Dirty/rework gate: status initially reported `dirty=1 rework=1` for `tianti-zuihou-yiji-content`; the approved reconcile path returned `no dirty microgame repos`. Follow-up status showed `dirty=0 rework=0` and `tianti-zuihou-yiji-content` running cleanly.
+- Preferred dispatch attempt used `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker --max-running 6`; it returned `no batch item requires preparation`, so no new worker was started.
+- Registry/status reason for no dispatch: `launchable_games=0`, `active_game_locks=3`, and `queued_behind_running=6`. The only queued First 12 workers are behind same-game running locks:
+  - `peigei-ri`: `peigei-ri-integration` running; `peigei-ri-qa` queued.
+  - `jiaoshoujia-qiangxiu`: `jiaoshoujia-qiangxiu-ui` running; integration and QA queued.
+  - `tianti-zuihou-yiji`: `tianti-zuihou-yiji-content` running; UI, integration, and QA queued.
+- The other First 12 lanes are accepted through QA in their registries: `huijiang-peibi`, `duanti-yunliao`, `dengyou-fenpei`, `tiban-mingdan`, `bingpeng-yezhen`, `gongpai-jiaohuan`, `zhuiwu-yujing`, `heizhang-xiaoce`, and `shuiyuan-lunzhi`.
+- Strict packet audits passed for all queued First 12 packets waiting behind running locks:
+  - `ok peigei-ri/peigei-ri-qa [queued]`
+  - `ok jiaoshoujia-qiangxiu/jiaoshoujia-qiangxiu-integration [queued]`
+  - `ok jiaoshoujia-qiangxiu/jiaoshoujia-qiangxiu-qa [queued]`
+  - `ok tianti-zuihou-yiji/tianti-zuihou-yiji-ui [queued]`
+  - `ok tianti-zuihou-yiji/tianti-zuihou-yiji-integration [queued]`
+  - `ok tianti-zuihou-yiji/tianti-zuihou-yiji-qa [queued]`
+- One-shot probes confirmed the active First 12 workers are live with missing reports and clean `git_status` at probe time:
+  - `peigei-ri-integration`: running, started `2026-05-01T09:33:53Z`, live tmux/process.
+  - `jiaoshoujia-qiangxiu-ui`: running, started `2026-05-01T09:32:43Z`, live tmux/process.
+  - `tianti-zuihou-yiji-content`: running, started `2026-05-01T09:35:06Z`, live tmux/process.
+- Strict packet audits also passed for those active running packets:
+  - `ok peigei-ri/peigei-ri-integration [running]`
+  - `ok jiaoshoujia-qiangxiu/jiaoshoujia-qiangxiu-ui [running]`
+  - `ok tianti-zuihou-yiji/tianti-zuihou-yiji-content [running]`
+- No handoff review was available: status remained `review=0`.
+- Non-First-12 `gongtou-dianming-ui` was left stopped. It is absent from the manager-local `microgame-line-context` index, so there is no `LINE_BRIEF.md` to satisfy the scene interaction contract gate. Strict packet audit also failed with exact findings:
+  - missing Direction Lock anchor
+  - missing one-sentence direction summary
+  - missing core-loop direction summary
+  - missing required-state direction summary
+  - missing mandatory Direction Lock constraint
+  - missing stop-instead-of-drifting constraint
+  - missing Suggestions-only direction change rule
+  - missing no-direct-new-direction rule
+  - missing core-loop reinforcement acceptance
+  - missing `DIRECTION_LOCK.md` context file
+  - missing `MINI_GDD.md` context file
+  - missing `MECHANIC_SPEC.md` context file
+  - missing `SCENE_INTERACTION_SPEC.md` context file
+  - missing `TASK_BREAKDOWN.md` context file
+  - missing canonical worker finish command
+  - missing primary input interaction contract
+  - missing minimum interaction contract
+  - missing no-choice-only interaction rule
+- Final status: `games=14 dirty=0 dispatchable=0 review=0 queued=11 running=3 blocked=0 rework=0 done=76`. Queue detail: `launchable_games=0 active_game_locks=3 queued_behind_running=6 packet_contract_repair=1 idle_or_seed=9`.
+- During final validation, `tianti-zuihou-yiji-content` briefly moved to `blocked` with `dirty_without_report: missing report file`, reducing status to `running=2 blocked=1 dirty=1`. Used the approved reconcile path again; it reported `no dirty microgame repos`. Follow-up status returned to `dirty=0 dispatchable=0 review=0 queued=11 running=3 blocked=0 rework=0 done=76`, with `tianti-zuihou-yiji-content` running on session `d71912bb-31bf-4d36-ba14-fa5125465e84`.
+- A final retry of `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker --max-running 6` again returned `no batch item requires preparation`.
+- Validation after writing this note: `sh /home/openclaw/babel-runtime/scripts/claudecode_manager_status.sh` and `git diff --check` both ran; `git diff --check` passed.
 
 ## Follow-up Pass 17:29 CST
 
