@@ -1,10 +1,26 @@
 # First 12 Queue Status - 2026-05-01
 
-Last manager pass: `2026-05-01 17:24:16 CST`
+Last manager pass: `2026-05-01 17:28:13 CST`
 
 Source queue: `/home/openclaw/babel-runtime/plan/MICROGAME_PRODUCTION_BATCH_2026-04-27.json`
 Line context index: `.codex-runtime/microgame-line-context/INDEX.md`
 Legacy takeover registry: `/home/openclaw/babel-runtime/plan/legacy-claude-takeover/legacy_takeover.json`
+
+## Follow-up Pass 17:28 CST
+
+- After the 17:24 record, status changed: `jiaoshoujia-qiangxiu-ui` became blocked with dirty files and no valid report, reducing the active First 12 worker count to two.
+- Used the approved dirty path again: `/home/openclaw/babel-runtime/scripts/babel_ops.sh microgame reconcile-dirty --apply --review --reset-review-failed`. It refused to auto-claim `jiaoshoujia-qiangxiu` because the dirty files had no valid report and multiple possible owners:
+  - `src/risk-map.js`
+  - `src/ui/feedback.js`
+  - note: `dirty_without_report: missing report file`
+- A batch retry confirmed the same safe stop condition before contract sync: dirty `jiaoshoujia-qiangxiu` worktree with `M src/risk-map.js` and `?? src/ui/`.
+- `s_control_status.sh` showed `claudecode_manager_autorun` had stopped. Restarted it through the s-owned wrapper: `/home/openclaw/babel-runtime/scripts/claudecode_manager_autorun.sh --workdir /home/openclaw/claudecode-manager --manager-workdir /home/openclaw/claudecode-manager --max-running 3 --daemon`.
+- Follow-up status showed autorun running again and `jiaoshoujia-qiangxiu` clean with a dispatchable lane. Read `jiaoshoujia-qiangxiu/LINE_BRIEF.md`, confirming the required scene input remains risk-map repair-point selection plus repair-queue ordering.
+- Strict packet audit passed for the queued downstream packet: `ok jiaoshoujia-qiangxiu/jiaoshoujia-qiangxiu-integration [queued]`.
+- Batch start selected `jiaoshoujia-qiangxiu`, synced contracts, and started `claudecode_worker_jiaoshoujia_qiangxiu`. Registry truth after start showed the actual running worker is the restarted `jiaoshoujia-qiangxiu-ui`, while integration remains queued.
+- Strict packet audit passed for the actual running worker: `ok jiaoshoujia-qiangxiu/jiaoshoujia-qiangxiu-ui [running]`. Probe showed it started at `2026-05-01T09:27:46Z`, has a live tmux/process, and report is still missing.
+- Final status: `games=14 dirty=1 dispatchable=0 review=0 queued=11 running=3 blocked=0 rework=0 done=76`. Active First 12 workers are `peigei-ri-integration`, `jiaoshoujia-qiangxiu-ui`, and `tianti-zuihou-yiji-content`; the dirty worktree is active running `tianti-zuihou-yiji-content`.
+- Validation: `sh /home/openclaw/babel-runtime/scripts/claudecode_manager_status.sh` and `git diff --check` both ran; `git diff --check` passed.
 
 ## Follow-up Pass 17:24 CST
 
