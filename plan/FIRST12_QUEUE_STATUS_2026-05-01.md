@@ -1,10 +1,102 @@
 # First 12 Queue Status - 2026-05-01
 
-Last manager pass: `2026-05-01 11:45:02 CST`
+Last manager pass: `2026-05-01 12:02:58 CST`
 
 Source queue: `/home/openclaw/babel-runtime/plan/MICROGAME_PRODUCTION_BATCH_2026-04-27.json`
 Line context index: `.codex-runtime/microgame-line-context/INDEX.md`
 Legacy takeover registry: `/home/openclaw/babel-runtime/plan/legacy-claude-takeover/legacy_takeover.json`
+
+## Follow-up Pass 12:02 CST
+
+- Re-read compact JSON `first_queue`, manager-local `microgame-line-context/INDEX.md`, target `LINE_BRIEF.md` files for `dengyou-fenpei`, `zhuiwu-yujing`, and `peigei-ri`, plus the legacy Claude takeover registry before dispatch decisions. No First 12 slug is a legacy takeover lane.
+- Current cap blocker: `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker` refused with exact message `game worker concurrency limit reached: 3 >= 3`, so no fourth worker was started.
+- Probed the three active workers once:
+  - `peigei-ri-integration`: registry `running`, report missing, zero-byte Claude output, live tmux/process present.
+  - `jiaoshoujia-qiangxiu-planner`: registry `running`, report missing, zero-byte Claude output, live tmux/process present.
+  - `tianti-zuihou-yiji-planner`: registry `running`, report missing, zero-byte Claude output, live tmux/process present; dirty files remain planner-owned plan files.
+- Strict packet audit passed for packets that may become eligible when a slot opens:
+  - `ok dengyou-fenpei/dengyou-fenpei-planner [queued]`
+  - `ok zhuiwu-yujing/zhuiwu-yujing-planner [rework]`
+  - `ok peigei-ri/peigei-ri-qa [queued]`
+- Refreshed manager status: `games=14 dirty=2 dispatchable=3 review=0 queued=25 running=3 blocked=0 rework=1 done=61`.
+- Dirty worktrees are active planner lanes (`jiaoshoujia-qiangxiu` and `tianti-zuihou-yiji`), so no dirty reconciliation was run against them. No handoff review was run because `review=0`; no cleanup was run because active worker registries still say `running`.
+- `zhuiwu-yujing-planner` remains a rework lane because Direction Check is incomplete: missing fields `本次改动强化了哪一句核心体验`, `本次改动是否引入了 Direction Lock 禁止的内容`, `核心循环是否仍然是原来的循环`, and `是否新增了无关系统`.
+- Validation: `git diff --check` passed.
+
+## Follow-up Pass 11:59 CST
+
+- Re-read compact JSON `first_queue`, manager-local `microgame-line-context/INDEX.md`, all twelve First 12 `LINE_BRIEF.md` files, and the legacy Claude takeover registry before dispatch decisions. No First 12 slug is a legacy takeover lane.
+- Contract gate: all twelve First 12 slugs have manager-local scene interaction briefs and game-workdir `MECHANIC_SPEC.md` plus `SCENE_INTERACTION_SPEC.md`; no lane is stopped for missing interaction contract in this pass.
+- Ran dirty reconciliation first because manager status reported dirty worktrees. It returned active-worker blockers, so nothing was manually reset:
+  - `dengyou-fenpei-planner`: dirty planner files under `plan/microgames/dengyou-fenpei/`, `worker_status=running`, `dirty_without_report: missing report file`.
+  - `peigei-ri-integration`: dirty files `src/state/engine.js` and `src/ui/renderer.js`, `worker_status=running`, `dirty_without_report: missing report file`.
+- Strict packet audit passed for packets that may become eligible next or were moving during autorun:
+  - `ok peigei-ri/peigei-ri-qa [queued]`
+  - `ok jiaoshoujia-qiangxiu/jiaoshoujia-qiangxiu-planner [running]`
+  - `ok tianti-zuihou-yiji/tianti-zuihou-yiji-planner [running]`
+  - `ok zhuiwu-yujing/zhuiwu-yujing-planner [rework]`
+- Autorun filled two planner lanes while this pass was active: `jiaoshoujia-qiangxiu-planner` and `tianti-zuihou-yiji-planner` are now `running`. This is correct planner-first ordering for new microgame lines.
+- Ran `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker`; it refused with exact blocker `game worker concurrency limit reached: 3 >= 3`, so no extra worker was started manually.
+- Probed the three running workers once:
+  - `peigei-ri-integration`: registry `running`, report missing, zero-byte Claude output, live tmux/process present; recent files show worker-owned edits in `src/state/engine.js`, `src/ui/renderer.js`, and refreshed plan/packet files.
+  - `jiaoshoujia-qiangxiu-planner`: registry `running`, report missing, zero-byte Claude output, live tmux/process present, no implementation files changed.
+  - `tianti-zuihou-yiji-planner`: registry `running`, report missing, zero-byte Claude output, live tmux/process present, no implementation files changed.
+- Refreshed manager status: `games=14 dirty=0 dispatchable=3 review=0 queued=25 running=3 blocked=0 rework=1 done=61`.
+- Current blockers and next safe actions:
+  - cap is full with `peigei-ri-integration`, `jiaoshoujia-qiangxiu-planner`, and `tianti-zuihou-yiji-planner` running; do not start a fourth worker.
+  - `zhuiwu-yujing-planner` remains `rework` because Direction Check is incomplete: missing fields `本次改动强化了哪一句核心体验`, `本次改动是否引入了 Direction Lock 禁止的内容`, `核心循环是否仍然是原来的循环`, and `是否新增了无关系统`.
+  - `dengyou-fenpei-planner` is queued again behind the cap.
+  - no handoff review was run because status reports `review=0`; no cleanup was run because all active worker registries still say `running`.
+
+## Follow-up Pass 11:56 CST
+
+- Re-read compact JSON `first_queue`, manager-local `microgame-line-context/INDEX.md`, all twelve First 12 `LINE_BRIEF.md` files, and the legacy Claude takeover registry before dispatch decisions. No First 12 slug is a legacy takeover lane.
+- Contract gate: all twelve First 12 slugs have manager-local scene interaction briefs with non-choice-only primary inputs.
+- Strict packet audit passed for the queued planner-first lanes that can be dispatched next:
+  - `ok jiaoshoujia-qiangxiu/jiaoshoujia-qiangxiu-planner [queued]`
+  - `ok tianti-zuihou-yiji/tianti-zuihou-yiji-planner [queued]`
+- Ran `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker`; it refused with exact blocker `game worker concurrency limit reached: 3 >= 3`, so no worker was started.
+- Dry-run selection is now `jiaoshoujia-qiangxiu`; its planner packet has already passed strict audit and must run before any executor packet for that game.
+- Probed the three running workers once:
+  - `peigei-ri-integration`: registry `running`, report missing, zero-byte Claude output, git status clean, live tmux/process present; manager status still marks `stale_no_output`.
+  - `dengyou-fenpei-planner`: registry `running`, report missing, zero-byte Claude output, git status clean, live tmux/process present.
+  - `zhuiwu-yujing-planner`: registry `running`, report missing, zero-byte Claude output, live tmux/process present; active planner-owned edits are in `plan/microgames/zhuiwu-yujing/MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`.
+- Current safe action: do not start another worker while cap is full; wait for a handoff or for registry status to stop being `running`. No cleanup was run because all three workers still have running registry status. No handoff review was available because manager status reports `review=0`.
+
+## Follow-up Pass 11:52 CST
+
+- Re-read compact JSON `first_queue`, manager-local `microgame-line-context/INDEX.md`, target `LINE_BRIEF.md` files for `jiaoshoujia-qiangxiu` and `tianti-zuihou-yiji`, and the legacy Claude takeover registry before dispatch decisions. No First 12 slug is a legacy takeover lane.
+- Ran dirty reconciliation first because manager status initially showed dirty running worktrees. It returned block actions for active planner workers:
+  - `dengyou-fenpei-planner`: dirty planner files, `worker_status=running`, `dirty_without_report: missing report file`.
+  - `zhuiwu-yujing-planner`: dirty planner files, `worker_status=running`, `dirty_without_report: missing report file`.
+- Probed the three running workers once:
+  - `peigei-ri-integration`: registry `running`, report missing, zero-byte Claude output, git status clean, live tmux/process present; manager status still marks `stale_no_output`.
+  - `dengyou-fenpei-planner`: registry `running`, report missing, zero-byte Claude output, live tmux/process present.
+  - `zhuiwu-yujing-planner`: registry `running`, report missing, zero-byte Claude output, live tmux/process present.
+- Strict packet audit passed for queued First 12 planner packets:
+  - `ok jiaoshoujia-qiangxiu/jiaoshoujia-qiangxiu-planner [queued]`
+  - `ok tianti-zuihou-yiji/tianti-zuihou-yiji-planner [queued]`
+- Ran `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker`; it refused with exact blocker `game worker concurrency limit reached: 3 >= 3`, so no worker was started.
+- Refreshed manager status after the pass: `games=14 dirty=0 dispatchable=3 review=0 queued=26 running=3 blocked=0 rework=0 done=61`. The running First 12 workers are `peigei-ri-integration`, `dengyou-fenpei-planner`, and `zhuiwu-yujing-planner`; `jiaoshoujia-qiangxiu-planner` and `tianti-zuihou-yiji-planner` remain audited and queued behind the cap. `gongtou-dianming` is dispatchable but outside First 12, so it was left untouched.
+
+## Follow-up Pass 11:48 CST
+
+- Re-read the compact JSON `first_queue`, manager-local `microgame-line-context/INDEX.md`, target `LINE_BRIEF.md` files for `huijiang-peibi`, `duanti-yunliao`, `zhuiwu-yujing`, `jiaoshoujia-qiangxiu`, and `tianti-zuihou-yiji`, and the legacy Claude takeover registry before dispatch decisions. No First 12 slug is a legacy takeover lane.
+- Contract gate: the inspected candidate lanes all have explicit scene interaction contracts. `zhuiwu-yujing`, `jiaoshoujia-qiangxiu`, and `tianti-zuihou-yiji` now have queued planner packets rather than the earlier missing-contract foundation packets.
+- Ran `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker`; it refused with exact blocker `game worker concurrency limit reached: 3 >= 3`, so no manual worker was started.
+- Probed the three running workers once:
+  - `peigei-ri-integration`: registry `running`, started `2026-05-01T03:44:45Z`, report missing, zero-byte Claude output, git status clean, live tmux/process present. Manager status still marks `stale_no_output: no worker output, report, or source changes after 900s`.
+  - `dengyou-fenpei-planner`: registry `running`, started `2026-05-01T03:40:20Z`, report present with no TODO markers, git status clean after control-plane reconciliation, live tmux/process present. Manager status still reports Direction Check fields missing.
+  - `bingpeng-yezhen-planner`: was running during probe, then cleared before final status; current status is clean with no active stage and done count increased to `61`.
+- Autorun filled the freed slot with `zhuiwu-yujing-planner`; it is now `running`, and `jiaoshoujia-qiangxiu-planner` plus `tianti-zuihou-yiji-planner` remain queued.
+- Strict packet audit passed for the active/runnable First 12 set:
+  - `ok peigei-ri/peigei-ri-integration [running]`
+  - `ok peigei-ri/peigei-ri-qa [queued]`
+  - `ok dengyou-fenpei/dengyou-fenpei-planner [running]`
+  - `ok zhuiwu-yujing/zhuiwu-yujing-planner [running]`
+  - `ok jiaoshoujia-qiangxiu/jiaoshoujia-qiangxiu-planner [queued]`
+  - `ok tianti-zuihou-yiji/tianti-zuihou-yiji-planner [queued]`
+- Validation status after the note: `games=14 dirty=1 dispatchable=3 review=0 queued=26 running=3 blocked=0 rework=0 done=61`. The dirty lane is the active `dengyou-fenpei-planner` worker, so it was not reconciled; with cap full and `review=0`, there is no safe manual dispatch or handoff review to run in this pass. `git diff --check` passed.
 
 ## Follow-up Pass 11:45 CST
 
