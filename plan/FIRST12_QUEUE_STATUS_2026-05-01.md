@@ -1,10 +1,30 @@
 # First 12 Queue Status - 2026-05-01
 
-Last manager pass: `2026-05-01 12:28:17 CST`
+Last manager pass: `2026-05-01 12:36:03 CST`
 
 Source queue: `/home/openclaw/babel-runtime/plan/MICROGAME_PRODUCTION_BATCH_2026-04-27.json`
 Line context index: `.codex-runtime/microgame-line-context/INDEX.md`
 Legacy takeover registry: `/home/openclaw/babel-runtime/plan/legacy-claude-takeover/legacy_takeover.json`
+
+## Follow-up Pass 12:36 CST
+
+- Re-read compact JSON `first_queue` orders 1-12, manager-local `microgame-line-context/INDEX.md`, all twelve First 12 `LINE_BRIEF.md` files, and the legacy Claude takeover registry before dispatch decisions. No First 12 slug is a legacy takeover lane.
+- Contract gate: all twelve First 12 lanes have manager-local `LINE_BRIEF.md`; all twelve game workdirs have `plan/microgames/<slug>/MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`. No lane is stopped for missing interaction contract in this pass.
+- Batch start attempt:
+  - Command: `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker`
+  - Result: `game worker concurrency limit reached: 3 >= 3`
+  - No fourth worker was started.
+- Current manager status after the batch attempt: `games=14 dirty=1 dispatchable=1 review=0 queued=17 running=3 blocked=5 rework=0 done=65`. The one dispatchable lane is non-First-12 `gongtou-dianming`, so it was left untouched for this First 12 pass.
+- Running First 12 workers filling the configured cap:
+  - `peigei-ri-integration`: registry `running`, live process/session present, clean worktree after autorun reset, report missing.
+  - `jiaoshoujia-qiangxiu-planner`: registry `running`, live process/session present, clean worktree, report missing.
+  - `zhuiwu-yujing-state`: registry `running`, live process/session present, worker-owned dirty state worktree, report missing.
+- Strict packet audit results:
+  - `ok peigei-ri/peigei-ri-integration [blocked]`; immediate registry/status refresh showed this lane running again with session `8a77b589-6662-4086-84ba-fb971fad1a57`, so no cleanup was run.
+  - `ok jiaoshoujia-qiangxiu/jiaoshoujia-qiangxiu-planner [running]`
+  - `ok zhuiwu-yujing/zhuiwu-yujing-state [running]`
+- `tianti-zuihou-yiji` block recorded from registry: `tianti-zuihou-yiji-foundation` is queued, while `state/content/ui/integration/qa` remain blocked with exact note `blocked by manager: foundation has no report and no source tree; rerun tianti-zuihou-yiji-foundation first`. Do not dispatch downstream executors until foundation is accepted.
+- No handoff review was available (`review=0`). No stale worker cleanup was run because active registries still report `running`.
 
 ## Follow-up Pass 12:28 CST
 
