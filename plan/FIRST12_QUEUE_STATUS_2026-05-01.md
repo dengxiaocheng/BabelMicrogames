@@ -1,10 +1,95 @@
 # First 12 Queue Status - 2026-05-01
 
-Last manager pass: `2026-05-01 08:15:57 CST`
+Last manager pass: `2026-05-01 08:50:53 CST`
 
 Source queue: `/home/openclaw/babel-runtime/plan/MICROGAME_PRODUCTION_BATCH_2026-04-27.json`
 Line context index: `.codex-runtime/microgame-line-context/INDEX.md`
 Legacy takeover registry: `/home/openclaw/babel-runtime/plan/legacy-claude-takeover/legacy_takeover.json`
+
+## Follow-up Pass 08:50 CST
+
+- Re-read the compact JSON First 12 queue, the manager-local line context index, all twelve First 12 `LINE_BRIEF.md` files, and the legacy Claude takeover registry before dispatch decisions.
+- Legacy takeover entries remain unrelated `/home/openclaw/claude/game*` planner lanes; no First 12 slug is a legacy takeover lane.
+- Batch dry-run selected `gongpai-jiaohuan`; its line contract requires drag-swapping badges plus adjusting records/testimony, not a choice-only exchange button.
+- Confirmed active or next First 12 lanes have required game-workdir contracts before trusting packets: `peigei-ri`, `heizhang-xiaoce`, `shuiyuan-lunzhi`, and `gongpai-jiaohuan` all have `DIRECTION_LOCK.md`, `MINI_GDD.md`, `MECHANIC_SPEC.md`, `SCENE_INTERACTION_SPEC.md`, and `TASK_BREAKDOWN.md`.
+- Reconfirmed hard blocked First 12 lanes remain stopped because deeper scene contracts are missing:
+  - `zhuiwu-yujing`: missing `MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`.
+  - `jiaoshoujia-qiangxiu`: missing `MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`.
+  - `tianti-zuihou-yiji`: missing `MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`.
+- Strict packet audits completed before trust/start decisions:
+  - `ok gongpai-jiaohuan/gongpai-jiaohuan-integration [queued]`
+  - `ok peigei-ri/peigei-ri-integration [running]`
+  - `ok heizhang-xiaoce/heizhang-xiaoce-planner [running]`
+  - `ok shuiyuan-lunzhi/shuiyuan-lunzhi-integration [running]`
+- Ran `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker`; it refused dispatch because the configured cap is full: `game worker concurrency limit reached: 3 >= 3`.
+- Current validation status after the start attempt: `games=14 dirty=2 dispatchable=2 review=0 queued=14 running=3 blocked=18 rework=0 done=49`.
+- Current running First 12 workers remain `peigei-ri-integration`, `heizhang-xiaoce-planner`, and `shuiyuan-lunzhi-integration`; `gongpai-jiaohuan-integration` is the audited First 12 waiting packet.
+- No dirty reconciliation was run because the dirty worktrees are active running worker worktrees, and dispatch was blocked by the worker cap rather than dirty state.
+- No handoff review was run because status reports `review=0`; no cleanup was run because active workers still report `running`.
+
+## Follow-up Pass 08:48 CST
+
+- Re-read the compact JSON First 12 queue, the manager-local line context index, and the legacy Claude takeover registry before dispatch decisions.
+- Legacy takeover entries remain unrelated `/home/openclaw/claude/game*` lanes; no First 12 slug is a legacy takeover lane.
+- Ran `/home/openclaw/babel-runtime/scripts/babel_ops.sh microgame reconcile-dirty --apply --review --reset-review-failed`; it reported `gongpai-jiaohuan` dirty on `src/state.test.js` with `dirty_without_report: missing report file` while `gongpai-jiaohuan-qa` was running. The later manager status returned to `dirty=0` and `gongpai-jiaohuan-integration/queued`.
+- Ran `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker`; it selected and started `heizhang-xiaoce-planner`.
+- Read target `LINE_BRIEF.md` files for active or next First 12 lanes covered this pass: `heizhang-xiaoce`, `peigei-ri`, `shuiyuan-lunzhi`, and `gongpai-jiaohuan`.
+- Confirmed `heizhang-xiaoce` and `gongpai-jiaohuan` have required game-workdir `MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md` files before trusting their packets.
+- Strict packet audits completed:
+  - `ok heizhang-xiaoce/heizhang-xiaoce-planner [running]`
+  - `ok peigei-ri/peigei-ri-integration [running]`
+  - `ok shuiyuan-lunzhi/shuiyuan-lunzhi-integration [running]`
+  - `ok gongpai-jiaohuan/gongpai-jiaohuan-integration [queued]`
+- Probed `heizhang-xiaoce-planner`: `running`, report missing, live tmux/process present. It began writing within scope after dispatch; current dirty file is worker-owned `plan/microgames/heizhang-xiaoce/DIRECTION_LOCK.md`.
+- A second batch dispatch attempt refused because the configured cap is full: `game worker concurrency limit reached: 3 >= 3`.
+- Current validation status: `games=14 dirty=1 dispatchable=2 review=0 queued=14 running=3 blocked=18 rework=0 done=49`.
+- Current running First 12 workers are `peigei-ri-integration`, `shuiyuan-lunzhi-integration`, and `heizhang-xiaoce-planner`.
+- Next audited First 12 waiting packet is `gongpai-jiaohuan-integration`; do not dispatch it until worker capacity drops below 3.
+- Hard blocked First 12 lanes remain stopped because generated game-plan contracts are missing:
+  - `zhuiwu-yujing`: missing `plan/microgames/zhuiwu-yujing/MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`; LINE_BRIEF says stop instead of inventing interaction.
+  - `jiaoshoujia-qiangxiu`: missing `plan/microgames/jiaoshoujia-qiangxiu/MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`; LINE_BRIEF says stop instead of inventing interaction.
+  - `tianti-zuihou-yiji`: missing `plan/microgames/tianti-zuihou-yiji/MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`; LINE_BRIEF says stop instead of inventing interaction.
+- No handoff review was run because status reports `review=0`; no cleanup was run because active workers still report `running`.
+
+## Follow-up Pass 08:44 CST
+
+- Re-read the compact JSON First 12 queue, the manager-local line context index, and the legacy Claude takeover registry before dispatch decisions.
+- Checked all First 12 lanes for required scene-contract files. All have `LINE_BRIEF.md`; `zhuiwu-yujing`, `jiaoshoujia-qiangxiu`, and `tianti-zuihou-yiji` still lack both game-workdir `MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`, so they remain stopped.
+- Read the target `LINE_BRIEF.md` files for the active or next waiting First 12 lanes in play: `peigei-ri`, `gongpai-jiaohuan`, `shuiyuan-lunzhi`, and `heizhang-xiaoce`.
+- Ran `/home/openclaw/babel-runtime/scripts/babel_ops.sh microgame reconcile-dirty --apply --review --reset-review-failed`; it reported only worker-owned `heizhang-xiaoce-planner` dirty state while the worker was still running and missing a report, then the refreshed status returned to `dirty=0`.
+- Strict packet audits completed before trusting current active or next waiting First 12 packets:
+  - `ok peigei-ri/peigei-ri-integration [running]`
+  - `ok gongpai-jiaohuan/gongpai-jiaohuan-qa [running]`
+  - `ok shuiyuan-lunzhi/shuiyuan-lunzhi-integration [running]`
+  - `ok heizhang-xiaoce/heizhang-xiaoce-ui [queued]`
+- Ran `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker`; it refused dispatch because the configured cap is full: `game worker concurrency limit reached: 3 >= 3`.
+- Current validation status: `games=14 dirty=0 dispatchable=2 review=0 queued=14 running=3 blocked=18 rework=0 done=49`.
+- Current running First 12 workers are `peigei-ri-integration`, `gongpai-jiaohuan-qa`, and `shuiyuan-lunzhi-integration`; `heizhang-xiaoce-ui` is the audited First 12 waiting packet.
+- No handoff review was run because status reports `review=0`; no cleanup was run because active workers still report `running`.
+- Legacy takeover entries remain unrelated `/home/openclaw/claude/game*` planner lanes; no First 12 slug is a legacy takeover lane.
+
+## Follow-up Pass 08:40 CST
+
+- Re-read the compact JSON First 12 queue, the manager-local line context index, all twelve First 12 `LINE_BRIEF.md` files, and the legacy Claude takeover registry before dispatch decisions.
+- Legacy takeover entries remain unrelated `/home/openclaw/claude/game*` planner lanes; no First 12 slug is a legacy takeover lane.
+- Ran `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker`; it refused dispatch because the configured cap is full: `game worker concurrency limit reached: 3 >= 3`.
+- Probed the current running First 12 workers once, without entering a manual wait loop:
+  - `peigei-ri-integration`: `running`, zero-byte Claude output, missing report, clean git status, live tmux/process present.
+  - `gongpai-jiaohuan-integration`: `running`, zero-byte Claude output, missing report, worker-owned dirty `src/content/eventPool.js`, live tmux/process present.
+  - `heizhang-xiaoce-planner`: `running`, zero-byte Claude output, missing report, clean git status, live tmux/process present.
+- Strict packet audits completed before trusting active or next waiting First 12 packets:
+  - `ok peigei-ri/peigei-ri-integration [running]`
+  - `ok gongpai-jiaohuan/gongpai-jiaohuan-integration [running]`
+  - `ok heizhang-xiaoce/heizhang-xiaoce-planner [running]`
+  - `ok shuiyuan-lunzhi/shuiyuan-lunzhi-integration [queued]`
+- Current validation status: `games=14 dirty=1 dispatchable=2 review=0 queued=14 running=3 blocked=18 rework=0 done=49`.
+- No dirty reconciliation was run because the only dirty worktree is worker-owned while `gongpai-jiaohuan-integration` remains `running`, and dispatch is blocked by the worker cap rather than unrelated dirty state.
+- No handoff review was run because status reports `review=0`; no cleanup was run because active workers still report `running`.
+- Current waiting First 12 packet with fresh strict audit coverage is `shuiyuan-lunzhi-integration`; do not dispatch it until worker capacity drops below 3.
+- Hard blocked First 12 lanes remain stopped because generated game-plan contracts are missing:
+  - `zhuiwu-yujing`: missing `plan/microgames/zhuiwu-yujing/MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`; LINE_BRIEF says stop instead of inventing interaction.
+  - `jiaoshoujia-qiangxiu`: missing `plan/microgames/jiaoshoujia-qiangxiu/MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`; LINE_BRIEF says stop instead of inventing interaction.
+  - `tianti-zuihou-yiji`: missing `plan/microgames/tianti-zuihou-yiji/MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`; LINE_BRIEF says stop instead of inventing interaction.
 
 ## Follow-up Pass 08:15 CST
 
