@@ -1,10 +1,47 @@
 # First 12 Queue Status - 2026-05-01
 
-Last manager pass: `2026-05-01 09:01:22 CST`
+Last manager pass: `2026-05-01 09:09:00 CST`
 
 Source queue: `/home/openclaw/babel-runtime/plan/MICROGAME_PRODUCTION_BATCH_2026-04-27.json`
 Line context index: `.codex-runtime/microgame-line-context/INDEX.md`
 Legacy takeover registry: `/home/openclaw/babel-runtime/plan/legacy-claude-takeover/legacy_takeover.json`
+
+## Follow-up Pass 09:09 CST
+
+- Re-read the compact JSON First 12 queue, manager-local line context index, and legacy Claude takeover registry before dispatch decisions.
+- Read the target `LINE_BRIEF.md` for `shuiyuan-lunzhi`; confirmed its game workdir has `MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`.
+- Strict packet audit completed before the start decision: `ok shuiyuan-lunzhi/shuiyuan-lunzhi-qa [queued]`.
+- Ran `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --slug shuiyuan-lunzhi --start-worker`; it refused dispatch because the configured cap was full: `game worker concurrency limit reached: 3 >= 3`.
+- State changed while probing: autorun freed/refilled the slot and started `shuiyuan-lunzhi-qa`; refreshed strict audit after start: `ok shuiyuan-lunzhi/shuiyuan-lunzhi-qa [running]`.
+- Probed current running First 12 workers once, without entering a manual wait loop:
+  - `gongpai-jiaohuan-qa`: `running`, zero-byte Claude output, missing report, clean at probe; final manager status later marked the running worktree dirty.
+  - `heizhang-xiaoce-planner`: `running`, zero-byte Claude output, missing report, worker-owned dirty plan files inside planner write scope, live tmux/process present.
+  - `shuiyuan-lunzhi-qa`: `running`, zero-byte Claude output, missing report, clean git status, live tmux/process present.
+- `peigei-ri-integration` is no longer a live worker by probe; status now advertises `peigei-ri-qa/queued` with clean git status and `review=0`.
+- Read the target `peigei-ri` `LINE_BRIEF.md`, confirmed required game-workdir contracts, and audited the next visible First 12 waiting packet: `ok peigei-ri/peigei-ri-qa [queued]`.
+- Refreshed manager status: `games=14 dirty=2 dispatchable=2 review=0 queued=12 running=3 blocked=18 rework=0 done=51`; dirty worktrees are attached to active running workers.
+- No handoff review was run because status reports `review=0`; no cleanup was run because active workers still report `running`.
+- Next safe action remains: let autorun and the registry free a worker slot or surface a review handoff; when capacity is available, dispatch only after reading the target line brief and strict-auditing the prepared packet.
+
+## Follow-up Pass 09:04 CST
+
+- Re-read the compact JSON First 12 queue, manager-local line context index, all twelve First 12 `LINE_BRIEF.md` files, and the legacy Claude takeover registry before dispatch decisions.
+- Legacy takeover entries remain unrelated `/home/openclaw/claude/game*` planner lanes; no First 12 slug is a legacy takeover lane.
+- Confirmed all First 12 slugs have `LINE_BRIEF.md`; `zhuiwu-yujing`, `jiaoshoujia-qiangxiu`, and `tianti-zuihou-yiji` still lack game-workdir `MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`, so those lanes remain stopped rather than letting workers invent scene interaction.
+- Current safe First-12 waiting packet is `shuiyuan-lunzhi-qa`; its line contract requires bucket fill amount plus route movement that changes `spillage` and `queue_order/trust`, not choice-only water buttons.
+- Strict packet audit completed before trust/start decision: `ok shuiyuan-lunzhi/shuiyuan-lunzhi-qa [queued]`.
+- Ran `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker`; it refused dispatch because the configured cap is full: `game worker concurrency limit reached: 3 >= 3`.
+- Probed current running First 12 workers once, without entering a manual wait loop:
+  - `peigei-ri-integration`: `running`, zero-byte Claude output, missing report, clean git status, live tmux/process present.
+  - `gongpai-jiaohuan-integration`: `running`, zero-byte Claude output, missing report, worker-owned dirty `src/main.js` and `plan/microgames/gongpai-jiaohuan/ACCEPTANCE_PLAYTHROUGH.md`, live tmux/process present.
+  - `heizhang-xiaoce-planner`: `running`, zero-byte Claude output, missing report, clean git status, live tmux/process present.
+- Refreshed manager status after the dispatch attempt: `games=14 dirty=1 dispatchable=2 review=0 queued=13 running=3 blocked=18 rework=0 done=50`.
+- No dirty reconciliation was run because the only dirty First 12 worktree is worker-owned while `gongpai-jiaohuan-integration` remains `running`, and dispatch is blocked by the worker cap rather than unrelated dirty state.
+- No handoff review was run because status reports `review=0`; no cleanup was run because active workers still report `running`.
+- Verification status changed while this pass was closing: autorun accepted `gongpai-jiaohuan-integration` and started `gongpai-jiaohuan-qa`; refreshed status became `games=14 dirty=0 dispatchable=2 review=0 queued=12 running=3 blocked=18 rework=0 done=51`.
+- Strict packet audit completed for the newly running packet after autorun advanced it: `ok gongpai-jiaohuan/gongpai-jiaohuan-qa [running]`.
+- Probed `gongpai-jiaohuan-qa`: `running`, zero-byte Claude output, missing report, clean git status, live tmux/process present.
+- Next safe action remains: let autorun and the registry free a worker slot or surface a review handoff; when capacity is available, rerun the batch command and audit any newly prepared packet before trusting it.
 
 ## Follow-up Pass 09:01 CST
 
