@@ -1,10 +1,32 @@
 # First 12 Queue Status - 2026-05-01
 
-Last manager pass: `2026-05-01 12:16:00 CST`
+Last manager pass: `2026-05-01 12:28:17 CST`
 
 Source queue: `/home/openclaw/babel-runtime/plan/MICROGAME_PRODUCTION_BATCH_2026-04-27.json`
 Line context index: `.codex-runtime/microgame-line-context/INDEX.md`
 Legacy takeover registry: `/home/openclaw/babel-runtime/plan/legacy-claude-takeover/legacy_takeover.json`
+
+## Follow-up Pass 12:28 CST
+
+- Re-read compact JSON `first_queue`, manager-local `microgame-line-context/INDEX.md`, all twelve First 12 `LINE_BRIEF.md` files, and the legacy Claude takeover registry before dispatch decisions. No First 12 slug is a legacy takeover lane.
+- Contract gate: all twelve First 12 lanes have scene interaction contracts in the manager-local brief and game-workdir planner files; no lane is stopped for missing `LINE_BRIEF.md`, `MECHANIC_SPEC.md`, or `SCENE_INTERACTION_SPEC.md` in this pass.
+- Current batch state:
+  - `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --dry-run` returned `no batch item requires preparation`.
+  - `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker` refused with exact blocker `game worker concurrency limit reached: 3 >= 3`, so no fourth worker was started.
+  - No handoff review was available.
+- Strict packet audit passed for active/next relevant First 12 packets:
+  - `ok peigei-ri/peigei-ri-integration [running]`
+  - `ok peigei-ri/peigei-ri-qa [queued]`
+  - `ok zhuiwu-yujing/zhuiwu-yujing-foundation [running]`
+  - `ok jiaoshoujia-qiangxiu/jiaoshoujia-qiangxiu-planner [running]`
+  - `ok tianti-zuihou-yiji/tianti-zuihou-yiji-foundation [queued]`
+- Probed the three running First 12 workers once:
+  - `peigei-ri-integration`: registry `running`, report missing, live tmux/process present, git status clean.
+  - `zhuiwu-yujing-foundation`: registry `running`, report missing, live tmux/process present, worker-owned untracked `index.html`, `package.json`, and `src/` files are present inside foundation write scope.
+  - `jiaoshoujia-qiangxiu-planner`: registry `running`, report missing, live tmux/process present, git status clean at probe time.
+- Blocked reason recorded for `tianti-zuihou-yiji`: `tianti-zuihou-yiji-foundation` is queued and strict-audited, but downstream `state/content/ui/integration/qa` workers remain blocked with exact note `blocked by manager: foundation has no report and no source tree; rerun tianti-zuihou-yiji-foundation first`. Do not start downstream executors until foundation is accepted.
+- Final validation status: `games=14 dirty=1 dispatchable=1 review=0 queued=18 running=3 blocked=5 rework=0 done=64`. The dirty lane is active running `zhuiwu-yujing-foundation`, the dispatchable lane is non-First-12 `gongtou-dianming`, and the five blocked workers are the downstream `tianti-zuihou-yiji` executors. `git diff --check` passed.
+- Current safe action: leave the cap filled by running First 12 workers and let autorun/registry surface the next handoff. No raw worker cleanup was run because all active registries still say `running`.
 
 ## Follow-up Pass 12:16 CST
 
