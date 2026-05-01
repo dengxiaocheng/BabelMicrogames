@@ -1,10 +1,42 @@
 # First 12 Queue Status - 2026-05-01
 
-Last manager pass: `2026-05-01 12:02:58 CST`
+Last manager pass: `2026-05-01 12:11:17 CST`
 
 Source queue: `/home/openclaw/babel-runtime/plan/MICROGAME_PRODUCTION_BATCH_2026-04-27.json`
 Line context index: `.codex-runtime/microgame-line-context/INDEX.md`
 Legacy takeover registry: `/home/openclaw/babel-runtime/plan/legacy-claude-takeover/legacy_takeover.json`
+
+## Follow-up Pass 12:11 CST
+
+- Re-read compact JSON `first_queue`, manager-local `microgame-line-context/INDEX.md`, target `LINE_BRIEF.md` files for queued/nearby First 12 lanes `jiaoshoujia-qiangxiu`, `tianti-zuihou-yiji`, `huijiang-peibi`, and `duanti-yunliao`, plus the legacy Claude takeover registry before dispatch decisions. No First 12 slug is a legacy takeover lane.
+- Ran `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker`; it refused with exact blocker `game worker concurrency limit reached: 3 >= 3`, so no new worker was started.
+- Probed the three running First 12 workers once:
+  - `peigei-ri-integration`: registry `running`, report missing, live tmux/process present, current git status clean.
+  - `dengyou-fenpei-planner`: registry `running`, report missing, live tmux/process present, dirty files are planner-owned `plan/microgames/dengyou-fenpei/` files within write scope.
+  - `zhuiwu-yujing-planner`: registry `running`, report missing, live tmux/process present, dirty files are planner-owned `plan/microgames/zhuiwu-yujing/` files within write scope.
+- Strict packet audit passed for the queued First 12 executor packets that may become eligible when a slot opens:
+  - `ok jiaoshoujia-qiangxiu/jiaoshoujia-qiangxiu-foundation [queued]`
+  - `ok tianti-zuihou-yiji/tianti-zuihou-yiji-foundation [queued]`
+- Planner-refined files required by executor packets are present for both queued executor lanes. `jiaoshoujia-qiangxiu` plan files were refreshed at `2026-05-01 12:06 CST`; `tianti-zuihou-yiji` plan files were refreshed between `2026-05-01 12:00 CST` and `12:05 CST`.
+- Final validation status for this pass: `games=14 dirty=2 dispatchable=3 review=0 queued=25 running=3 blocked=0 rework=0 done=62`. The two dirty lanes are active running planners, so no dirty reconciliation or cleanup was run. `git diff --check` passed.
+
+## Follow-up Pass 12:07 CST
+
+- Re-read compact JSON `first_queue`, manager-local `microgame-line-context/INDEX.md`, all twelve First 12 `LINE_BRIEF.md` files, and the legacy Claude takeover registry before dispatch decisions. No First 12 slug is a legacy takeover lane.
+- Current running cap blocker: `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker` refused with exact message `game worker concurrency limit reached: 3 >= 3`, so no fourth worker was started.
+- Strict packet audit passed for active workers:
+  - `ok peigei-ri/peigei-ri-integration [running]`
+  - `ok dengyou-fenpei/dengyou-fenpei-planner [running]`
+  - `ok zhuiwu-yujing/zhuiwu-yujing-planner [running]`
+- Dirty reconciliation was required after status reported dirty dispatch blockers. `/home/openclaw/babel-runtime/scripts/babel_ops.sh microgame reconcile-dirty --apply --review --reset-review-failed` accepted and pushed `tianti-zuihou-yiji-planner` as commit `54699fc`, recorded manager audit issue `#2083`, and reset the dirty blocker state. Manager status after reconciliation: `games=14 dirty=0 dispatchable=3 review=0 queued=25 running=3 blocked=0 rework=0 done=62`.
+- Strict packet audit passed for queued First 12 packets that may become eligible:
+  - `ok jiaoshoujia-qiangxiu/jiaoshoujia-qiangxiu-planner [queued]`
+  - `ok jiaoshoujia-qiangxiu/jiaoshoujia-qiangxiu-foundation [queued]`
+  - `ok tianti-zuihou-yiji/tianti-zuihou-yiji-foundation [queued]`
+  - `ok peigei-ri/peigei-ri-qa [queued]`
+- Planner-first guard: `jiaoshoujia-qiangxiu-planner` is queued again after dirty reset (`last_note=dev_reset_dirty_blocker: stashed dirty worktree for fast iteration`), so `jiaoshoujia-qiangxiu-foundation` must not be dispatched before the planner runs and produces current planner-refined files. Batch dry-run selects `jiaoshoujia-qiangxiu`; next safe start, when cap opens, must be the planner lane.
+- Current running First 12 workers are `peigei-ri-integration`, `dengyou-fenpei-planner`, and `zhuiwu-yujing-planner`. No handoff review remains pending (`review=0`), and no stale-session cleanup was run because active registries still say `running`.
+- Final validation status for this pass: `games=14 dirty=2 dispatchable=3 review=0 queued=25 running=3 blocked=0 rework=0 done=62`. The two dirty lanes are active running planners (`dengyou-fenpei-planner` and `zhuiwu-yujing-planner`), so no further dirty reconciliation was run. `git diff --check` passed.
 
 ## Follow-up Pass 12:02 CST
 
