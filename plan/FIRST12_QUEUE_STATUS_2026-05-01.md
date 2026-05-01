@@ -1,10 +1,60 @@
 # First 12 Queue Status - 2026-05-01
 
-Last manager pass: `2026-05-01 09:47:36 CST`
+Last manager pass: `2026-05-01 09:59:16 CST`
 
 Source queue: `/home/openclaw/babel-runtime/plan/MICROGAME_PRODUCTION_BATCH_2026-04-27.json`
 Line context index: `.codex-runtime/microgame-line-context/INDEX.md`
 Legacy takeover registry: `/home/openclaw/babel-runtime/plan/legacy-claude-takeover/legacy_takeover.json`
+
+## Follow-up Pass 09:58 CST
+
+- Re-read the compact JSON First 12 queue, manager-local line context index, all twelve First 12 `LINE_BRIEF.md` files, and the legacy Claude takeover registry before dispatch decisions.
+- Legacy takeover entries remain unrelated `/home/openclaw/claude/game*` planner lanes; no First 12 slug is a legacy takeover lane.
+- Confirmed all twelve First 12 slugs have `LINE_BRIEF.md`; confirmed active/prepared lanes have game-workdir scene contracts where needed.
+- Hard blocked First 12 lanes remain stopped because generated game-workdir contracts are missing:
+  - `zhuiwu-yujing`: missing `plan/microgames/zhuiwu-yujing/MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`; LINE_BRIEF says stop instead of inventing interaction.
+  - `jiaoshoujia-qiangxiu`: missing `plan/microgames/jiaoshoujia-qiangxiu/MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`; LINE_BRIEF says stop instead of inventing interaction.
+  - `tianti-zuihou-yiji`: missing `plan/microgames/tianti-zuihou-yiji/MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`; LINE_BRIEF says stop instead of inventing interaction.
+- Batch dispatch was attempted with `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker`; it returned `no batch item requires preparation`, so no worker was started.
+- Strict packet audits passed:
+  - `ok peigei-ri/peigei-ri-integration [running]`
+  - `ok peigei-ri/peigei-ri-qa [queued]`
+  - `ok shuiyuan-lunzhi/shuiyuan-lunzhi-content [running]`
+  - `ok shuiyuan-lunzhi/shuiyuan-lunzhi-qa [queued]`
+- Probed current running First 12 workers once, without entering a manual wait loop:
+  - `peigei-ri-integration`: `running`, zero-byte Claude output, report has placeholders (`report_todo_count=12`), worker-owned dirty files `plan/microgames/peigei-ri/ACCEPTANCE_PLAYTHROUGH.md`, `src/state/engine.js`, and `src/state/engine.test.js`; do not accept unless finish produces a complete non-placeholder report that names all actual changed files.
+  - `shuiyuan-lunzhi-content`: `running`, zero-byte Claude output, report missing, clean git status, live tmux/process present.
+- Refreshed manager status: `games=14 dirty=1 dispatchable=1 review=0 queued=7 running=2 blocked=18 rework=0 done=58`; autorun remains running as `claudecode_manager_autorun`.
+- No handoff review was run because status reports `review=0`; no cleanup was run because active workers still report `running`.
+- `git diff --check` passed for the manager workdir.
+- Next safe action remains: let autorun and the registries surface a completed handoff, then run `microgame_worker_review_handoff.sh`; do not dispatch non-First-12 `gongtou-dianming` for this objective unless the queue policy changes.
+
+## Follow-up Pass 09:54 CST
+
+- Re-read the compact JSON First 12 queue, manager-local line context index, target `LINE_BRIEF.md` files for active/blocked First 12 lanes, and the legacy Claude takeover registry before dispatch decisions.
+- Legacy takeover entries remain unrelated `/home/openclaw/claude/game*` planner lanes; no First 12 slug is a legacy takeover lane.
+- Batch dispatch was attempted with `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker`; it refused because the configured worker cap was full at the time: `game worker concurrency limit reached: 3 >= 3`.
+- Probed the then-running First 12 workers once, without entering a manual wait loop:
+  - `peigei-ri-integration`: `running`, report missing, clean git status, live tmux/process present; packet includes generated `MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`.
+  - `heizhang-xiaoce-qa`: `running` at probe with worker-owned dirty `src/game.test.js`; it later advanced to clean/done.
+  - `shuiyuan-lunzhi-content`: `running`, worker-owned dirty `src/game.js` and `src/content/events.js`, live tmux/process present; packet includes generated `MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`.
+- Strict packet audits passed for prepared First 12 queued packets:
+  - `ok peigei-ri/peigei-ri-qa [queued]`
+  - `ok shuiyuan-lunzhi/shuiyuan-lunzhi-qa [queued]`
+- After `heizhang-xiaoce-qa` completed and capacity dropped, targeted First 12 dispatch checks were attempted:
+  - `peigei-ri`: selected and prepared, but start refused with `tmux session already exists: claudecode_worker_peigei_ri`; do not start a second worker for the same game while `peigei-ri-integration` is running.
+  - `shuiyuan-lunzhi`: selected, but start refused because the game worktree was dirty on `src/game.js` and `src/content/`.
+- Dirty reconciliation was run because `shuiyuan-lunzhi` dirty state blocked dispatch:
+  - command: `/home/openclaw/babel-runtime/scripts/babel_ops.sh microgame reconcile-dirty --apply --review --reset-review-failed`
+  - result: action `block` for `shuiyuan-lunzhi-content`; dirty files `src/content/events.js` and `src/game.js`; exact note `dirty_without_report: report has placeholder: 待填写`.
+  - A status refresh immediately after reconcile showed the lane back as clean `shuiyuan-lunzhi-content/running`, with a refreshed session and no manager-review handoff exposed.
+- Current First 12 state after refresh: `peigei-ri-integration` and `shuiyuan-lunzhi-content` are running; `peigei-ri-qa` and `shuiyuan-lunzhi-qa` are queued and already strict-audited; `heizhang-xiaoce` is clean/done.
+- Hard blocked First 12 lanes remain stopped because generated game-workdir contracts are missing:
+  - `zhuiwu-yujing`: missing `plan/microgames/zhuiwu-yujing/MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`; LINE_BRIEF says stop instead of inventing interaction.
+  - `jiaoshoujia-qiangxiu`: missing `plan/microgames/jiaoshoujia-qiangxiu/MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`; LINE_BRIEF says stop instead of inventing interaction.
+  - `tianti-zuihou-yiji`: missing `plan/microgames/tianti-zuihou-yiji/MECHANIC_SPEC.md` and `SCENE_INTERACTION_SPEC.md`; LINE_BRIEF says stop instead of inventing interaction.
+- No handoff review was run because refreshed status reports `review=0`; no cleanup was run because remaining active workers still report `running`.
+- Next safe action remains: wait for `peigei-ri-integration` or `shuiyuan-lunzhi-content` to produce a non-placeholder handoff, then run `microgame_worker_review_handoff.sh`; do not dispatch non-First-12 `gongtou-dianming` for this objective unless the queue policy changes.
 
 ## Follow-up Pass 09:47 CST
 
