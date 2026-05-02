@@ -1,5 +1,53 @@
 # Microgame Manager Dispatch Log - 2026-05-02
 
+## Latest Attempt - 2026-05-02T08:19:16+0800
+- Inputs read in order: compact JSON queue, manager-local line context index, all twelve First 12 `LINE_BRIEF.md` files, and the legacy Claude takeover registry.
+- First 12 queue slugs confirmed: `peigei-ri`, `huijiang-peibi`, `duanti-yunliao`, `dengyou-fenpei`, `tiban-mingdan`, `bingpeng-yezhen`, `gongpai-jiaohuan`, `zhuiwu-yujing`, `heizhang-xiaoce`, `shuiyuan-lunzhi`, `jiaoshoujia-qiangxiu`, `tianti-zuihou-yiji`.
+- Contract gate: all twelve First 12 lanes have explicit scene interactions with concrete non-choice primary/minimum inputs.
+- Legacy registry read: legacy takeover lanes remain separate and were not used as a First 12 fallback.
+- Manager status before dispatch: `games=20 dirty=0 dispatchable=0 review=0 queued=6 running=1 blocked=0 rework=0 done=98`; queue detail `launchable_games=0 active_game_locks=1 queued_behind_running=1 packet_contract_repair=1 idle_or_seed=15`; active First 12 worker `peigei-ri-integration`.
+- Command: `sh /home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker --max-running 6`
+- Result: exit code 3, `no batch item requires preparation`.
+- Action taken: stopped without manual registry inspection, fallback lane invention, direct worker start, dirty-reconcile fallback, packet-audit/start fallback, stale-session cleanup, raw kill, or legacy-lane fallback.
+- Packet audit: no packet was prepared in this pass, so there was no packet to audit.
+- Recorded decision: no safe launchable item under the current compact queue and concurrency rules.
+
+## Latest Attempt - 2026-05-02T05:52:58+08:00
+- Inputs read in order: compact JSON queue, manager-local line context index, all twelve First 12 `LINE_BRIEF.md` files, and the legacy Claude takeover registry.
+- First 12 queue slugs confirmed: `peigei-ri`, `huijiang-peibi`, `duanti-yunliao`, `dengyou-fenpei`, `tiban-mingdan`, `bingpeng-yezhen`, `gongpai-jiaohuan`, `zhuiwu-yujing`, `heizhang-xiaoce`, `shuiyuan-lunzhi`, `jiaoshoujia-qiangxiu`, `tianti-zuihou-yiji`.
+- Contract gate: all twelve First 12 lanes have explicit scene interactions with concrete non-choice primary/minimum inputs.
+- Legacy registry read: legacy takeover lanes remain separate and were not used as a First 12 fallback.
+- Manager status before dispatch: `games=20 dirty=0 dispatchable=0 review=0 queued=6 running=1 blocked=0 rework=0 done=98`; queue detail `launchable_games=0 active_game_locks=1 queued_behind_running=1 packet_contract_repair=1 idle_or_seed=15`; active First 12 worker `peigei-ri-integration`.
+- Command: `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker --max-running 6`
+- Result: exit code 3, `no batch item requires preparation`.
+- Action taken: stopped without manual registry inspection, fallback lane invention, direct worker start, dirty-reconcile fallback, packet-audit/start fallback, stale-session cleanup, raw kill, or legacy-lane fallback.
+- Packet audit: no packet was prepared in this pass, so there was no packet to audit.
+- Recorded decision: no safe launchable item under the current compact queue and concurrency rules.
+
+## Latest Attempt - 2026-05-02T05:50:38+0800
+- Inputs read in order: compact JSON queue, manager-local line context index, all twelve First 12 `LINE_BRIEF.md` files, and the legacy Claude takeover registry.
+- First 12 queue slugs confirmed: `peigei-ri`, `huijiang-peibi`, `duanti-yunliao`, `dengyou-fenpei`, `tiban-mingdan`, `bingpeng-yezhen`, `gongpai-jiaohuan`, `zhuiwu-yujing`, `heizhang-xiaoce`, `shuiyuan-lunzhi`, `jiaoshoujia-qiangxiu`, `tianti-zuihou-yiji`.
+- Contract gate: all twelve First 12 lanes have explicit scene interactions with concrete non-choice primary/minimum inputs.
+- Legacy registry read: legacy takeover lanes remain separate and were not used as a First 12 fallback.
+- Manager status before dispatch: `games=20 dirty=0 dispatchable=0 review=0 queued=6 running=1 blocked=0 rework=0 done=98`; queue detail `launchable_games=0 active_game_locks=1 queued_behind_running=1 packet_contract_repair=1 idle_or_seed=15`; active First 12 worker `peigei-ri-integration`.
+- Command: `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker --max-running 6`
+- Result: exit code 3, `no batch item requires preparation`.
+- Action taken: stopped without manual registry inspection, fallback lane invention, direct worker start, dirty-reconcile fallback, packet-audit/start fallback, stale-session cleanup, raw kill, or legacy-lane fallback.
+- Packet audit: no packet was prepared in this pass, so there was no packet to audit.
+- Recorded decision: no safe launchable item under the current compact queue and concurrency rules.
+
+## Latest Attempt - 2026-05-02T05:43:26+0800
+- Inputs read in order: compact JSON queue, manager-local line context index, all twelve First 12 `LINE_BRIEF.md` files, and the legacy Claude takeover registry.
+- First 12 queue slugs confirmed: `peigei-ri`, `huijiang-peibi`, `duanti-yunliao`, `dengyou-fenpei`, `tiban-mingdan`, `bingpeng-yezhen`, `gongpai-jiaohuan`, `zhuiwu-yujing`, `heizhang-xiaoce`, `shuiyuan-lunzhi`, `jiaoshoujia-qiangxiu`, `tianti-zuihou-yiji`.
+- Contract gate: all twelve First 12 lanes have explicit scene interactions with concrete non-choice primary/minimum inputs.
+- Legacy registry read: legacy takeover lanes remain separate and were not used as a First 12 fallback.
+- Manager status before dispatch: `games=20 dirty=0 dispatchable=0 review=0 queued=6 running=1 blocked=0 rework=0 done=98`; queue detail `launchable_games=0 active_game_locks=1 queued_behind_running=1 packet_contract_repair=1 idle_or_seed=15`; active First 12 worker `peigei-ri-integration`.
+- Command: `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker --max-running 6`
+- Result: exit code 3, `no batch item requires preparation`.
+- Action taken: stopped without manual registry inspection, fallback lane invention, direct worker start, dirty-reconcile fallback, packet-audit/start fallback, stale-session cleanup, raw kill, or legacy-lane fallback.
+- Packet audit: no packet was prepared in this pass, so there was no packet to audit.
+- Recorded decision: no safe launchable item under the current compact queue and concurrency rules.
+
 ## Source Inputs Read
 - Compact queue: `/home/openclaw/babel-runtime/plan/MICROGAME_PRODUCTION_BATCH_2026-04-27.json`
 - Line context index: `.codex-runtime/microgame-line-context/INDEX.md`
@@ -17,6 +65,179 @@
   `no batch item requires preparation`
 - Per queue rule, no registry hand-inspection, direct fallback lane, or direct worker start was attempted after this result.
 - Current recorded state: no safe launchable item under the current queue and concurrency rules.
+
+## Latest Attempt - 2026-05-02T05:32:52+0800
+- Inputs re-read: compact queue, manager-local line context index, all twelve First 12 `LINE_BRIEF.md` files, and legacy takeover registry.
+- First 12 queue slugs: `peigei-ri`, `huijiang-peibi`, `duanti-yunliao`, `dengyou-fenpei`, `tiban-mingdan`, `bingpeng-yezhen`, `gongpai-jiaohuan`, `zhuiwu-yujing`, `heizhang-xiaoce`, `shuiyuan-lunzhi`, `jiaoshoujia-qiangxiu`, `tianti-zuihou-yiji`.
+- Contract gate: all twelve First 12 lanes have explicit scene interaction contracts with concrete non-choice primary/minimum interactions.
+- Legacy registry read: legacy takeover context remains separate and was not used as a First 12 fallback lane.
+- Manager status before dispatch: `games=20 dirty=0 dispatchable=0 review=0 queued=6 running=1 blocked=0 rework=0 done=98`; queue detail `launchable_games=0 active_game_locks=1 queued_behind_running=1 packet_contract_repair=1 idle_or_seed=15`; running First 12 worker `peigei-ri-integration`.
+- Command: `sh /home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker --max-running 6`
+- Result: exit code 3, `no batch item requires preparation`.
+- Action taken: stopped without manual registry inspection, fallback lane invention, direct worker start, dirty-reconcile fallback, packet-audit/start fallback, stale-session cleanup, raw kill, or legacy-lane fallback.
+- Packet audit: no worker packet was prepared by this pass, so there was no packet to audit.
+- Recorded decision: no safe launchable item under the current queue and concurrency rules.
+
+## Latest Attempt - 2026-05-02T05:27:52+08:00
+- Inputs re-read: compact queue, manager-local line context index, all twelve First 12 `LINE_BRIEF.md` files, and legacy takeover registry.
+- First 12 queue slugs: `peigei-ri`, `huijiang-peibi`, `duanti-yunliao`, `dengyou-fenpei`, `tiban-mingdan`, `bingpeng-yezhen`, `gongpai-jiaohuan`, `zhuiwu-yujing`, `heizhang-xiaoce`, `shuiyuan-lunzhi`, `jiaoshoujia-qiangxiu`, `tianti-zuihou-yiji`.
+- Contract gate: all twelve First 12 lanes have explicit scene interaction contracts with concrete non-choice primary/minimum interactions.
+- Legacy registry read: legacy takeover context remains separate and was not used as a First 12 fallback lane.
+- Command: `sh /home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker --max-running 6`
+- Result: exit code 3, `no batch item requires preparation`.
+- Action taken: stopped without manual registry inspection, fallback lane invention, direct worker start, dirty-reconcile fallback, packet-audit/start fallback, stale-session cleanup, raw kill, or legacy-lane fallback.
+- Packet audit: no worker packet was prepared by this pass, so there was no packet to audit.
+- Recorded decision: no safe launchable item under the current queue and concurrency rules.
+
+## Latest Attempt - 2026-05-02T05:15:19+0800
+- Inputs re-read: compact queue, manager-local line context index, all twelve First 12 `LINE_BRIEF.md` files, and legacy takeover registry.
+- First 12 queue slugs: `peigei-ri`, `huijiang-peibi`, `duanti-yunliao`, `dengyou-fenpei`, `tiban-mingdan`, `bingpeng-yezhen`, `gongpai-jiaohuan`, `zhuiwu-yujing`, `heizhang-xiaoce`, `shuiyuan-lunzhi`, `jiaoshoujia-qiangxiu`, `tianti-zuihou-yiji`.
+- Contract gate: all twelve First 12 lanes have explicit scene interaction contracts with concrete non-choice primary/minimum interactions.
+- Legacy registry read: legacy takeover context remains separate and was not used as a First 12 fallback lane.
+- Command: `CLAUDECODE_MAX_RUNNING=6 /home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker --max-running 6`
+- Result: exit code 3, `no batch item requires preparation`.
+- Action taken: stopped without manual registry inspection, fallback lane invention, direct worker start, dirty-reconcile fallback, packet-audit/start fallback, stale-session cleanup, raw kill, or legacy-lane fallback.
+- Packet audit: no worker packet was prepared by this pass, so there was no packet to audit.
+- Recorded decision: no safe launchable item under the current queue and concurrency rules.
+
+## Latest Attempt - 2026-05-02T05:13:20+0800
+- Inputs re-read: compact queue, manager-local line context index, all twelve First 12 `LINE_BRIEF.md` files, and legacy takeover registry.
+- First 12 queue slugs: `peigei-ri`, `huijiang-peibi`, `duanti-yunliao`, `dengyou-fenpei`, `tiban-mingdan`, `bingpeng-yezhen`, `gongpai-jiaohuan`, `zhuiwu-yujing`, `heizhang-xiaoce`, `shuiyuan-lunzhi`, `jiaoshoujia-qiangxiu`, `tianti-zuihou-yiji`.
+- Contract gate: all twelve First 12 lanes have explicit scene interaction contracts with concrete non-choice primary/minimum interactions.
+- Legacy registry read: legacy takeover context remains separate and was not used as a First 12 fallback lane.
+- Manager status before dispatch: `games=20 dirty=0 dispatchable=0 review=0 queued=6 running=1 blocked=0 rework=0 done=98`; queue detail `launchable_games=0 active_game_locks=1 queued_behind_running=1 packet_contract_repair=1 idle_or_seed=15`; running First 12 worker `peigei-ri-integration`.
+- Command: `sh /home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker --max-running 6`
+- Result: exit code 3, `no batch item requires preparation`.
+- Action taken: stopped without manual registry inspection, fallback lane invention, direct worker start, dirty-reconcile fallback, packet-audit/start fallback, stale-session cleanup, raw kill, or legacy-lane fallback.
+- Packet audit: no worker packet was prepared by this pass, so there was no packet to audit.
+- Validation after recording: `games=20 dirty=0 dispatchable=0 review=0 queued=6 running=1 blocked=0 rework=0 done=98`; queue detail `launchable_games=0 active_game_locks=1 queued_behind_running=1 packet_contract_repair=1 idle_or_seed=15`; running First 12 worker remains `peigei-ri-integration`. `git diff --check` passed.
+- Recorded decision: no safe launchable item under the current queue and concurrency rules.
+
+## Latest Attempt - 2026-05-02T05:04:37+0800
+- Inputs re-read: compact queue, manager-local line context index, all twelve First 12 `LINE_BRIEF.md` files, and legacy takeover registry.
+- First 12 queue slugs: `peigei-ri`, `huijiang-peibi`, `duanti-yunliao`, `dengyou-fenpei`, `tiban-mingdan`, `bingpeng-yezhen`, `gongpai-jiaohuan`, `zhuiwu-yujing`, `heizhang-xiaoce`, `shuiyuan-lunzhi`, `jiaoshoujia-qiangxiu`, `tianti-zuihou-yiji`.
+- Contract gate: all twelve First 12 lanes have explicit scene interaction contracts with concrete non-choice primary/minimum interactions.
+- Legacy registry read: legacy takeover context remains separate and was not used as a First 12 fallback lane.
+- Manager status before dispatch: `games=20 dirty=0 dispatchable=0 review=0 queued=6 running=1 blocked=0 rework=0 done=98`; queue detail `launchable_games=0 active_game_locks=1 queued_behind_running=1 packet_contract_repair=1 idle_or_seed=15`; running First 12 worker `peigei-ri-integration`.
+- Command: `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker --max-running 6`
+- Result: exit code 3, `no batch item requires preparation`.
+- Action taken: stopped without manual registry inspection, fallback lane invention, direct worker start, dirty-reconcile fallback, packet-audit/start fallback, stale-session cleanup, raw kill, or legacy-lane fallback.
+- Packet audit: no worker packet was prepared by this pass, so there was no packet to audit.
+- Validation after recording: `games=20 dirty=0 dispatchable=0 review=0 queued=6 running=1 blocked=0 rework=0 done=98`; queue detail `launchable_games=0 active_game_locks=1 queued_behind_running=1 packet_contract_repair=1 idle_or_seed=15`; running First 12 worker remains `peigei-ri-integration`. `git diff --check` passed.
+- Recorded decision: no safe launchable item under the current queue and concurrency rules.
+
+## Latest Attempt - 2026-05-02T04:56:32+0800
+- Inputs re-read: compact queue, manager-local line context index, all twelve First 12 `LINE_BRIEF.md` files, and legacy takeover registry.
+- First 12 queue slugs: `peigei-ri`, `huijiang-peibi`, `duanti-yunliao`, `dengyou-fenpei`, `tiban-mingdan`, `bingpeng-yezhen`, `gongpai-jiaohuan`, `zhuiwu-yujing`, `heizhang-xiaoce`, `shuiyuan-lunzhi`, `jiaoshoujia-qiangxiu`, `tianti-zuihou-yiji`.
+- Contract gate: all twelve First 12 lanes have explicit scene interaction contracts with concrete non-choice primary/minimum interactions.
+- Legacy registry read: legacy takeover context remains separate and was not used as a First 12 fallback lane.
+- Manager status before dispatch: `games=20 dirty=0 dispatchable=0 review=0 queued=6 running=1 blocked=0 rework=0 done=98`; queue detail `launchable_games=0 active_game_locks=1 queued_behind_running=1 packet_contract_repair=1 idle_or_seed=15`; running First 12 worker `peigei-ri-integration`.
+- Command: `sh /home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker --max-running 6`
+- Result: exit code 3, `no batch item requires preparation`.
+- Action taken: stopped without manual registry inspection, fallback lane invention, direct worker start, dirty-reconcile fallback, packet-audit/start fallback, stale-session cleanup, raw kill, or legacy-lane fallback.
+- Packet audit: no worker packet was prepared by this pass, so there was no packet to audit.
+- Validation after recording: `games=20 dirty=0 dispatchable=0 review=0 queued=6 running=1 blocked=0 rework=0 done=98`; queue detail `launchable_games=0 active_game_locks=1 queued_behind_running=1 packet_contract_repair=1 idle_or_seed=15`; running First 12 worker remains `peigei-ri-integration`. `git diff --check` passed.
+- Recorded decision: no safe launchable item under the current queue and concurrency rules.
+
+## Latest Attempt - 2026-05-02T04:53:43+0800
+- Inputs re-read: compact queue, manager-local line context index, all twelve First 12 `LINE_BRIEF.md` files, and legacy takeover registry.
+- First 12 queue slugs: `peigei-ri`, `huijiang-peibi`, `duanti-yunliao`, `dengyou-fenpei`, `tiban-mingdan`, `bingpeng-yezhen`, `gongpai-jiaohuan`, `zhuiwu-yujing`, `heizhang-xiaoce`, `shuiyuan-lunzhi`, `jiaoshoujia-qiangxiu`, `tianti-zuihou-yiji`.
+- Contract gate: all twelve First 12 lanes have explicit scene interaction contracts with concrete non-choice primary/minimum interactions.
+- Legacy registry read: legacy takeover context remains separate and was not used as a First 12 fallback lane.
+- Manager status before dispatch: `games=20 dirty=0 dispatchable=0 review=0 queued=6 running=1 blocked=0 rework=0 done=98`; queue detail `launchable_games=0 active_game_locks=1 queued_behind_running=1 packet_contract_repair=1 idle_or_seed=15`; running First 12 worker `peigei-ri-integration`.
+- Command: `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker --max-running 6`
+- Result: exit code 3, `no batch item requires preparation`.
+- Action taken: stopped without manual registry inspection, fallback lane invention, direct worker start, dirty-reconcile fallback, packet-audit/start fallback, stale-session cleanup, raw kill, or legacy-lane fallback.
+- Packet audit: no worker packet was prepared by this pass, so there was no packet to audit.
+- Validation after recording: `games=20 dirty=0 dispatchable=0 review=0 queued=6 running=1 blocked=0 rework=0 done=98`; queue detail `launchable_games=0 active_game_locks=1 queued_behind_running=1 packet_contract_repair=1 idle_or_seed=15`; running First 12 worker remains `peigei-ri-integration`.
+- Recorded decision: no safe launchable item under the current queue and concurrency rules.
+
+## Latest Attempt - 2026-05-02T04:46:06+0800
+- Inputs re-read: compact queue, manager-local line context index, all twelve First 12 `LINE_BRIEF.md` files, and legacy takeover registry.
+- First 12 queue slugs: `peigei-ri`, `huijiang-peibi`, `duanti-yunliao`, `dengyou-fenpei`, `tiban-mingdan`, `bingpeng-yezhen`, `gongpai-jiaohuan`, `zhuiwu-yujing`, `heizhang-xiaoce`, `shuiyuan-lunzhi`, `jiaoshoujia-qiangxiu`, `tianti-zuihou-yiji`.
+- Contract gate: all twelve First 12 lanes have explicit scene interaction contracts with concrete non-choice primary/minimum interactions.
+- Legacy registry read: legacy takeover context remains separate and was not used as a First 12 fallback lane.
+- Manager status before dispatch: `games=20 dirty=0 dispatchable=0 review=0 queued=6 running=1 blocked=0 rework=0 done=98`; queue detail `launchable_games=0 active_game_locks=1 queued_behind_running=1 packet_contract_repair=1 idle_or_seed=15`; running First 12 worker `peigei-ri-integration`.
+- Command: `sh /home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker --max-running 6`
+- Result: exit code 3, `no batch item requires preparation`.
+- Action taken: stopped without manual registry inspection, fallback lane invention, direct worker start, dirty-reconcile fallback, packet-audit/start fallback, stale-session cleanup, raw kill, or legacy-lane fallback.
+- Packet audit: no worker packet was prepared by this pass, so there was no packet to audit.
+- Validation after recording: `games=20 dirty=0 dispatchable=0 review=0 queued=6 running=1 blocked=0 rework=0 done=98`; queue detail `launchable_games=0 active_game_locks=1 queued_behind_running=1 packet_contract_repair=1 idle_or_seed=15`; running First 12 worker remains `peigei-ri-integration`. `git diff --check` passed.
+- Recorded decision: no safe launchable item under the current queue and concurrency rules.
+
+## Latest Attempt - 2026-05-02T04:42:18+0800
+- Inputs re-read: compact queue, manager-local line context index, all twelve First 12 `LINE_BRIEF.md` files, and legacy takeover registry.
+- First 12 queue slugs: `peigei-ri`, `huijiang-peibi`, `duanti-yunliao`, `dengyou-fenpei`, `tiban-mingdan`, `bingpeng-yezhen`, `gongpai-jiaohuan`, `zhuiwu-yujing`, `heizhang-xiaoce`, `shuiyuan-lunzhi`, `jiaoshoujia-qiangxiu`, `tianti-zuihou-yiji`.
+- Contract gate: all twelve First 12 lanes have explicit scene interaction contracts with concrete non-choice primary/minimum interactions.
+- Legacy registry read: legacy takeover context remains separate and was not used as a First 12 fallback lane.
+- Manager status before dispatch: `games=20 dirty=0 dispatchable=0 review=0 queued=6 running=1 blocked=0 rework=0 done=98`; queue detail `launchable_games=0 active_game_locks=1 queued_behind_running=1 packet_contract_repair=1 idle_or_seed=15`; running First 12 worker `peigei-ri-integration`.
+- Command: `sh /home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker --max-running 6`
+- Result: exit code 3, `no batch item requires preparation`.
+- Action taken: stopped without manual registry inspection, fallback lane invention, direct worker start, dirty-reconcile fallback, packet-audit/start fallback, stale-session cleanup, raw kill, or legacy-lane fallback.
+- Packet audit: no worker packet was prepared by this pass, so there was no packet to audit.
+- Validation after recording: `games=20 dirty=1 dispatchable=0 review=0 queued=6 running=1 blocked=0 rework=0 done=98`; queue detail `launchable_games=0 active_game_locks=1 queued_behind_running=1 packet_contract_repair=1 idle_or_seed=15`; `peigei-ri-integration` is still running and owns the visible dirty state. `git diff --check` passed.
+- Recorded decision: no safe launchable item under the current queue and concurrency rules.
+
+## Latest Attempt - 2026-05-02T04:36:33+0800
+- Inputs re-read: compact queue, manager-local line context index, all twelve First 12 `LINE_BRIEF.md` files, and legacy takeover registry.
+- First 12 queue slugs: `peigei-ri`, `huijiang-peibi`, `duanti-yunliao`, `dengyou-fenpei`, `tiban-mingdan`, `bingpeng-yezhen`, `gongpai-jiaohuan`, `zhuiwu-yujing`, `heizhang-xiaoce`, `shuiyuan-lunzhi`, `jiaoshoujia-qiangxiu`, `tianti-zuihou-yiji`.
+- Contract gate: all twelve First 12 lanes have explicit scene interaction contracts with concrete non-choice primary/minimum interactions.
+- Legacy registry read: legacy takeover context remains separate and was not used as a First 12 fallback lane.
+- Command: `CLAUDECODE_MAX_RUNNING=6 /home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker --max-running 6`
+- Result: exit code 3, `no batch item requires preparation`.
+- Action taken: stopped without manual registry inspection, fallback lane invention, direct worker start, dirty-reconcile fallback, packet-audit/start fallback, stale-session cleanup, raw kill, or legacy-lane fallback.
+- Packet audit: no worker packet was prepared by this pass, so there was no packet to audit.
+- Recorded decision: no safe launchable item under the current queue and concurrency rules.
+
+## Latest Attempt - 2026-05-02T04:15:05+0800
+- Inputs re-read: compact queue, manager-local line context index, all twelve First 12 `LINE_BRIEF.md` files, and legacy takeover registry.
+- First 12 queue slugs: `peigei-ri`, `huijiang-peibi`, `duanti-yunliao`, `dengyou-fenpei`, `tiban-mingdan`, `bingpeng-yezhen`, `gongpai-jiaohuan`, `zhuiwu-yujing`, `heizhang-xiaoce`, `shuiyuan-lunzhi`, `jiaoshoujia-qiangxiu`, `tianti-zuihou-yiji`.
+- Contract gate: all twelve First 12 lanes have explicit scene interaction contracts with concrete non-choice primary/minimum interactions.
+- Legacy registry read: legacy takeover context remains separate and was not used as a First 12 fallback lane.
+- Manager status before dispatch: `games=20 dirty=0 dispatchable=0 review=0 queued=6 running=1 blocked=0 rework=0 done=98`; queue detail `launchable_games=0 active_game_locks=1 queued_behind_running=1 packet_contract_repair=1 idle_or_seed=15`; running First 12 worker `peigei-ri-integration`.
+- Command: `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker --max-running 6`
+- Result: exit code 3, `no batch item requires preparation`.
+- Action taken: stopped without manual registry inspection, fallback lane invention, direct worker start, dirty-reconcile fallback, packet-audit/start fallback, stale-session cleanup, raw kill, or legacy-lane fallback.
+- Packet audit: no worker packet was prepared by this pass, so there was no packet to audit.
+- Recorded decision: no safe launchable item under the current queue and concurrency rules.
+
+## Latest Attempt - 2026-05-02T04:12:34+08:00
+- Inputs re-read: compact queue, manager-local line context index, all twelve First 12 `LINE_BRIEF.md` files, and legacy takeover registry.
+- First 12 queue slugs: `peigei-ri`, `huijiang-peibi`, `duanti-yunliao`, `dengyou-fenpei`, `tiban-mingdan`, `bingpeng-yezhen`, `gongpai-jiaohuan`, `zhuiwu-yujing`, `heizhang-xiaoce`, `shuiyuan-lunzhi`, `jiaoshoujia-qiangxiu`, `tianti-zuihou-yiji`.
+- Contract gate: all twelve First 12 lanes have explicit scene interaction contracts with concrete non-choice primary/minimum interactions.
+- Legacy registry read: legacy takeover context remains separate and was not used as a First 12 fallback lane.
+- Command: `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker --max-running 6`
+- Result: exit code 3, `no batch item requires preparation`.
+- Action taken: stopped without manual registry inspection, fallback lane invention, direct worker start, dirty-reconcile fallback, packet-audit/start fallback, stale-session cleanup, raw kill, or legacy-lane fallback.
+- Packet audit: no worker packet was prepared by this pass, so there was no packet to audit.
+- Manager status after dispatch attempt: `games=20 dirty=0 dispatchable=0 review=0 queued=6 running=1 blocked=0 rework=0 done=98`; queue detail `launchable_games=0 active_game_locks=1 queued_behind_running=1 packet_contract_repair=1 idle_or_seed=15`; running First 12 worker remains `peigei-ri-integration`.
+- Recorded decision: no safe launchable item under the current queue and concurrency rules.
+
+## Latest Attempt - 2026-05-02T04:00:50+0800
+- Inputs re-read: compact queue, manager-local line context index, all twelve First 12 `LINE_BRIEF.md` files, and legacy takeover registry.
+- First 12 queue slugs: `peigei-ri`, `huijiang-peibi`, `duanti-yunliao`, `dengyou-fenpei`, `tiban-mingdan`, `bingpeng-yezhen`, `gongpai-jiaohuan`, `zhuiwu-yujing`, `heizhang-xiaoce`, `shuiyuan-lunzhi`, `jiaoshoujia-qiangxiu`, `tianti-zuihou-yiji`.
+- Contract gate: all twelve First 12 lanes have explicit scene interaction contracts with concrete non-choice primary/minimum interactions.
+- Legacy registry read: legacy takeover context remains separate and was not used as a First 12 fallback lane.
+- Manager status before dispatch: `games=20 dirty=1 dispatchable=0 review=0 queued=5 running=1 blocked=0 rework=1 done=98`; queue detail `launchable_games=0 active_game_locks=1 queued_behind_running=1 packet_contract_repair=1 idle_or_seed=15`; running First 12 worker `peigei-ri-qa`.
+- Command: `sh /home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker --max-running 6`
+- Result: exit code 3, `no batch item requires preparation`.
+- Action taken: stopped without manual registry inspection, fallback lane invention, direct worker start, dirty-reconcile fallback, packet-audit/start fallback, stale-session cleanup, raw kill, or legacy-lane fallback.
+- Packet audit: no worker packet was prepared by this pass, so there was no packet to audit.
+- Validation after dispatch attempt: `games=20 dirty=1 dispatchable=0 review=0 queued=5 running=1 blocked=0 rework=1 done=98`; queue detail `launchable_games=0 active_game_locks=1 queued_behind_running=1 packet_contract_repair=1 idle_or_seed=15`; running First 12 worker remains `peigei-ri-qa`. `git diff --check` passed.
+- Recorded decision: no safe launchable item under the current queue and concurrency rules.
+
+## Latest Attempt - 2026-05-02T03:58:20+0800
+- Inputs re-read: compact queue, manager-local line context index, all twelve First 12 `LINE_BRIEF.md` files, and legacy takeover registry.
+- First 12 queue slugs: `peigei-ri`, `huijiang-peibi`, `duanti-yunliao`, `dengyou-fenpei`, `tiban-mingdan`, `bingpeng-yezhen`, `gongpai-jiaohuan`, `zhuiwu-yujing`, `heizhang-xiaoce`, `shuiyuan-lunzhi`, `jiaoshoujia-qiangxiu`, `tianti-zuihou-yiji`.
+- Contract gate: all twelve First 12 lanes have explicit scene interaction contracts with concrete non-choice primary/minimum interactions.
+- Legacy registry read: legacy takeover context remains separate and was not used as a First 12 fallback lane.
+- Manager status before dispatch: `games=20 dirty=1 dispatchable=0 review=0 queued=5 running=1 blocked=0 rework=1 done=98`; queue detail `launchable_games=0 active_game_locks=1 queued_behind_running=1 packet_contract_repair=1 idle_or_seed=15`; running First 12 worker `peigei-ri-qa`.
+- Command: `/home/openclaw/babel-runtime/scripts/microgame_batch_prepare_next.sh --start-worker --max-running 6`
+- Result: exit code 3, `no batch item requires preparation`.
+- Action taken: stopped without manual registry inspection, fallback lane invention, direct worker start, dirty-reconcile fallback, packet-audit/start fallback, stale-session cleanup, raw kill, or legacy-lane fallback.
+- Packet audit: no worker packet was prepared by this pass, so there was no packet to audit.
+- Validation status after dispatch attempt: `games=20 dirty=1 dispatchable=0 review=0 queued=5 running=1 blocked=0 rework=1 done=98`; queue detail `launchable_games=0 active_game_locks=1 queued_behind_running=1 packet_contract_repair=1 idle_or_seed=15`; running First 12 worker remains `peigei-ri-qa`. `git diff --check` passed.
+- Recorded decision: no safe launchable item under the current queue and concurrency rules.
 
 ## Latest Attempt - 2026-05-02T03:55:09+0800
 - Inputs re-read: compact queue, manager-local line context index, all twelve First 12 `LINE_BRIEF.md` files, and legacy takeover registry.
